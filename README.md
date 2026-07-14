@@ -1,4 +1,4 @@
-# goblins-den
+# Goblin's Den
 This is a 3D FPS game done on [Godot](https://godotengine.org/).
 
 ![Game screenshot](/images/screenshot_1.png)
