@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="GoblinsDen"
+config/name="Proto Reverie"
 run/main_scene="uid://bjpcxgpmpe8b8"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
