@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://csm8qril8g0dl"]
+
+[ext_resource type="PackedScene" uid="uid://bx51fif0cdly2" path="res://scenes/rooms/base_room.tscn" id="1_he615"]
+
+[node name="Entrance" unique_id=1003464471 instance=ExtResource("1_he615")]
+
+[node name="Floors" parent="." index="0" unique_id=793733367]
+data = {
+"cells": PackedInt32Array(65535, 65535, 0, 0, 65535, 0, 65535, 0, 0, 0, 0, 0, 0, 65534, 0, 0, 65533, 0, 65535, 65534, 0, 65535, 65533, 0, 65535, 1, 1048577, 0, 1, 1048577, 1, 65533, 655361, 1, 65534, 655361, 1, 65535, 655361, 1, 0, 655361, 65534, 65533, 1, 65534, 65534, 1, 65534, 65535, 1, 65534, 0, 1, 1, 1, 1048578, 65534, 1, 2, 1, 65532, 655362, 65534, 65532, 1441794, 65535, 65532, 1441795, 0, 65532, 655363)
+}

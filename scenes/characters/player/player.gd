@@ -101,7 +101,7 @@ func _input(event: InputEvent) -> void:
 
 func check_jump_input() -> void:
 	if is_on_floor() and Input.is_action_just_pressed("jump"):
-		velocity.y = jump_force # apply a upward motion 
+		velocity.y = jump_force # apply a upward motion		
 
 func process_gravity() -> void:
 	if not is_on_floor():
