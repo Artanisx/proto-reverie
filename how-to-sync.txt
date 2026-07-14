@@ -1,0 +1,10 @@
+HOW TO SYNC CHANGES FROM UPSTREAM
+
+D:\
+cd D:\Projects\Godot\proto-reverie
+
+1. Fetch the updates: git fetch upstream
+2. Merge them: git merge upstream/master
+3- Push to your new repo: git push origin master
+
+https://fizzy.cc/posts/how-to-fork-my-own-git-repo
