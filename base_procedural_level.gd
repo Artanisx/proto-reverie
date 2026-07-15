@@ -9,13 +9,43 @@ extends BaseLevel
 ## For now this script generates a 2D array, and in the position of each of the rooms it only puts a C if it's a room in the critical path or a number to define the branches. 
 ## So, the logic to choose which room to place (depending on which rooms is connected and where) and the logic to actually place the rooms in the level is to be created. 
 
+## Dictionary for room prefabs
+const ROOMS_MAP := {
+	RoomType.R10x10_1W_BOTTOM: preload("res://scenes/rooms/10x_10_1_way_room_bottom.tscn"),
+	RoomType.R10x10_1W_LEFT: preload("res://scenes/rooms/10x_10_1_way_room_left.tscn"),
+	RoomType.R10x10_1W_RIGHT: preload("res://scenes/rooms/10x_10_1_way_room_right.tscn"),
+	RoomType.R10x10_1W_TOP: preload("res://scenes/rooms/10x_10_1_way_room_top.tscn"),
+	RoomType.R10x10_2W_BOTTOM_LEFT: preload("res://scenes/rooms/10x_10_2_way_room_bottom_left.tscn"),
+	RoomType.R10x10_2W_BOTTOM_RIGHT: preload("res://scenes/rooms/10x_10_2_way_room_bottom_right.tscn"),
+	RoomType.R10x10_2W_HORIZZONTAL: preload("res://scenes/rooms/10x_10_2_way_room_horizzontal.tscn"),
+	RoomType.R10x10_2W_TOP_LEFT: preload("res://scenes/rooms/10x_10_2_way_room_top_left.tscn"),
+	RoomType.R10x10_2W_TOP_RIGHT: preload("res://scenes/rooms/10x_10_2_way_room_top_right.tscn"),
+	RoomType.R10x10_2W_VERTICAL: preload("res://scenes/rooms/10x_10_2_way_room_vertical.tscn"),
+	RoomType.R10x10_3W_BOTTOM: preload("res://scenes/rooms/10x_10_3_way_room_bottom.tscn"),
+	RoomType.R10x10_3W_LEFT: preload("res://scenes/rooms/10x_10_3_way_room_left.tscn"),
+	RoomType.R10x10_3W_RIGHT: preload("res://scenes/rooms/10x_10_3_way_room_right.tscn"),
+	RoomType.R10x10_3W_TOP: preload("res://scenes/rooms/10x_10_3_way_room_top.tscn"),
+	RoomType.R10x10_4W: preload("res://scenes/rooms/10x_10_4_way_room.tscn")
+} 
+
+## Enum for room types
+enum RoomType{R10x10_1W_BOTTOM, R10x10_1W_LEFT, R10x10_1W_RIGHT, R10x10_1W_TOP,
+			  R10x10_2W_BOTTOM_LEFT, R10x10_2W_BOTTOM_RIGHT, R10x10_2W_HORIZZONTAL, R10x10_2W_TOP_LEFT, R10x10_2W_TOP_RIGHT, R10x10_2W_VERTICAL,
+			  R10x10_3W_BOTTOM, R10x10_3W_LEFT, R10x10_3W_RIGHT, R10x10_3W_TOP,
+			  R10x10_4W}
+
 @export var dimensions: Vector2i = Vector2i(7,5) ## Defines the size of the level
 @export var start: Vector2i = Vector2i(-1,-1) ## Defines where in the grid the starting room will be placed. If not defined (or it is invalid), a random place will be picked.
 @export var critical_path_length: int = 13 ## Defines the shortest possible path from the start to the end room
 @export var branches: int = 3 # How many detours there should be
 @export var branch_length: Vector2i = Vector2i(1,4) # How long a detour is (from minimum to maximum rooms)
+@export var room_size: int = 21 # The size of the room, including the portion related to the doors for proper placement.
+
+@onready var rooms_container: Node3D = $Rooms
+
 
 var level : Array ## This will store the array of rooms this level is composed of. For now, for t4esting purposes, it's npt a [BaseRoom] array. It will be so once done.
+var level_grid : Array ## This  stores the level grid positions for each room
 var branch_candidates : Array[Vector2i] ## List of room that can have branches added to them, so which rooms can support these detours
 
 func _ready() -> void:
@@ -24,6 +54,10 @@ func _ready() -> void:
 	generate_path(start, critical_path_length, "CP") # CP stands for CRITICAL PATH
 	generate_branches()
 	print_level()
+	
+	## Actual room placement
+	calculate_room_positions() 
+	print_level_grid()
 	
 	## Finally call the super (baseroom) _ready function to initialize the player
 	super()
@@ -57,7 +91,19 @@ func print_level() -> void:
 			
 		level_as_string += '\n'
 	
-	print(level_as_string)	
+	print(level_as_string)
+
+## This function will print the level grid, which contains rooms positions Meant for debugging.
+func print_level_grid() -> void:
+	var level_as_string : String = ""
+	
+	## We count from top row and counting down to 0. Hence we start by y - 1 (array start at zero) and count -1, -1 to reach the top. We read from top to bottom.
+	for y in range (dimensions.y - 1, -1, -1):
+		for x in dimensions.x:			
+			level_as_string += "[" + str(level_grid[x][y]) + "]"			
+		level_as_string += '\n'
+	
+	print(level_as_string)
 	
 ## This function will place the first room, where the player will spawn
 func place_entrance() -> void:	
@@ -151,3 +197,36 @@ func generate_branches() -> void:
 			branches_created += 1 #success
 		else:
 			branch_candidates.erase(candidate) #failure, remove this	
+
+## This function will actually place a room in the level
+func place_room(room_position: Vector2i, type: RoomType = RoomType.R10x10_4W) -> void:
+	## To start, we'll place R10x10_4W	
+	var room : BaseRoom = ROOMS_MAP[type].instantiate()
+	
+	## Position the new room in the given coordinates
+	room.position = Vector3(room_position.x, 0, room_position.y)
+	
+	## Add it to the rooms container as a child
+	rooms_container.add_child(room)
+	
+## This function calculates the actual position in the level for the room.
+## Puts the postiions in the level_grid array
+func calculate_room_positions() -> void:	
+	## Initialize the level_grid array
+	for x in dimensions.x:
+		level_grid.append([])	# First we add empty arrays to form the columns of the map
+		for y in dimensions.y:
+			level_grid[x].append(Vector2i.ZERO) # Then for each y, we add a position 0,0 as a start
+			
+	## With Dimension X = 7 and Y = 5, at this point we have a 2d array with 7 columns and 5 rows, all filled with Vector2i.ZERO
+	## [0,0][0,0][0,0][0,0][0,0][0,0][0,0]
+	## [0,0][0,0][0,0][0,0][0,0][0,0][0,0]
+	## [0,0][0,0][0,0][0,0][0,0][0,0][0,0]
+	## [0,0][0,0][0,0][0,0][0,0][0,0][0,0]
+	## [0,0][0,0][0,0][0,0][0,0][0,0][0,0]
+	
+	## Start room will always be at 0,0 (we set it as such) position which is [0.DIMENSION.Y] as Y starts from the bottom
+	
+	for x in dimensions.x:
+		for y in dimensions.y:
+			level_grid[x][y] = Vector2i(x*room_size,y*room_size)
