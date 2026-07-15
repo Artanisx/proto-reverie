@@ -114,7 +114,7 @@ func generate_path(from: Vector2i, length: int, marker : String) -> bool:
 			not level[current.x + direction.x][current.y + direction.y]):	## The value in these new coordinates must also be empty and not already contain a room
 			current += direction	## This is all valid, so we can set this current position and proceed in this direction. Meaning, this is valid as the critical path			
 			
-			if length == 1 and marker == "C":	
+			if length == 1 and marker == "CP":	
 				## this is the last room of the critical path, so rather than marker, i want to put  ENDRO as end end room.
 				level[current.x][current.y] = "ENDRO"
 			else:

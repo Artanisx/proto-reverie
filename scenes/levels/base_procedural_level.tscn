@@ -5,7 +5,7 @@
 
 [node name="BaseProceduralLevel" unique_id=433839496 instance=ExtResource("1_hr3kg")]
 script = ExtResource("2_jyg1e")
-dimensions = Vector2i(7, 5)
+dimensions = Vector2i(5, 5)
 start = Vector2i(-1, -1)
 critical_path_length = 13
 branches = 3
