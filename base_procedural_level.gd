@@ -201,11 +201,80 @@ func generate_branches() -> void:
 
 ## This function will generate the whole level
 func generate_level() -> void:
+	var is_there_room_up: bool = false
+	var is_there_room_down: bool = false
+	var is_there_room_left: bool = false
+	var is_there_room_right: bool = false
+	
 	for i in range(len(level_grid)):
 		for j in range(len(level_grid[i])):  
 			## First we check if there's a room
-			if level[i][j]:
-				place_room(level_grid[i][j]) ## We place a room only if there's something there.
+			if level[i][j]:				
+				## CHeck if there's a room UP/DOWN/RIGHT/LEFT	
+				if j-1 >= 0 and (level[i][j-1]):
+					is_there_room_down = true					
+				if j+1 < dimensions.y and (level[i][j+1]):
+					is_there_room_up = true
+				if i+1 < dimensions.x and (level[i+1][j]):
+					is_there_room_right = true
+				if i-1 >= 0 and (level[i-1][j]):
+					is_there_room_left = true
+					
+				#print("I'm checking room name " + str(level[i][j]) + " that is i:" + str(i) + " j:" + str(j) + " in pos: " + str(level_grid[i][j]) + 
+				#	  " and here's the deal. room_up:" + str(is_there_room_up) + " room_down: " + str(is_there_room_down) + " room_right: " + str(is_there_room_right) + "room_left: " + str(is_there_room_left))	
+					
+				if is_there_room_up and is_there_room_down and is_there_room_right and is_there_room_left:
+					place_room(level_grid[i][j], RoomType.R10x10_4W)
+				#	print("Placing a RoomType.R10x10_4W in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
+				elif is_there_room_up and is_there_room_down and not is_there_room_right and not is_there_room_left:
+					place_room(level_grid[i][j], RoomType.R10x10_2W_VERTICAL)
+				#	print("Placing a RoomType.R10x10_2W_VERTICAL in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
+				elif not is_there_room_up and not is_there_room_down and is_there_room_right and is_there_room_left:
+					place_room(level_grid[i][j], RoomType.R10x10_2W_HORIZZONTAL)
+				#	print("Placing a RoomType.R10x10_2W_HORIZZONTAL in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
+				elif not is_there_room_up and is_there_room_down and not is_there_room_right and not is_there_room_left:
+					place_room(level_grid[i][j], RoomType.R10x10_1W_TOP)
+				#	print("Placing a RoomType.R10x10_1W_TOP in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
+				elif is_there_room_up and not is_there_room_down and not is_there_room_right and not is_there_room_left:
+					place_room(level_grid[i][j], RoomType.R10x10_1W_BOTTOM)
+				#	print("Placing a RoomType.R10x10_1W_BOTTOM in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
+				elif not is_there_room_up and not is_there_room_down and is_there_room_right and not is_there_room_left:
+					place_room(level_grid[i][j], RoomType.R10x10_1W_RIGHT)
+				#	print("Placing a RoomType.R10x10_1W_RIGHT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
+				elif not is_there_room_up and not is_there_room_down and not is_there_room_right and is_there_room_left:
+					place_room(level_grid[i][j], RoomType.R10x10_1W_LEFT)
+				#	print("Placing a RoomType.R10x10_1W_LEFT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
+				elif is_there_room_up and not is_there_room_down and is_there_room_right and not is_there_room_left:
+					place_room(level_grid[i][j], RoomType.R10x10_2W_BOTTOM_RIGHT)
+				#	print("Placing a RoomType.R10x10_2W_BOTTOM_RIGHT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
+				elif is_there_room_up and not is_there_room_down and not is_there_room_right and is_there_room_left:
+					place_room(level_grid[i][j], RoomType.R10x10_2W_BOTTOM_LEFT)
+				#	print("Placing a RoomType.R10x10_2W_BOTTOM_LEFT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
+				elif not is_there_room_up and is_there_room_down and is_there_room_right and not is_there_room_left:
+					place_room(level_grid[i][j], RoomType.R10x10_2W_TOP_RIGHT)
+				#	print("Placing a RoomType.R10x10_2W_TOP_RIGHT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
+				elif not is_there_room_up and is_there_room_down and not is_there_room_right and is_there_room_left:
+					place_room(level_grid[i][j], RoomType.R10x10_2W_TOP_LEFT)
+				#	print("Placing a RoomType.R10x10_2W_TOP_LEFT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
+				elif is_there_room_up and not is_there_room_down and is_there_room_right and is_there_room_left:
+					place_room(level_grid[i][j], RoomType.R10x10_3W_BOTTOM)
+				#	print("Placing a RoomType.R10x10_3W_BOTTOM in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
+				elif is_there_room_up and is_there_room_down and not is_there_room_right and is_there_room_left:
+					place_room(level_grid[i][j], RoomType.R10x10_3W_LEFT)
+				#	print("Placing a RoomType.R10x10_3W_LEFT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
+				elif is_there_room_up and is_there_room_down and is_there_room_right and not is_there_room_left:
+					place_room(level_grid[i][j], RoomType.R10x10_3W_RIGHT)
+				#	print("Placing a RoomType.R10x10_3W_RIGHT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
+				elif not is_there_room_up and is_there_room_down and is_there_room_right and is_there_room_left:
+					place_room(level_grid[i][j], RoomType.R10x10_3W_TOP)
+				#	print("Placing a RoomType.R10x10_3W_TOP in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
+				
+				## Resets flags for the next run
+				is_there_room_up = false
+				is_there_room_down = false
+				is_there_room_left = false
+				is_there_room_right = false	
+				
 
 ## This function will actually place a room in the level
 func place_room(room_position: Vector2i, type: RoomType = RoomType.R10x10_4W) -> void:
