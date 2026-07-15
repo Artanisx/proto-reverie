@@ -168,8 +168,8 @@ func generate_path(from: Vector2i, length: int, marker : String) -> bool:
 				## we mark this as the value passed as marker. If this is being called from the generation of the critical path, it will be a 'C', if not will be a number for the branches >>> NOT ANMIORE:We change the value of this position in the array to something different than 0; the lenght of the critical path. Basically we are adding a room here (for now it's an umber and it is the number of rooms towards the exit)
 				level[current.x][current.y] = marker + "L:" + str(length) # I need to see the distance in the map
 				
-			## we don't want to create detours from the alst room, so lenght should be more than 1
-			if length > 1:
+			## we don't want to create detours from the alst room or the start room, so lenght should be more than 1 and less than critical_path_legnth
+			if length > 1 and length < critical_path_length:
 				branch_candidates.append(current) ## We add this position in the map in the list of the branch_candidates, so room that can go somewhere else in a detour. This can only happen if we're not in the last room before the end (so lenght must be  > 1)
 			
 			if generate_path(current, length - 1, marker): ## We reduce the length of the critical path by 1 - starting from current - and call this again.				
