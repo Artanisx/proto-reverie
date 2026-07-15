@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bjpcxgpmpe8b8"]
 
 [ext_resource type="PackedScene" uid="uid://dlcqvtj4w04oc" path="res://scenes/ui/ui.tscn" id="1_sl2e5"]
-[ext_resource type="PackedScene" uid="uid://d1obtsf1ugf7r" path="res://scenes/levels/level_01_welcome.tscn" id="2_sl2e5"]
+[ext_resource type="PackedScene" uid="uid://chh4yl0resqfx" path="res://scenes/levels/test_level.tscn" id="2_sl2e5"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_4rhad"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -25,4 +25,4 @@ environment = SubResource("Environment_sl2e5")
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Level-01-Welcome" parent="." unique_id=433839496 instance=ExtResource("2_sl2e5")]
+[node name="TestLevel" parent="." unique_id=433839496 instance=ExtResource("2_sl2e5")]

@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://chh4yl0resqfx"]
+
+[ext_resource type="PackedScene" uid="uid://c8lwyjbg0yfil" path="res://scenes/levels/base_level.tscn" id="1_jbqir"]
+[ext_resource type="PackedScene" uid="uid://bwwxs0e5xvyox" path="res://scenes/rooms/10x_10_4_way_room.tscn" id="2_yautc"]
+[ext_resource type="PackedScene" uid="uid://c0kkr838jbgy5" path="res://scenes/rooms/10x_10_2_way_room_vertical.tscn" id="3_hfwtw"]
+[ext_resource type="PackedScene" uid="uid://d3bspm1the7pp" path="res://scenes/rooms/10x_10_2_way_room_horizzontal.tscn" id="4_2mu0v"]
+[ext_resource type="PackedScene" uid="uid://dbcpidbre6xsq" path="res://scenes/rooms/10x_10_3_way_room_top.tscn" id="5_jmx14"]
+[ext_resource type="PackedScene" uid="uid://ssn8vj2st2fx" path="res://scenes/rooms/10x_10_3_way_room_left.tscn" id="6_eaa0b"]
+[ext_resource type="PackedScene" uid="uid://bg24gsapwp5ji" path="res://scenes/rooms/10x_10_3_way_room_right.tscn" id="7_a5rnb"]
+[ext_resource type="PackedScene" uid="uid://dluatfd7wyvb1" path="res://scenes/rooms/10x_10_3_way_room_bottom.tscn" id="8_fqldq"]
+[ext_resource type="PackedScene" uid="uid://bs0o64xc5k1i1" path="res://scenes/rooms/10x_10_1_way_room_top.tscn" id="9_3ay3b"]
+[ext_resource type="PackedScene" uid="uid://gfufwakuak14" path="res://scenes/rooms/10x_10_1_way_room_left.tscn" id="10_2mu0v"]
+[ext_resource type="PackedScene" uid="uid://bv7ampufjk8ug" path="res://scenes/rooms/10x_10_1_way_room_right.tscn" id="11_eaa0b"]
+[ext_resource type="PackedScene" uid="uid://bkjs2j33bo517" path="res://scenes/rooms/10x_10_1_way_room_bottom.tscn" id="12_a5rnb"]
+[ext_resource type="PackedScene" uid="uid://gysve867paps" path="res://scenes/rooms/10x_10_2_way_room_top_left.tscn" id="13_hppjq"]
+[ext_resource type="PackedScene" uid="uid://cgqa5ir76kdoi" path="res://scenes/rooms/10x_10_2_way_room_bottom_left.tscn" id="14_os2yb"]
+[ext_resource type="PackedScene" uid="uid://c1ay3b2myoj5c" path="res://scenes/rooms/10x_10_2_way_room_bottom_right.tscn" id="15_v6k17"]
+[ext_resource type="PackedScene" uid="uid://byire8xioj8h6" path="res://scenes/rooms/10x_10_2_way_room_top_right.tscn" id="16_upsmr"]
+
+[node name="TestLevel" unique_id=433839496 instance=ExtResource("1_jbqir")]
+
+[node name="10x10_4WayRoom" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="0" unique_id=1003464471 instance=ExtResource("2_yautc")]
+
+[node name="10x10_2WayRoom_vertical" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="1" unique_id=147869905 instance=ExtResource("3_hfwtw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
+
+[node name="10x10_2WayRoom_horizzontal" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="2" unique_id=1024716882 instance=ExtResource("4_2mu0v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 0)
+
+[node name="10x10_3WayRoom_top" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="3" unique_id=1402210405 instance=ExtResource("5_jmx14")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 22)
+
+[node name="10x10_3WayRoom_left" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="4" unique_id=457588061 instance=ExtResource("6_eaa0b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 0)
+
+[node name="10x10_3WayRoom_right" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="5" unique_id=1744391440 instance=ExtResource("7_a5rnb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 0, 0)
+
+[node name="10x10_3WayRoom_bottom" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="6" unique_id=620834501 instance=ExtResource("8_fqldq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -44)
+
+[node name="10x10_1WayRoom_top" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="7" unique_id=6219218 instance=ExtResource("9_3ay3b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 0, 22)
+
+[node name="10x10_1WayRoom_left" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="8" unique_id=969141256 instance=ExtResource("10_2mu0v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, -44)
+
+[node name="10x10_1WayRoom_right" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="9" unique_id=2034005502 instance=ExtResource("11_eaa0b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 22)
+
+[node name="10x10_1WayRoom_bottom" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="10" unique_id=644991036 instance=ExtResource("12_a5rnb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, -22)
+
+[node name="10x10_2WayRoom_top_left" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="11" unique_id=629864914 instance=ExtResource("13_hppjq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 22)
+
+[node name="10x10_2WayRoom_bottom_left" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="12" unique_id=189446430 instance=ExtResource("14_os2yb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 0, -22)
+
+[node name="10x10_2WayRoom_bottom_right" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="13" unique_id=2079240815 instance=ExtResource("15_v6k17")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66, 0, -22)
+
+[node name="10x10_2WayRoom_top_right" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="14" unique_id=24694356 instance=ExtResource("16_upsmr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -44)
+
+[node name="10x10_1WayRoom_bottom2" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="15" unique_id=629579895 instance=ExtResource("12_a5rnb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -66)
+
+[node name="10x10_1WayRoom_top2" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="16" unique_id=1002226542 instance=ExtResource("9_3ay3b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66, 0, 0)
