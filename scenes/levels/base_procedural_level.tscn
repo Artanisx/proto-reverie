@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bhm65ia5boj6c"]
+
+[ext_resource type="PackedScene" uid="uid://c8lwyjbg0yfil" path="res://scenes/levels/base_level.tscn" id="1_hr3kg"]
+[ext_resource type="Script" uid="uid://cvpiqgnlo850u" path="res://base_procedural_level.gd" id="2_jyg1e"]
+
+[node name="BaseProceduralLevel" unique_id=433839496 instance=ExtResource("1_hr3kg")]
+script = ExtResource("2_jyg1e")
+dimensions = Vector2i(7, 5)
+start = Vector2i(-1, -1)
+critical_path_length = 13
+branches = 3
+branch_length = Vector2i(1, 4)

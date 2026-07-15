@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://f6wr1jdq7npo"]
+
+[ext_resource type="PackedScene" uid="uid://bhm65ia5boj6c" path="res://scenes/levels/base_procedural_level.tscn" id="1_5fqda"]
+[ext_resource type="PackedScene" uid="uid://bs0o64xc5k1i1" path="res://scenes/rooms/10x_10_1_way_room_top.tscn" id="2_esoqm"]
+[ext_resource type="PackedScene" uid="uid://bkjs2j33bo517" path="res://scenes/rooms/10x_10_1_way_room_bottom.tscn" id="3_6fdy7"]
+
+[node name="TestProceduralLevel" unique_id=433839496 instance=ExtResource("1_5fqda")]
+
+[node name="10x10_1WayRoom_top" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="0" unique_id=1003464471 instance=ExtResource("2_esoqm")]
+
+[node name="10x10_1WayRoom_bottom" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="1" unique_id=690487702 instance=ExtResource("3_6fdy7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
