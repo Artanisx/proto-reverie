@@ -5,6 +5,9 @@ extends BaseLevel
 ##
 ## The main goal of this script is to procedurally generate the rooms (picking the ones in the list) laying them up.
 ## Being a subclass of Base Level it inhertis the logic for player spawning.
+## The logic that actually PLACES rooms in the level, and the logic that selects WHICH ROOM to place depending on the adjacents room (if any) is still to be created.
+## For now this script generates a 2D array, and in the position of each of the rooms it only puts a C if it's a room in the critical path or a number to define the branches. 
+## So, the logic to choose which room to place (depending on which rooms is connected and where) and the logic to actually place the rooms in the level is to be created. 
 
 @export var dimensions: Vector2i = Vector2i(7,5) ## Defines the size of the level
 @export var start: Vector2i = Vector2i(-1,-1) ## Defines where in the grid the starting room will be placed. If not defined (or it is invalid), a random place will be picked.
