@@ -21,7 +21,7 @@ var branch_candidates : Array[Vector2i] ## List of room that can have branches a
 func _ready() -> void:
 	initialize_level()
 	place_entrance()
-	generate_path(start, critical_path_length, "C") # C stands for CRITICAL PATH
+	generate_path(start, critical_path_length, "CP") # CP stands for CRITICAL PATH
 	generate_branches()
 	print_level()
 	
@@ -53,7 +53,7 @@ func print_level() -> void:
 			if level[x][y]:	 ## if there's a room
 				level_as_string += "[" + str(level[x][y]) + "]"	
 			else:
-				level_as_string += "[ ]"	## this is empty, there's no room		
+				level_as_string += "[     ]"	## this is empty, there's no room		
 			
 		level_as_string += '\n'
 	
@@ -69,7 +69,7 @@ func place_entrance() -> void:
 		start.y = randi_range(0, dimensions.y - 1)
 		
 	## We place the start room in the position predetermined. Could be a specific Room with a lift/portal to return to the hub, a hp station... something.
-	level[start.x][start.y] = "S"
+	level[start.x][start.y] = "START"
 	
 ## This function will generate the critical path. 
 ## This is a iterative process, adding one room at time, starting from the entrance.
@@ -78,7 +78,7 @@ func place_entrance() -> void:
 ## length: the max critical_path_length we allow	
 ## marker: this will be the value the room will be set
 func generate_path(from: Vector2i, length: int, marker : String) -> bool:
-	if length == 0:
+	if length == 0:		
 		return true ## We generated the whole path, so we can return
 		## This will return something like this
 		## [0][7][6][3][2][1][0]
@@ -112,13 +112,20 @@ func generate_path(from: Vector2i, length: int, marker : String) -> bool:
 		if (current.x + direction.x >= 0 and current.x + direction.x < dimensions.x and
 			current.y + direction.y >= 0 and current.y + direction.y < dimensions.y and
 			not level[current.x + direction.x][current.y + direction.y]):	## The value in these new coordinates must also be empty and not already contain a room
-			current += direction	## This is all valid, so we can set this current position and proceed in this direction. Meaning, this is valid as the critical path
-			level[current.x][current.y] = marker ## we mark this as the value passed as marker. If this is being called from the generation of the critical path, it will be a 'C', if not will be a number for the branches >>> NOT ANMIORE:We change the value of this position in the array to something different than 0; the lenght of the critical path. Basically we are adding a room here (for now it's an umber and it is the number of rooms towards the exit)
+			current += direction	## This is all valid, so we can set this current position and proceed in this direction. Meaning, this is valid as the critical path			
 			
+			if length == 1 and marker == "C":	
+				## this is the last room of the critical path, so rather than marker, i want to put  ENDRO as end end room.
+				level[current.x][current.y] = "ENDRO"
+			else:
+				## we mark this as the value passed as marker. If this is being called from the generation of the critical path, it will be a 'C', if not will be a number for the branches >>> NOT ANMIORE:We change the value of this position in the array to something different than 0; the lenght of the critical path. Basically we are adding a room here (for now it's an umber and it is the number of rooms towards the exit)
+				level[current.x][current.y] = marker + "L:" + str(length) # I need to see the distance in the map
+				
+			## we don't want to create detours from the alst room, so lenght should be more than 1
 			if length > 1:
 				branch_candidates.append(current) ## We add this position in the map in the list of the branch_candidates, so room that can go somewhere else in a detour. This can only happen if we're not in the last room before the end (so lenght must be  > 1)
 			
-			if generate_path(current, length - 1, marker): ## We reduce the length of the critical path by 1 - starting from current - and call this again.
+			if generate_path(current, length - 1, marker): ## We reduce the length of the critical path by 1 - starting from current - and call this again.				
 				return true # it returned true, so we generated the whole thing, and the critical path is complete
 			else:
 				# it returned false, the critical path failed at some point. 
@@ -140,7 +147,7 @@ func generate_branches() -> void:
 		# select a branch candidate at random from the list
 		candidate = branch_candidates[randi_range(0, branch_candidates.size() -1)]
 		# generate a new path from this candidate of the branch_length we set. the marker branches created plus 1 (so each branch will be 1,1,1 or 2,2,2 etc)
-		if generate_path(candidate, randi_range(branch_length.x, branch_length.y), str(branches_created + 1)):
+		if generate_path(candidate, randi_range(branch_length.x, branch_length.y), "B" + str(branches_created + 1)):
 			branches_created += 1 #success
 		else:
 			branch_candidates.erase(candidate) #failure, remove this	
