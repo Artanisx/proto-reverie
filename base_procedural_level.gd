@@ -58,6 +58,7 @@ func _ready() -> void:
 	## Actual room placement
 	calculate_room_positions() 
 	print_level_grid()
+	generate_level()
 	
 	## Finally call the super (baseroom) _ready function to initialize the player
 	super()
@@ -197,6 +198,12 @@ func generate_branches() -> void:
 			branches_created += 1 #success
 		else:
 			branch_candidates.erase(candidate) #failure, remove this	
+
+## This function will generate the whole level
+func generate_level() -> void:
+	for i in range(len(level_grid)):
+		for j in range(len(level_grid[i])):  
+			place_room(level_grid[i][j])
 
 ## This function will actually place a room in the level
 func place_room(room_position: Vector2i, type: RoomType = RoomType.R10x10_4W) -> void:
