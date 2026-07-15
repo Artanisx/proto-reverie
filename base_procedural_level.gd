@@ -203,7 +203,9 @@ func generate_branches() -> void:
 func generate_level() -> void:
 	for i in range(len(level_grid)):
 		for j in range(len(level_grid[i])):  
-			place_room(level_grid[i][j])
+			## First we check if there's a room
+			if level[i][j]:
+				place_room(level_grid[i][j]) ## We place a room only if there's something there.
 
 ## This function will actually place a room in the level
 func place_room(room_position: Vector2i, type: RoomType = RoomType.R10x10_4W) -> void:
