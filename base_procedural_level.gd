@@ -200,6 +200,9 @@ func generate_branches() -> void:
 			branch_candidates.erase(candidate) #failure, remove this	
 
 ## This function will generate the whole level
+## TODO:
+## 1- ENDRO should really be a 1way room only, connected to CPL:2, or else it could happen ENDRO is very near the start or that is not clean if it could be reached by earlier than cp or from a Branch
+## 2- Branches atm are weird, since the CP can be next to itself, branches coudl be useless unless they are used specifically for special stuff like chests/special bossess
 func generate_level() -> void:
 	var is_there_room_up: bool = false
 	var is_there_room_down: bool = false
