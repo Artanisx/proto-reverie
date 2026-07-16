@@ -9,5 +9,5 @@ func _ready() -> void:
 	minimap_camera.minimap_ready.connect(on_minimap_ready.bind())
 
 func on_minimap_ready() -> void:
-	print("received minimap readyness")
+	##print("received minimap readyness")
 	minimap_camera.set_player(test_procedural_level.get_player())

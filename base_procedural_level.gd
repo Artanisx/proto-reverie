@@ -377,6 +377,68 @@ func place_room(room_position: Vector2i, type: RoomType = RoomType.R10x10_4W, ki
 	## Define its type
 	room.kind = kind
 	
+	## If it's an END ROOM let's add a blue omnilight3d
+	if kind == BaseRoom.RoomKind.END:
+		var light : OmniLight3D = OmniLight3D.new()
+		light.light_color = Color(0.0, 0.0, 1.0)
+		light.light_energy = 5.0
+		light.light_size = 1.0
+		light.position = Vector3.ZERO
+		room.add_child(light)
+		
+		## Also create a Sprite3D for the minimap
+		var minimap_icon : Sprite3D = Sprite3D.new()
+		minimap_icon.texture = preload("res://assets/textures/player_minimap.png")
+		minimap_icon.modulate = Color(0.0, 0.0, 1.0)
+		minimap_icon.axis = Vector3.Axis.AXIS_Y
+		minimap_icon.set_layer_mask_value(1, false) 
+		minimap_icon.set_layer_mask_value(2, true)
+		minimap_icon.position = Vector3(0.0, 5.0, 0.0) 
+		minimap_icon.scale = Vector3(20.0, 20.0, 20.0)
+		room.add_child(minimap_icon)
+		
+	## If it's an START ROOM let's add a green omnilight3d
+	if kind == BaseRoom.RoomKind.START:
+		var light : OmniLight3D = OmniLight3D.new()
+		light.light_color = Color(0.0, 1.0, 0.0)
+		light.light_energy = 5.0
+		light.light_size = 1.0
+		light.position = Vector3.ZERO
+		room.add_child(light)
+		
+		## Also create a Sprite3D for the minimap
+		var minimap_icon : Sprite3D = Sprite3D.new()
+		minimap_icon.texture = preload("res://assets/textures/player_minimap.png")
+		minimap_icon.modulate = Color(0.0, 1.0, 0.0, 0.25)
+		minimap_icon.axis = Vector3.Axis.AXIS_Y
+		minimap_icon.set_layer_mask_value(1, false) 
+		minimap_icon.set_layer_mask_value(2, true)
+		minimap_icon.position = Vector3(0.0, 5.0, 0.0) 
+		minimap_icon.scale = Vector3(20.0, 20.0, 20.0)
+		room.add_child(minimap_icon)
+		
+	## If it's an BRANCH PATH END ROOM (whre a chest/boss may lie) let's add a red omnilight3d
+	if kind == BaseRoom.RoomKind.BRANCHROOM:
+		var light : OmniLight3D = OmniLight3D.new()
+		light.light_color = Color(1.0, 0.0, 0.0)
+		light.light_energy = 5.0
+		light.light_size = 1.0
+		light.position = Vector3.ZERO
+		room.add_child(light)
+		
+		## Also create a Sprite3D for the minimap
+		var minimap_icon : Sprite3D = Sprite3D.new()
+		minimap_icon.texture = preload("res://assets/textures/player_minimap.png")
+		minimap_icon.modulate = Color(1.0, 0.0, 0.0, 0.25)
+		minimap_icon.axis = Vector3.Axis.AXIS_Y
+		minimap_icon.set_layer_mask_value(1, false) 
+		minimap_icon.set_layer_mask_value(2, true)
+		minimap_icon.position = Vector3(0.0, 5.0, 0.0) 
+		minimap_icon.scale = Vector3(20.0, 20.0, 20.0)
+		room.add_child(minimap_icon)
+	
+	
+	
 	## Add it to the rooms container as a child
 	rooms_container.add_child(room)
 	

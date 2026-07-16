@@ -15,8 +15,8 @@ func _ready() -> void:
 	minimap_ready.emit()
 	if player:
 		offset = global_position - player.global_position
-	else:
-		print("No player set in the minimap")
+	##else:
+	##	print("No player set in the minimap")
 
 func _process(_delta: float) -> void:
 	if player:
