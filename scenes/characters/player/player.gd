@@ -16,19 +16,26 @@ const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking
 @export var mouse_sensitivity : float ## Mouse Sensitivity: Use to determine the mouse look speed. 
 @export var run_speed : float ## Speed of running movement, used for WASD + SHIFT for running. 
 @export var walk_speed : float ## Speed of regular movement, used for WASD. 
+@export var mapcamera_distance : float = 100.0 ##MAP CAMERA Y POSITION (DISTANCE/ZOOM)
 
 @onready var camera: Camera3D = %Camera3D ## Reference to the Camera3D node. 
+@onready var mapcamera: Camera3D = $MAPCAMERA
+
 
 var input_dir := Vector2.ZERO ## Store the direction of movement from player input. Represents the player hitting W-A-S-D
+
+var mouse_look_allowed : bool = true ## toggles mouselook
 
 func _ready() -> void:
 	# Capture the mouse so it doesn't go outside of the window (F8 to stop debugging)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
+	mapcamera.size = mapcamera_distance
+	
 func _process(_delta: float) -> void:
 	## Setup the input direction using the get_vector function that maps a Vector2 to a input: 
 	## negative x motion (strafe left), positive x motion (stafe right), negative y motion (go backward), postive y motion (go forward)
-	input_dir = Input.get_vector("strafe_left","strafe_right","backward","forward")
+	input_dir = Input.get_vector("strafe_left","strafe_right","backward","forward")	
 	
 func _physics_process(delta: float) -> void:	
 	check_jump_input()	## handles player jump
@@ -74,8 +81,16 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _input(event: InputEvent) -> void:
+	## Handle Map
+	if Input.is_action_just_pressed("ui_page_up"):
+		mapcamera.make_current()
+		mouse_look_allowed = false
+	if Input.is_action_just_pressed("ui_page_down"):
+		camera.make_current()
+		mouse_look_allowed = true
+	
 	## HANDLE MOUSE LOOK (looking around)
-	if event is InputEventMouseMotion:
+	if event is InputEventMouseMotion and mouse_look_allowed:
 		# The event.relative Vector2 contains the X and Y position of the mouse relative to the current
 		# mouse position. This means the current movement is stored. 
 		# You can visualize it using this with the below print
@@ -97,8 +112,10 @@ func _input(event: InputEvent) -> void:
 		camera.rotate_x(-event.relative.y * mouse_sensitivity)
 		
 		# Clamp camera X rotation (up/down) to restrict the angles
-		camera.rotation.x = clampf(camera.rotation.x, MAX_ANGLE_LOOK_DOWN, MAX_ANGLE_LOOK_UP)	
-
+		camera.rotation.x = clampf(camera.rotation.x, MAX_ANGLE_LOOK_DOWN, MAX_ANGLE_LOOK_UP)
+		
+	
+		
 func check_jump_input() -> void:
 	if is_on_floor() and Input.is_action_just_pressed("jump"):
 		velocity.y = jump_force # apply a upward motion		
