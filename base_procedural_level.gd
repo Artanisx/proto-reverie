@@ -298,9 +298,10 @@ func generate_level() -> void:
 				else:
 					## This is not a START ROOM or END ROOM or END BRANCH ROOM, regular logic follows
 				
-					## CHeck if there's a room UP/DOWN/RIGHT/LEFT	
+					## CHeck if there's a room UP/DOWN/RIGHT/LEFT
+					
 					if j-1 >= 0 and (level[i][j-1]):
-						is_there_room_down = true					
+						is_there_room_down = true	
 					if j+1 < dimensions.y and (level[i][j+1]):
 						is_there_room_up = true
 					if i+1 < dimensions.x and (level[i+1][j]):
@@ -472,4 +473,11 @@ func is_this_same_branch(branch_number_name: String, room_to_check : String) -> 
 		return true
 	else:
 		#print("FALSE!")	
+		return false
+
+## This function checks if the passed room in an ender room like START/ENDROOM/ENDBRANCH		
+func is_endpath_room(room_to_check: String) -> bool:	
+	if room_to_check.contains("START") or room_to_check.contains("ENDRO") or room_to_check.contains("ENDBR"): 
+		return true
+	else:
 		return false
