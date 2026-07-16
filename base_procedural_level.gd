@@ -59,8 +59,9 @@ func _ready() -> void:
 	calculate_room_positions() 
 	print_level_grid()
 	generate_level()
+	print_rooms()
 	
-	## Finally call the super (baseroom) _ready function to initialize the player
+	## Finally call the super (baselevel) _ready function to initialize the player
 	super()
 	
 ## This function will procedurally generate the level assembling rooms
@@ -164,6 +165,15 @@ func generate_path(from: Vector2i, length: int, marker : String) -> bool:
 			if length == 1 and marker == "CP":	
 				## this is the last room of the critical path, so rather than marker, i want to put  ENDRO as end end room.
 				level[current.x][current.y] = "ENDRO"
+			elif length == 1 and marker.contains("B"):
+				## this is the last room of a branch, we want to mark it as such
+				## first we store which branch this is:
+				var room_name: String = marker ## B1ML2L:1
+				var parts := room_name.split("M") ## B1 - L2L:1
+				var branch_name : int = int(parts[0])	 ## 1
+				var parts2 := parts[1].split(":") ## L2L -  1  
+				var branch_length_str := int(parts2[0])  ## 2
+				level[current.x][current.y] = "ENDBR" + str(branch_name) + "L:" + str(branch_length_str) ##ENBDBR1L:2
 			else:
 				## we mark this as the value passed as marker. If this is being called from the generation of the critical path, it will be a 'C', if not will be a number for the branches >>> NOT ANMIORE:We change the value of this position in the array to something different than 0; the lenght of the critical path. Basically we are adding a room here (for now it's an umber and it is the number of rooms towards the exit)
 				level[current.x][current.y] = marker + "L:" + str(length) # I need to see the distance in the map
@@ -194,7 +204,9 @@ func generate_branches() -> void:
 		# select a branch candidate at random from the list
 		candidate = branch_candidates[randi_range(0, branch_candidates.size() -1)]
 		# generate a new path from this candidate of the branch_length we set. the marker branches created plus 1 (so each branch will be 1,1,1 or 2,2,2 etc)
-		if generate_path(candidate, randi_range(branch_length.x, branch_length.y), "B" + str(branches_created + 1)):
+		## first, we define a random lenght for this branch based upon settings
+		var b_length : int = randi_range(branch_length.x, branch_length.y)
+		if generate_path(candidate, b_length, "B" + str(branches_created + 1) + "ML" + str(b_length)): 	## BXMLY where X is branch number and Y is max length
 			branches_created += 1 #success
 		else:
 			branch_candidates.erase(candidate) #failure, remove this	
@@ -212,64 +224,138 @@ func generate_level() -> void:
 	for i in range(len(level_grid)):
 		for j in range(len(level_grid[i])):  
 			## First we check if there's a room
-			if level[i][j]:				
-				## CHeck if there's a room UP/DOWN/RIGHT/LEFT	
-				if j-1 >= 0 and (level[i][j-1]):
-					is_there_room_down = true					
-				if j+1 < dimensions.y and (level[i][j+1]):
-					is_there_room_up = true
-				if i+1 < dimensions.x and (level[i+1][j]):
-					is_there_room_right = true
-				if i-1 >= 0 and (level[i-1][j]):
-					is_there_room_left = true
+			if level[i][j]:
+				## Store the kind of room it is for proper assignment
+				var kind : BaseRoom.RoomKind				
+				
+				if level[i][j] == "START":
+					kind = BaseRoom.RoomKind.START
+				elif level[i][j] == "ENDRO":
+					kind = BaseRoom.RoomKind.END
+				elif level[i][j].contains("ENDBR"):
+					kind = BaseRoom.RoomKind.BRANCHPATHEND 
+				elif level[i][j].contains("CP"):
+					kind = BaseRoom.RoomKind.CRITICALPATH
+				else:
+					kind = BaseRoom.RoomKind.BRANCHROOM
+			
+				## CHECK if it's a START room
+				if (kind == BaseRoom.RoomKind.START):
+					## This is a start room, we want it to be a 1 way room open towards the highest CP
+					
+					## We check if there's a room UP/DOWN/RIGHT/LEFT that is the highest CP
+					## It is the only condition for why we consider the room to be needed and will be only possible for one direction	
+					if j-1 >= 0 and (level[i][j-1]) and level[i][j-1].contains("CP") and calculate_cp_length(level[i][j-1]) == critical_path_length:
+						is_there_room_down = true
+					if j+1 < dimensions.y and (level[i][j+1]) and level[i][j+1].contains("CP") and calculate_cp_length(level[i][j+1]) == critical_path_length:
+						is_there_room_up = true
+					if i+1 < dimensions.x and (level[i+1][j]) and level[i+1][j].contains("CP") and calculate_cp_length(level[i+1][j]) == critical_path_length:
+						is_there_room_right = true
+					if i-1 >= 0 and (level[i-1][j]) and level[i-1][j].contains("CP") and calculate_cp_length(level[i-1][j]) == critical_path_length:
+						is_there_room_left = true
+					
+					## PROBLEM: adjacent rooms will still have a room towards the start room even if "closed"
+				## CHECK if it's a END room
+				elif (kind == BaseRoom.RoomKind.END):
+					## This is a END room, we want it to be a 1 way room open towards the LOWEST CP (which can only be 2)
+					## It is the only condition for why we consider the room to be needed and will be only possible for one direction	
+					if j-1 >= 0 and (level[i][j-1]) and level[i][j-1].contains("CP") and calculate_cp_length(level[i][j-1]) == 2:
+						is_there_room_down = true
+					if j+1 < dimensions.y and (level[i][j+1]) and level[i][j+1].contains("CP") and calculate_cp_length(level[i][j+1]) == 2:
+						is_there_room_up = true
+					if i+1 < dimensions.x and (level[i+1][j]) and level[i+1][j].contains("CP") and calculate_cp_length(level[i+1][j]) == 2:
+						is_there_room_right = true
+					if i-1 >= 0 and (level[i-1][j]) and level[i-1][j].contains("CP") and calculate_cp_length(level[i-1][j]) == 2:
+						is_there_room_left = true
+					
+					## PROBLEM: adjacent rooms will still have a room towards the end room even if "closed"
+				
+				## CHECK if it's a BRANCH room end
+				elif (kind == BaseRoom.RoomKind.BRANCHPATHEND):
+					## This is a Branch Room end (ENDBR1L:3)
+					## We want it to be a 1 way room open towards the previous branch length (B1ML3L:2)
+					## It is the only condition for why we consider the room to be needed and will be only possible for one direction
+					## First, we extract the branch length we need to target
+					var branch_room_name : String = level[i][j] ## ENDBR1L:3
+					var parts := branch_room_name.split(":") ## ENDBR1L   -    3
+					var branch_num_name := parts[0].split("R")[1].split("L")[0]	## 1
+					
+					## branch length should be == 2 as the next room is lenght 1 which is the endrbranchroom...
+					if j-1 >= 0 and (level[i][j-1]) and level[i][j-1].contains("B") and calculate_branch_length(branch_num_name, level[i][j-1]) == 2:
+						is_there_room_down = true
+					if j+1 < dimensions.y and (level[i][j+1]) and level[i][j+1].contains("B") and calculate_branch_length(branch_num_name, level[i][j+1]) == 2:
+						is_there_room_up = true
+					if i+1 < dimensions.x and (level[i+1][j]) and level[i+1][j].contains("B") and calculate_branch_length(branch_num_name, level[i+1][j]) == 2:
+						is_there_room_right = true
+					if i-1 >= 0 and (level[i-1][j]) and level[i-1][j].contains("B") and calculate_branch_length(branch_num_name, level[i-1][j]) == 2:
+						is_there_room_left = true
+						
+					if 	not is_there_room_left and not is_there_room_right and not is_there_room_up and not is_there_room_down:
+						print("ERROR! [" + branch_room_name + "] doesn't have any doors, and that's impossible. If that happens it won't be placed...")
+					
+					#print("Hey! I checked for one BRANCHPATHEND room! SPecifically this : " + branch_room_name)					
+					## PROBLEM: adjacent rooms will still have a room towards the branch end room even if "closed"	
+				else:
+					## This is not a START ROOM or END ROOM or END BRANCH ROOM, regular logic follows
+				
+					## CHeck if there's a room UP/DOWN/RIGHT/LEFT	
+					if j-1 >= 0 and (level[i][j-1]):
+						is_there_room_down = true					
+					if j+1 < dimensions.y and (level[i][j+1]):
+						is_there_room_up = true
+					if i+1 < dimensions.x and (level[i+1][j]):
+						is_there_room_right = true
+					if i-1 >= 0 and (level[i-1][j]):
+						is_there_room_left = true
+				
 					
 				#print("I'm checking room name " + str(level[i][j]) + " that is i:" + str(i) + " j:" + str(j) + " in pos: " + str(level_grid[i][j]) + 
 				#	  " and here's the deal. room_up:" + str(is_there_room_up) + " room_down: " + str(is_there_room_down) + " room_right: " + str(is_there_room_right) + "room_left: " + str(is_there_room_left))	
 					
 				if is_there_room_up and is_there_room_down and is_there_room_right and is_there_room_left:
-					place_room(level_grid[i][j], RoomType.R10x10_4W)
+					place_room(level_grid[i][j], RoomType.R10x10_4W, kind)
 				#	print("Placing a RoomType.R10x10_4W in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif is_there_room_up and is_there_room_down and not is_there_room_right and not is_there_room_left:
-					place_room(level_grid[i][j], RoomType.R10x10_2W_VERTICAL)
+					place_room(level_grid[i][j], RoomType.R10x10_2W_VERTICAL, kind)
 				#	print("Placing a RoomType.R10x10_2W_VERTICAL in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif not is_there_room_up and not is_there_room_down and is_there_room_right and is_there_room_left:
-					place_room(level_grid[i][j], RoomType.R10x10_2W_HORIZZONTAL)
+					place_room(level_grid[i][j], RoomType.R10x10_2W_HORIZZONTAL, kind)
 				#	print("Placing a RoomType.R10x10_2W_HORIZZONTAL in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif not is_there_room_up and is_there_room_down and not is_there_room_right and not is_there_room_left:
-					place_room(level_grid[i][j], RoomType.R10x10_1W_TOP)
+					place_room(level_grid[i][j], RoomType.R10x10_1W_TOP, kind)
 				#	print("Placing a RoomType.R10x10_1W_TOP in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif is_there_room_up and not is_there_room_down and not is_there_room_right and not is_there_room_left:
-					place_room(level_grid[i][j], RoomType.R10x10_1W_BOTTOM)
+					place_room(level_grid[i][j], RoomType.R10x10_1W_BOTTOM, kind)
 				#	print("Placing a RoomType.R10x10_1W_BOTTOM in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif not is_there_room_up and not is_there_room_down and is_there_room_right and not is_there_room_left:
-					place_room(level_grid[i][j], RoomType.R10x10_1W_RIGHT)
+					place_room(level_grid[i][j], RoomType.R10x10_1W_RIGHT, kind)
 				#	print("Placing a RoomType.R10x10_1W_RIGHT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif not is_there_room_up and not is_there_room_down and not is_there_room_right and is_there_room_left:
-					place_room(level_grid[i][j], RoomType.R10x10_1W_LEFT)
+					place_room(level_grid[i][j], RoomType.R10x10_1W_LEFT, kind)
 				#	print("Placing a RoomType.R10x10_1W_LEFT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif is_there_room_up and not is_there_room_down and is_there_room_right and not is_there_room_left:
-					place_room(level_grid[i][j], RoomType.R10x10_2W_BOTTOM_RIGHT)
+					place_room(level_grid[i][j], RoomType.R10x10_2W_BOTTOM_RIGHT, kind)
 				#	print("Placing a RoomType.R10x10_2W_BOTTOM_RIGHT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif is_there_room_up and not is_there_room_down and not is_there_room_right and is_there_room_left:
-					place_room(level_grid[i][j], RoomType.R10x10_2W_BOTTOM_LEFT)
+					place_room(level_grid[i][j], RoomType.R10x10_2W_BOTTOM_LEFT, kind)
 				#	print("Placing a RoomType.R10x10_2W_BOTTOM_LEFT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif not is_there_room_up and is_there_room_down and is_there_room_right and not is_there_room_left:
-					place_room(level_grid[i][j], RoomType.R10x10_2W_TOP_RIGHT)
+					place_room(level_grid[i][j], RoomType.R10x10_2W_TOP_RIGHT, kind)
 				#	print("Placing a RoomType.R10x10_2W_TOP_RIGHT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif not is_there_room_up and is_there_room_down and not is_there_room_right and is_there_room_left:
-					place_room(level_grid[i][j], RoomType.R10x10_2W_TOP_LEFT)
+					place_room(level_grid[i][j], RoomType.R10x10_2W_TOP_LEFT, kind)
 				#	print("Placing a RoomType.R10x10_2W_TOP_LEFT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif is_there_room_up and not is_there_room_down and is_there_room_right and is_there_room_left:
-					place_room(level_grid[i][j], RoomType.R10x10_3W_BOTTOM)
+					place_room(level_grid[i][j], RoomType.R10x10_3W_BOTTOM, kind)
 				#	print("Placing a RoomType.R10x10_3W_BOTTOM in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif is_there_room_up and is_there_room_down and not is_there_room_right and is_there_room_left:
-					place_room(level_grid[i][j], RoomType.R10x10_3W_LEFT)
+					place_room(level_grid[i][j], RoomType.R10x10_3W_LEFT, kind)
 				#	print("Placing a RoomType.R10x10_3W_LEFT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif is_there_room_up and is_there_room_down and is_there_room_right and not is_there_room_left:
-					place_room(level_grid[i][j], RoomType.R10x10_3W_RIGHT)
+					place_room(level_grid[i][j], RoomType.R10x10_3W_RIGHT, kind)
 				#	print("Placing a RoomType.R10x10_3W_RIGHT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif not is_there_room_up and is_there_room_down and is_there_room_right and is_there_room_left:
-					place_room(level_grid[i][j], RoomType.R10x10_3W_TOP)
+					place_room(level_grid[i][j], RoomType.R10x10_3W_TOP, kind)
 				#	print("Placing a RoomType.R10x10_3W_TOP in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				
 				## Resets flags for the next run
@@ -280,15 +366,20 @@ func generate_level() -> void:
 				
 
 ## This function will actually place a room in the level
-func place_room(room_position: Vector2i, type: RoomType = RoomType.R10x10_4W) -> void:
+func place_room(room_position: Vector2i, type: RoomType = RoomType.R10x10_4W, kind: BaseRoom.RoomKind = BaseRoom.RoomKind.START) -> void:
 	## To start, we'll place R10x10_4W	
 	var room : BaseRoom = ROOMS_MAP[type].instantiate()
 	
 	## Position the new room in the given coordinates
 	room.position = Vector3(room_position.x, 0, room_position.y)
 	
+	## Define its type
+	room.kind = kind
+	
 	## Add it to the rooms container as a child
 	rooms_container.add_child(room)
+	
+	#print("I Have placed a room of kind: " + str(room.kind) + ", in position:" + str(room.position))
 	
 ## This function calculates the actual position in the level for the room.
 ## Puts the postiions in the level_grid array
@@ -311,3 +402,74 @@ func calculate_room_positions() -> void:
 	for x in dimensions.x:
 		for y in dimensions.y:
 			level_grid[x][y] = Vector2i(x*room_size,y*room_size)
+
+## This function will print the rooms, so we can see what's been generated. Meant for debugging.
+func print_rooms() -> void:
+	var room_as_string : String = ""
+	var rooms : Array[BaseRoom] = []
+	for child: Node in rooms_container.get_children():
+		if child is BaseRoom:
+			rooms.push_back(child)
+	
+	for room: BaseRoom in rooms:		
+		var kind_as_string : String = ""
+		
+		 #enum RoomKind{START,END,CRITICALPATH,BRANCHROOM,BRANCHPATHEND}
+		
+		match(room.kind):
+			0: 
+				kind_as_string = "START"
+			1:
+				kind_as_string = "END"
+			2: 
+				kind_as_string = "CRITICALPATH"
+			3: 
+				kind_as_string = "BRANCHROOM"
+			4:
+				kind_as_string = "BRANCHPATHEND"
+			
+		 
+		room_as_string += "[" + kind_as_string + "](" + str(int(room.position.x)) + "," + str(int(room.position.z)) + ")"	
+	
+	print(room_as_string)
+
+func calculate_cp_length(level_to_calculate: String) -> int:
+	return int(level_to_calculate)
+	
+func calculate_branch_length(branch_number_name: String, level_to_calculate: String) -> int:
+	## Branch rooms have this nomenclature: [BXMLYL:Z]
+	## Where X is the branch name in numerical form
+	## Y is the max branch length
+	## Z is current length
+	
+	## Before we return the length to allow calculation to see if the adhjacnet room is right, we need to check if it's on the same branch:
+	if is_this_same_branch(branch_number_name, level_to_calculate):
+		#it is, so we can return the number of length	
+		var parts := level_to_calculate.split(":")
+		#print("So, this length is: " + parts[1])
+		return int(parts[1])
+	else:
+		# it isn't, we should return a very high number that will surely fail
+		#print("No, this isn't on the same branch, set length to 999 to make this fail")
+		return 999
+	
+func is_this_same_branch(branch_number_name: String, room_to_check : String) -> bool:
+	## this receives a branch_nuber_name [K] and a room name [BXMLYL:Z]
+	## returns true if the room to check belongs to the same branch, so only if K == X
+	
+	## however, we need to check for ENDBRXL:Y too because a endbranchroom might be adjacent
+	## we need to instantly return false in this case
+	if room_to_check.contains("ENDBR"):
+		#print("checking for another branch end, we should return false here")
+		return false
+	
+	var room_belongs_to_branch := room_to_check.split("M")[0][1] ## X
+	#print("Checking if this is the same branch! So, branch number name is: " + branch_number_name + " and i'm checking for room: " + room_to_check + "! I think rooms_benlongs_to_bracnh is " + room_belongs_to_branch + " therefore I belive this should be: ")
+	
+	
+	if branch_number_name == room_belongs_to_branch:
+		#print("TRUE!")	
+		return true
+	else:
+		#print("FALSE!")	
+		return false

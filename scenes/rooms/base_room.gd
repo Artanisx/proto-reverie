@@ -12,6 +12,12 @@ extends Node3D
 @onready var ceilings: GridMap = %Ceilings
 @onready var floors: GridMap = %Floors
 
+## Enum for room kinds
+enum RoomKind{START,END,CRITICALPATH,BRANCHROOM,BRANCHPATHEND}
+
+## Var that hold the RoomKind, defaults to a start room
+var kind : RoomKind = RoomKind.START
+
 var cell_ids_with_no_ceiling := []
 
 func _ready() -> void:
@@ -21,7 +27,7 @@ func fill_ceilings() -> void:
 	# For each cell in the Floors, if the cell is one of the ones WITHOUT a ceiling...
 	for cell_name : String in ["Ground", "Hole-Corner", "Hole-Side", "Hole-UTurn"]:
 		## This cell in Floors needs a ceiling, so let's add this id to the list
-		var cell_to_fill = floors.mesh_library.find_item_by_name(cell_name)
+		var cell_to_fill := floors.mesh_library.find_item_by_name(cell_name)
 		cell_ids_with_no_ceiling.push_back(cell_to_fill)
 		
 	# Get an array of coordinates for cells that have been painted (i.e. contains something)	

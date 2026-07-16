@@ -26,4 +26,5 @@ transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545
 shadow_enabled = true
 
 [node name="TestProceduralLevel" parent="." unique_id=433839496 instance=ExtResource("2_sl2e5")]
-branches = 2
+dimensions = Vector2i(7, 5)
+branch_length = Vector2i(2, 4)

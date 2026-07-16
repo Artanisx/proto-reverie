@@ -3,3 +3,4 @@
 [ext_resource type="PackedScene" uid="uid://bhm65ia5boj6c" path="res://scenes/levels/base_procedural_level.tscn" id="1_5fqda"]
 
 [node name="TestProceduralLevel" unique_id=433839496 instance=ExtResource("1_5fqda")]
+dimensions = Vector2i(8, 8)
