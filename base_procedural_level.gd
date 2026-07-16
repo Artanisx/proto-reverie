@@ -28,6 +28,8 @@ const ROOMS_MAP := {
 	RoomType.R10x10_4W: preload("res://scenes/rooms/10x_10_4_way_room.tscn")
 } 
 
+const MINIMAP_ICONS_HEIGHT : float = 3.5 ## Y position for minimap icons
+
 ## Enum for room types
 enum RoomType{R10x10_1W_BOTTOM, R10x10_1W_LEFT, R10x10_1W_RIGHT, R10x10_1W_TOP,
 			  R10x10_2W_BOTTOM_LEFT, R10x10_2W_BOTTOM_RIGHT, R10x10_2W_HORIZZONTAL, R10x10_2W_TOP_LEFT, R10x10_2W_TOP_RIGHT, R10x10_2W_VERTICAL,
@@ -511,7 +513,7 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		minimap_icon.axis = Vector3.Axis.AXIS_Y
 		minimap_icon.set_layer_mask_value(1, false) 
 		minimap_icon.set_layer_mask_value(2, true)
-		minimap_icon.position = Vector3(0.0, 5.0, 0.0) 
+		minimap_icon.position = Vector3(0.0, MINIMAP_ICONS_HEIGHT, 0.0) 
 		minimap_icon.scale = Vector3(20.0, 20.0, 20.0)
 		room.add_child(minimap_icon)
 		
@@ -531,7 +533,7 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		minimap_icon.axis = Vector3.Axis.AXIS_Y
 		minimap_icon.set_layer_mask_value(1, false) 
 		minimap_icon.set_layer_mask_value(2, true)
-		minimap_icon.position = Vector3(0.0, 5.0, 0.0) 
+		minimap_icon.position = Vector3(0.0, MINIMAP_ICONS_HEIGHT, 0.0) 
 		minimap_icon.scale = Vector3(20.0, 20.0, 20.0)
 		room.add_child(minimap_icon)
 		
@@ -551,6 +553,6 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		minimap_icon.axis = Vector3.Axis.AXIS_Y
 		minimap_icon.set_layer_mask_value(1, false) 
 		minimap_icon.set_layer_mask_value(2, true)
-		minimap_icon.position = Vector3(0.0, 5.0, 0.0) 
+		minimap_icon.position = Vector3(0.0, MINIMAP_ICONS_HEIGHT, 0.0) 
 		minimap_icon.scale = Vector3(20.0, 20.0, 20.0)
 		room.add_child(minimap_icon)	
