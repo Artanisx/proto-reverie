@@ -17,7 +17,10 @@ const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking
 @export var run_speed : float ## Speed of running movement, used for WASD + SHIFT for running. 
 @export var walk_speed : float ## Speed of regular movement, used for WASD. 
 
+@onready var animation_player: AnimationPlayer = $character/AnimationPlayer ## Reference to the AnimationPlayer to handle animations
 @onready var camera: Camera3D = %Camera3D ## Reference to the Camera3D node. 
+
+
 
 var input_dir := Vector2.ZERO ## Store the direction of movement from player input. Represents the player hitting W-A-S-D
 
@@ -69,6 +72,16 @@ func _physics_process(delta: float) -> void:
 		## Again, we only want to update X and Z, not Y that is the up/down vector
 		velocity.x = move_toward(velocity.x, desired_velocity.x, acceleration * delta)
 		velocity.z = move_toward(velocity.z, desired_velocity.z, acceleration * delta)
+	
+	## Apply animation	
+	var horizontal_velocity := Vector3(velocity.x, 0.0, velocity.z)
+	
+	## Calculate the velocity and set either the run or idle animation accordingly
+	if horizontal_velocity.length_squared() > 0.1 and is_on_floor():
+		animation_player.play("run")
+	else:
+		animation_player.play("idle")
+	
 	
 	## Apply movemenet
 	move_and_slide()
