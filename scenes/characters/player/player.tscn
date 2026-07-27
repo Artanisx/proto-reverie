@@ -27,3 +27,5 @@ current = true
 near = 0.001
 
 [node name="character" parent="." unique_id=18193015 instance=ExtResource("2_t61fv")]
+
+[editable path="character"]
