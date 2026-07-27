@@ -28,4 +28,18 @@ near = 0.001
 
 [node name="character" parent="." unique_id=18193015 instance=ExtResource("2_t61fv")]
 
+[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(18193015, 1780705758) index="0" unique_id=521648815]
+bones/0/position = Vector3(-5.32907e-15, 0.7321018, -0.09928819)
+bones/3/rotation = Quaternion(-0.2513728, -0.3401814, 0.77154964, 0.4751836)
+bones/4/rotation = Quaternion(-0.53910965, -0.17746489, 0.030919548, 0.82274604)
+bones/6/rotation = Quaternion(0.28121728, -0.08643705, 0.8158967, -0.4977532)
+bones/7/rotation = Quaternion(-0.5840134, -0.16368864, 0.0133109465, 0.79495734)
+bones/9/rotation = Quaternion(0.021174774, -0.11775581, 0.9852112, 0.1226549)
+bones/10/rotation = Quaternion(0.3834145, 0.0015787875, 0.045187887, 0.922469)
+bones/12/rotation = Quaternion(-0.021174539, -0.11775537, 0.98521113, -0.122655086)
+bones/13/rotation = Quaternion(0.3834142, -0.0015787927, -0.045187827, 0.922469)
+
+[node name="AnimationPlayer" parent="character" index="1" unique_id=1590986662]
+autoplay = &"idle"
+
 [editable path="character"]
