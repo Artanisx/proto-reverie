@@ -3,7 +3,7 @@ This is a 3D FPS game done on [Godot](https://godotengine.org/).
 
 This prototype is based upon this [tutorial repository](https://github.com/Artanisx/goblins-den) which I'm currently following along.
 
-## Idea
+# Idea
 The prototype must establish the main combat loop (FPS combat, deciding whether to grant powers alongside firearms) and a system that generates a single stage.
 
 So, no multi-level maps or anything like that; basically, the prototype consists of:
@@ -19,7 +19,7 @@ That’s it, very basic. If it's fun, we will add system extensions, like chests
 Once the prototype is done, we can proceed with an in-depth design, deciding on the format, room layouts, balancing, whether there are chests, what kind of items are found, potential healing, equipment, different weapons, powers, etc. But not before creating the aforementioned prototype.
 
 
-## Syncronization
+# Syncronization
 In case new features implemented in the tutorial repository can be beneficial, I'll sync this repository from that upstream, since this repository is linked to it.
 
 The procedure will be, using Windows Terminal:
@@ -34,8 +34,102 @@ cd D:\Projects\Godot\proto-reverie
 3. Push to this repo:
 ```git push origin master```
 
+At 2. after the merge command, there will be merge conflicts:
+```
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
+Auto-merging scenes/characters/player/player.gd
+Auto-merging scenes/characters/player/player.tscn
+CONFLICT (content): Merge conflict in scenes/characters/player/player.tscn
+Auto-merging scenes/world/world.tscn
+CONFLICT (content): Merge conflict in scenes/world/world.tscn
+Automatic merge failed; fix conflicts and then commit the result.
+```
+How to fix them. 
 
-## Credits
+## Option 1:
+The conflicts are small edits you need to check yourself manually, opening the file and saving it, then you stage it and later commit, completing the merge. It's completely manual, and even if you want to accept / reject a file you'll need to manually work on it. This was tested and I know for a fact that works.
+1. ```git status```
+This will show clearly the status of the partial merge:
+```
+On branch master
+Your branch is up to date with 'origin/master'.
+
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Changes to be committed:
+        new file:   assets/blender/character.blend
+        new file:   assets/blender/character.blend1
+        new file:   assets/meshes/characters/character.glb
+        new file:   assets/meshes/characters/character.glb.import
+        new file:   assets/meshes/characters/character_skin-human.png
+        new file:   assets/meshes/characters/character_skin-human.png.import
+        new file:   assets/textures/skin-human.png
+        modified:   scenes/characters/player/player.gd
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+        both modified:   README.md
+        both modified:   scenes/characters/player/player.tscn
+        both modified:   scenes/world/world.tscn
+```
+We have three files that have issues (shown in red). Opening each of them we'll see there are portion of the text added like below:
+```
+<<<<<<< HEAD
+// Code from the current local branch
+=======
+– Code from the merging branch on remote (upstream in our case)
+>>>>>>> origin/master
+```
+This is called a conflict divider, and there might be multiple of them in the file.
+In order to fix the merge conflict you need to remove these extra lines (<<<< HEAD, the divisor from "local to upstream" =====, and the >>>> origin/master) and of course decide which actual content to keep which might be just the local (removing the remote lines in the conflict divider), the remote, or a bit of both.
+The final file should be what you need to have in the finalized merge, without any conflict divider extra lines. Once done you add this to the staging, including the whole path as needed:
+
+2. ```git add README.md```
+
+3. You repeat the process with all files that have merge conflicts, making sure to add all of them to staging.
+
+4. ```git status``` again so you can see that everything is green:
+```
+On branch master
+Your branch is up to date with 'origin/master'.
+
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+        new file:   assets/blender/character.blend
+        new file:   assets/blender/character.blend1
+        new file:   assets/meshes/characters/character.glb
+        new file:   assets/meshes/characters/character.glb.import
+        new file:   assets/meshes/characters/character_skin-human.png
+        new file:   assets/meshes/characters/character_skin-human.png.import
+        new file:   assets/textures/skin-human.png
+        modified:   scenes/characters/player/player.gd
+        modified:   scenes/characters/player/player.tscn
+        modified:   scenes/world/world.tscn
+```
+
+5. ```git commit -m "Merge with the upstream"```
+This will create a commit for the merge. Another ```git status``` will show working tree clean.
+
+6. ```git push```
+This will push the commit to github, completing the merge also there.
+
+## Option 2:
+For some files you want to ignore a change from the upstream entirely (for example the readme!) that you want to keep as local, or you only want a upstream file (for example the player scene). Rather than manually fixing these merge conflict, you can instruct git on which file to keep. This was *NOT* tested and I don't know if it works.
+
+1. Assuming that you want to keep the local README.md for Proto-Reverie you can do: ```git checkout --ours README.md```
+2. Assume that you want to keep only the upstream player.tscn, you can do: ```git checkout --theirs assets/blender/character.blend```
+3. Now that you have fixed these two merge conflicts telling git you want to keep the local readme.md and the upstream character.blend, you add them to staging:
+    1. ```git add README.md```
+    2. ```git add assets/blender/character.blend```
+4. Assuming there are no more merge conflicts (if there are deal with them with option 1 or option 2), commit: ```git commit -m "Merge with the upstream"```
+5. Finally, push ``git push```
+
+# Credits
 Pixel Art done by me using [Aseprite](https://www.aseprite.org/). This being a prototype I'm using art I created following along this [tutorial repository](https://github.com/Artanisx/goblins-den) <br>
 3D Art done by me using [Blender](https://www.blender.org/). This being a prototype I'm using art I created following along this [tutorial repository](https://github.com/Artanisx/goblins-den).
 
