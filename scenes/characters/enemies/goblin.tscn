@@ -18,10 +18,10 @@ shape = SubResource("CapsuleShape3D_oy0di")
 
 [node name="character" parent="." unique_id=1969068303 instance=ExtResource("1_jcgx1")]
 
-[node name="Character" parent="character/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1969068303, 822125072) index="0" unique_id=1274341776]
+[node name="Character" parent="character/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1969068303, 1892329746) index="0" unique_id=874086800]
 surface_material_override/0 = SubResource("StandardMaterial3D_jcgx1")
 
-[node name="AnimationPlayer" parent="character" index="1" unique_id=472815350]
+[node name="AnimationPlayer" parent="character" index="1" unique_id=2132742092]
 autoplay = &"idle"
 
 [editable path="character"]
