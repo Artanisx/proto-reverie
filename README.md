@@ -7,3 +7,8 @@ The game was created following along [this tutorial series](https://www.youtube.
 
 Pixel Art done by me using [Aseprite](https://www.aseprite.org/) while following along.<br>
 3D Art done by me using [Blender](https://www.blender.org/) while following along).
+
+## Currently on
+
+Episode 04: https://www.youtube.com/watch?v=8vKzfsgLOIk&list=PLT26e2jOwbdg&index=5
+Time Index: 0:0:10
