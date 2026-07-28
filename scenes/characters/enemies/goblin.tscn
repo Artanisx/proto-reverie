@@ -1,9 +1,14 @@
 [gd_scene format=3 uid="uid://b7ocgy8gc1rn5"]
 
 [ext_resource type="PackedScene" uid="uid://doq2ddny7lxxo" path="res://assets/meshes/characters/character.glb" id="1_jcgx1"]
+[ext_resource type="Texture2D" uid="uid://ii8mminbj3y3" path="res://assets/textures/skin-goblin.png" id="2_ik1ic"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_oy0di"]
 height = 1.7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jcgx1"]
+albedo_texture = ExtResource("2_ik1ic")
+texture_filter = 0
 
 [node name="Goblin" type="CharacterBody3D" unique_id=1741756622]
 
@@ -23,6 +28,9 @@ bones/9/rotation = Quaternion(0.021174774, -0.11775581, 0.9852112, 0.1226549)
 bones/10/rotation = Quaternion(0.3834145, 0.0015787875, 0.045187887, 0.922469)
 bones/12/rotation = Quaternion(-0.021174539, -0.11775537, 0.98521113, -0.122655086)
 bones/13/rotation = Quaternion(0.3834142, -0.0015787927, -0.045187827, 0.922469)
+
+[node name="Character" parent="character/Armature/Skeleton3D" index="0" unique_id=1908790583]
+surface_material_override/0 = SubResource("StandardMaterial3D_jcgx1")
 
 [node name="AnimationPlayer" parent="character" index="1" unique_id=1590986662]
 autoplay = &"idle"
