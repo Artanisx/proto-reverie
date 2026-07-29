@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://doq2ddny7lxxo" path="res://assets/meshes/characters/character.glb" id="1_jcgx1"]
 [ext_resource type="Texture2D" uid="uid://ii8mminbj3y3" path="res://assets/textures/skin-goblin.png" id="2_ik1ic"]
+[ext_resource type="PackedScene" uid="uid://biuymgx8pyx78" path="res://assets/meshes/weapons/shortsword.glb" id="3_1ffe6"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_oy0di"]
 height = 1.7
@@ -36,6 +37,16 @@ bones/21/rotation = Quaternion(0.3834156, -0.0015788155, -0.045187946, 0.9224685
 
 [node name="Character" parent="character/Armature/Skeleton3D" index="0" unique_id=1615055388]
 surface_material_override/0 = SubResource("StandardMaterial3D_jcgx1")
+
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="character/Armature/Skeleton3D" index="1" unique_id=54954367]
+transform = Transform3D(-0.009950995, -0.9985971, 0.052001864, 0.36564374, 0.044769228, 0.92967707, -0.93070155, 0.028265268, 0.36468545, 0.4578342, 0.9251892, -0.3038082)
+bone_name = "LowerArm.R_leaf"
+bone_idx = 16
+
+[node name="WeaponPlaceholder" type="Node3D" parent="character/Armature/Skeleton3D/BoneAttachment3D" unique_id=680065264]
+transform = Transform3D(-0.63431454, -0.18869834, -0.7496921, -0.28513458, 0.9584875, 0, 0.7185704, 0.21376312, -0.66178685, -0.061765797, 5.820766e-11, 0.05648811)
+
+[node name="shortsword" parent="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder" unique_id=936778119 instance=ExtResource("3_1ffe6")]
 
 [node name="AnimationPlayer" parent="character" index="1" unique_id=1072014312]
 autoplay = &"idle"
