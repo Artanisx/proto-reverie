@@ -29,26 +29,10 @@ near = 0.001
 
 [node name="character" parent="." unique_id=902149486 instance=ExtResource("2_t61fv")]
 
-[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 475110786) index="0" unique_id=1547151714]
-bones/0/position = Vector3(-0.24236484, 0.42799065, -0.37512615)
-bones/0/rotation = Quaternion(0.08041042, 0.70251983, -0.7025199, -0.08041043)
-bones/2/position = Vector3(0.24236484, 0.42799065, -0.37512615)
-bones/4/position = Vector3(-0.28344277, 0.03899663, 1.087476e-07)
-bones/6/position = Vector3(0.28344277, 0.03899663, 1.087476e-07)
-bones/8/position = Vector3(2.7828657e-09, 0.5299497, -0.08423395)
-bones/11/rotation = Quaternion(-0.2513728, -0.34018144, 0.77154964, 0.47518358)
-bones/12/rotation = Quaternion(-0.507, -0.16271628, 0.0015463678, 0.84644675)
-bones/14/rotation = Quaternion(0.28121728, -0.08643704, 0.81589663, -0.49775317)
-bones/15/rotation = Quaternion(-0.5021446, -0.15509902, 0.031164985, 0.8501905)
-bones/17/rotation = Quaternion(0.017817507, -0.23050646, 0.9601979, 0.15674633)
-bones/18/rotation = Quaternion(0.6018733, 0.0013613916, 0.07093459, 0.79543394)
-bones/20/rotation = Quaternion(-0.017817616, -0.23050615, 0.960198, -0.15674645)
-bones/21/rotation = Quaternion(0.60187316, -0.0013613971, -0.070934504, 0.795434)
-
-[node name="BoneAttachment3D" type="BoneAttachment3D" parent="character/Armature/Skeleton3D" index="1" unique_id=1334627026]
-transform = Transform3D(0.14671893, -0.9864328, -0.07364212, 0.3700071, -0.014314696, 0.9289181, -0.9173702, -0.16353825, 0.36288708, 0.49737206, 0.8313671, -0.31269035)
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="character/Armature/Skeleton3D" parent_id_path=PackedInt32Array(902149486, 2062208085) index="1" unique_id=1334627026]
+transform = Transform3D(1.0000001, 7.4505806e-08, 0, -1.7136335e-07, 2.9802322e-08, 0.9999999, 0, -0.99999976, 7.4505806e-08, 0.67874885, 0.79302806, -2.9802322e-08)
 bone_name = "LowerArm.R_leaf"
-bone_idx = 16
+bone_idx = 8
 
 [node name="WeaponPlaceholder" type="Node3D" parent="character/Armature/Skeleton3D/BoneAttachment3D" unique_id=1888966459]
 transform = Transform3D(-0.2651611, -0.18913247, -0.94547266, 0.25000003, 0.93355346, -0.25686148, 0.9312302, -0.30447784, -0.2002589, -0.02997258, -2.910383e-11, 0.07420103)
@@ -56,7 +40,7 @@ transform = Transform3D(-0.2651611, -0.18913247, -0.94547266, 0.25000003, 0.9335
 [node name="shortsword" parent="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder" unique_id=199658927 instance=ExtResource("3_686vu")]
 transform = Transform3D(1.0000001, 0, 2.9802322e-08, -1.8626451e-09, 1.0000001, -1.3969839e-09, -2.9802322e-08, -1.3969839e-09, 1.0000001, 0, 0, 0)
 
-[node name="AnimationPlayer" parent="character" index="1" unique_id=1072014312]
+[node name="AnimationPlayer" parent="character" index="1" unique_id=461979395]
 autoplay = &"idle"
 
 [editable path="character"]

@@ -19,36 +19,20 @@ shape = SubResource("CapsuleShape3D_oy0di")
 
 [node name="character" parent="." unique_id=1969068303 instance=ExtResource("1_jcgx1")]
 
-[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(1969068303, 475110786) index="0" unique_id=1547151714]
-bones/0/position = Vector3(-0.24236484, 0.42799065, -0.37512615)
-bones/0/rotation = Quaternion(0.08041042, 0.70251983, -0.7025199, -0.08041043)
-bones/2/position = Vector3(0.24236484, 0.42799065, -0.37512615)
-bones/4/position = Vector3(-0.28344277, 0.03899663, 1.087476e-07)
-bones/6/position = Vector3(0.28344277, 0.03899663, 1.087476e-07)
-bones/8/position = Vector3(-1.776356e-15, 0.62109935, -0.08423395)
-bones/11/rotation = Quaternion(-0.2513728, -0.34018144, 0.77154964, 0.47518358)
-bones/12/rotation = Quaternion(-0.5391095, -0.1774649, 0.03091945, 0.8227461)
-bones/14/rotation = Quaternion(0.28121728, -0.08643704, 0.81589663, -0.49775317)
-bones/15/rotation = Quaternion(-0.5840134, -0.16368856, 0.013311086, 0.79495746)
-bones/17/rotation = Quaternion(0.02117573, -0.11775691, 0.98521113, 0.12265455)
-bones/18/rotation = Quaternion(0.38341573, 0.0015788153, 0.045187976, 0.9224685)
-bones/20/rotation = Quaternion(-0.021175804, -0.11775666, 0.9852111, -0.12265462)
-bones/21/rotation = Quaternion(0.3834156, -0.0015788155, -0.045187946, 0.9224685)
-
-[node name="Character" parent="character/Armature/Skeleton3D" index="0" unique_id=1615055388]
+[node name="Character" parent="character/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1969068303, 1459414153) index="0" unique_id=372819895]
 surface_material_override/0 = SubResource("StandardMaterial3D_jcgx1")
 
-[node name="BoneAttachment3D" type="BoneAttachment3D" parent="character/Armature/Skeleton3D" index="1" unique_id=54954367]
-transform = Transform3D(-0.009950995, -0.9985971, 0.052001864, 0.36564374, 0.044769228, 0.92967707, -0.93070155, 0.028265268, 0.36468545, 0.4578342, 0.9251892, -0.3038082)
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="character/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1969068303, 1459414153) index="1" unique_id=54954367]
+transform = Transform3D(1.0000001, 7.4505806e-08, 0, -1.7136335e-07, 2.9802322e-08, 0.9999999, 0, -0.99999976, 7.4505806e-08, 0.67874885, 0.79302806, -2.9802322e-08)
 bone_name = "LowerArm.R_leaf"
-bone_idx = 16
+bone_idx = 8
 
 [node name="WeaponPlaceholder" type="Node3D" parent="character/Armature/Skeleton3D/BoneAttachment3D" unique_id=680065264]
 transform = Transform3D(-0.63431454, -0.18869834, -0.7496921, -0.28513458, 0.9584875, 0, 0.7185704, 0.21376312, -0.66178685, -0.061765797, 5.820766e-11, 0.05648811)
 
 [node name="shortsword" parent="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder" unique_id=936778119 instance=ExtResource("3_1ffe6")]
 
-[node name="AnimationPlayer" parent="character" index="1" unique_id=1072014312]
+[node name="AnimationPlayer" parent="character" index="1" unique_id=1119740234]
 autoplay = &"idle"
 
 [editable path="character"]
