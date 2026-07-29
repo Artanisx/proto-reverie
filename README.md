@@ -17,4 +17,5 @@ What: From start!
 
 
 Next Episode will be 06: https://www.youtube.com/watch?v=2tYm-Ix84cg&list=PLT26e2jOwbdg&index=7
+
 Playlist: https://www.youtube.com/playlist?list=PLT26e2jOwbdg
