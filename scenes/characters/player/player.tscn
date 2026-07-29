@@ -3,10 +3,17 @@
 [ext_resource type="Script" uid="uid://1qnwebdshlgr" path="res://scenes/characters/player/player.gd" id="1_7uws0"]
 [ext_resource type="PackedScene" uid="uid://doq2ddny7lxxo" path="res://assets/meshes/characters/character.glb" id="2_t61fv"]
 [ext_resource type="PackedScene" uid="uid://biuymgx8pyx78" path="res://assets/meshes/weapons/shortsword.glb" id="3_686vu"]
+[ext_resource type="Texture2D" uid="uid://cn61pdxjcwm6o" path="res://assets/meshes/weapons/shortsword_dungeon-texture.png" id="4_hss88"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5w87n"]
 margin = 0.3
 height = 1.7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_686vu"]
+albedo_texture = ExtResource("4_hss88")
+texture_filter = 0
+use_z_clip_scale = true
+z_clip_scale = 0.5
 
 [node name="Player" type="CharacterBody3D" unique_id=1783328250]
 script = ExtResource("1_7uws0")
@@ -51,7 +58,11 @@ transform = Transform3D(-0.3245963, -0.02680943, -0.94547266, 0.6924978, 0.67414
 [node name="shortsword" parent="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder" unique_id=199658927 instance=ExtResource("3_686vu")]
 transform = Transform3D(1.0000001, 0, 2.9802322e-08, -1.8626451e-09, 1.0000001, -1.3969839e-09, -2.9802322e-08, -1.3969839e-09, 1.0000001, 0, 0, 0)
 
+[node name="Sword" parent="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder/shortsword" index="0" unique_id=312049190]
+surface_material_override/0 = SubResource("StandardMaterial3D_686vu")
+
 [node name="AnimationPlayer" parent="character" index="1" unique_id=461979395]
 autoplay = &"idle"
 
 [editable path="character"]
+[editable path="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder/shortsword"]
