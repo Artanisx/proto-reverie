@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://doq2ddny7lxxo" path="res://assets/meshes/characters/character.glb" id="2_t61fv"]
 [ext_resource type="PackedScene" uid="uid://biuymgx8pyx78" path="res://assets/meshes/weapons/shortsword.glb" id="3_686vu"]
 [ext_resource type="Texture2D" uid="uid://cn61pdxjcwm6o" path="res://assets/meshes/weapons/shortsword_dungeon-texture.png" id="4_hss88"]
+[ext_resource type="PackedScene" uid="uid://bqvidyxo6b1fn" path="res://assets/meshes/weapons/axe.glb" id="5_qd3e3"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5w87n"]
 margin = 0.3
@@ -53,13 +54,15 @@ bone_name = "LowerArm.R_leaf"
 bone_idx = 8
 
 [node name="WeaponPlaceholder" type="Node3D" parent="character/Armature/Skeleton3D/BoneAttachment3D" unique_id=1888966459]
-transform = Transform3D(-0.3245963, -0.02680943, -0.94547266, 0.6924978, 0.6741432, -0.25686148, 0.6442702, -0.73811394, -0.2002589, -0.02997258, -2.910383e-11, 0.07420103)
+transform = Transform3D(0.22814482, 0.2324464, -0.94547284, -0.08349022, -0.9628353, -0.25686145, -0.970041, 0.13753916, -0.20025888, -0.02997258, -2.910383e-11, 0.07420103)
 
 [node name="shortsword" parent="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder" unique_id=199658927 instance=ExtResource("3_686vu")]
 transform = Transform3D(1.0000001, 0, 2.9802322e-08, -1.8626451e-09, 1.0000001, -1.3969839e-09, -2.9802322e-08, -1.3969839e-09, 1.0000001, 0, 0, 0)
 
 [node name="Sword" parent="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder/shortsword" index="0" unique_id=312049190]
 surface_material_override/0 = SubResource("StandardMaterial3D_686vu")
+
+[node name="axe" parent="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder" unique_id=402674198 instance=ExtResource("5_qd3e3")]
 
 [node name="AnimationPlayer" parent="character" index="1" unique_id=461979395]
 autoplay = &"idle"
