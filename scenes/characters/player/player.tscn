@@ -3,10 +3,19 @@
 [ext_resource type="Script" uid="uid://1qnwebdshlgr" path="res://scenes/characters/player/player.gd" id="1_7uws0"]
 [ext_resource type="PackedScene" uid="uid://doq2ddny7lxxo" path="res://assets/meshes/characters/character.glb" id="2_t61fv"]
 [ext_resource type="Texture2D" uid="uid://c7yd40jiqkhtf" path="res://assets/textures/cone_of_vision_minimap.png" id="3_686vu"]
+[ext_resource type="PackedScene" uid="uid://biuymgx8pyx78" path="res://assets/meshes/weapons/shortsword.glb" id="3_686vu"]
+[ext_resource type="Texture2D" uid="uid://cn61pdxjcwm6o" path="res://assets/meshes/weapons/shortsword_dungeon-texture.png" id="4_hss88"]
+[ext_resource type="PackedScene" uid="uid://bqvidyxo6b1fn" path="res://assets/meshes/weapons/axe.glb" id="5_qd3e3"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5w87n"]
 margin = 0.3
 height = 1.7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_686vu"]
+albedo_texture = ExtResource("4_hss88")
+texture_filter = 0
+use_z_clip_scale = true
+z_clip_scale = 0.5
 
 [node name="Player" type="CharacterBody3D" unique_id=1783328250]
 script = ExtResource("1_7uws0")
@@ -48,20 +57,37 @@ texture = ExtResource("3_686vu")
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 100, 0)
 projection = 1
 
-[node name="character" parent="." unique_id=18193015 instance=ExtResource("2_t61fv")]
+[node name="character" parent="." unique_id=902149486 instance=ExtResource("2_t61fv")]
 
-[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(18193015, 1634879110) index="0" unique_id=711749299]
-bones/0/position = Vector3(-5.32907e-15, 0.7321018, -0.09928819)
-bones/3/rotation = Quaternion(-0.2513728, -0.3401814, 0.77154964, 0.4751836)
-bones/4/rotation = Quaternion(-0.53910965, -0.17746489, 0.030919548, 0.82274604)
-bones/6/rotation = Quaternion(0.28121728, -0.08643705, 0.8158967, -0.4977532)
-bones/7/rotation = Quaternion(-0.5840134, -0.16368864, 0.0133109465, 0.79495734)
-bones/9/rotation = Quaternion(0.021174774, -0.11775581, 0.9852112, 0.1226549)
-bones/10/rotation = Quaternion(0.3834145, 0.0015787875, 0.045187887, 0.922469)
-bones/12/rotation = Quaternion(-0.021174539, -0.11775537, 0.98521113, -0.122655086)
-bones/13/rotation = Quaternion(0.3834142, -0.0015787927, -0.045187827, 0.922469)
+[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 1051702559) index="0" unique_id=2062208085]
+bones/0/position = Vector3(-1.776356e-15, 0.62109935, -0.08423395)
+bones/3/rotation = Quaternion(-0.2513728, -0.34018144, 0.77154964, 0.47518358)
+bones/4/rotation = Quaternion(-0.5391095, -0.1774649, 0.03091945, 0.8227461)
+bones/6/rotation = Quaternion(0.28121728, -0.08643704, 0.81589663, -0.49775317)
+bones/7/rotation = Quaternion(-0.5840134, -0.16368856, 0.013311086, 0.79495746)
+bones/9/rotation = Quaternion(0.02117573, -0.11775691, 0.98521113, 0.12265455)
+bones/10/rotation = Quaternion(0.38341573, 0.0015788153, 0.045187976, 0.9224685)
+bones/12/rotation = Quaternion(-0.021175804, -0.11775666, 0.9852111, -0.12265462)
+bones/13/rotation = Quaternion(0.3834156, -0.0015788155, -0.045187946, 0.9224685)
 
-[node name="AnimationPlayer" parent="character" index="1" unique_id=1748363294]
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="character/Armature/Skeleton3D" index="1" unique_id=1334627026]
+transform = Transform3D(-0.009950995, -0.9985971, 0.052001864, 0.36564374, 0.044769228, 0.92967707, -0.93070155, 0.028265268, 0.36468545, 0.4578342, 0.9251892, -0.3038082)
+bone_name = "LowerArm.R_leaf"
+bone_idx = 8
+
+[node name="WeaponPlaceholder" type="Node3D" parent="character/Armature/Skeleton3D/BoneAttachment3D" unique_id=1888966459]
+transform = Transform3D(0.22814482, 0.2324464, -0.94547284, -0.08349022, -0.9628353, -0.25686145, -0.970041, 0.13753916, -0.20025888, -0.02997258, -2.910383e-11, 0.07420103)
+
+[node name="shortsword" parent="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder" unique_id=199658927 instance=ExtResource("3_686vu")]
+transform = Transform3D(1.0000001, 0, 2.9802322e-08, -1.8626451e-09, 1.0000001, -1.3969839e-09, -2.9802322e-08, -1.3969839e-09, 1.0000001, 0, 0, 0)
+
+[node name="Sword" parent="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder/shortsword" index="0" unique_id=312049190]
+surface_material_override/0 = SubResource("StandardMaterial3D_686vu")
+
+[node name="axe" parent="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder" unique_id=402674198 instance=ExtResource("5_qd3e3")]
+
+[node name="AnimationPlayer" parent="character" index="1" unique_id=461979395]
 autoplay = &"idle"
 
 [editable path="character"]
+[editable path="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder/shortsword"]
