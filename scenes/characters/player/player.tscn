@@ -58,8 +58,9 @@ transform = Transform3D(0.22814482, 0.2324464, -0.94547284, -0.08349022, -0.9628
 
 [node name="shortsword" parent="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder" unique_id=199658927 instance=ExtResource("3_686vu")]
 transform = Transform3D(1.0000001, 0, 2.9802322e-08, -1.8626451e-09, 1.0000001, -1.3969839e-09, -2.9802322e-08, -1.3969839e-09, 1.0000001, 0, 0, 0)
+visible = false
 
-[node name="Sword" parent="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder/shortsword" index="0" unique_id=312049190]
+[node name="Sword" parent="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder/shortsword" index="0" unique_id=1650519071]
 surface_material_override/0 = SubResource("StandardMaterial3D_686vu")
 
 [node name="axe" parent="character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder" unique_id=402674198 instance=ExtResource("5_qd3e3")]
