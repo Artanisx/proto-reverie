@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bc5bg71atm1ug"]
+
+[ext_resource type="Texture2D" uid="uid://d08bac15cxci6" path="res://assets/textures/dungeon-texture.png" id="1_ftvap"]
+
+[resource]
+albedo_texture = ExtResource("1_ftvap")
+texture_filter = 0
+use_z_clip_scale = true
+z_clip_scale = 0.5
