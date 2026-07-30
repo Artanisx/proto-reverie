@@ -11,6 +11,9 @@ const HIGHLIGHT_MATERIAL := preload("res://materials/highlight_material.tres")
 
 @export var weapon_data: WeaponData
 
+@onready var collision_shape: CollisionShape3D = %CollisionShape		## Reference to the collision shape, since we'll need to create it dynamically depending on the item
+
+
 var highlight_material : StandardMaterial3D
 var mesh_node : MeshInstance3D
 
@@ -29,10 +32,11 @@ func _ready() -> void:
 	if weapon_data:
 		pickable_object = weapon_data.glb_mesh.instantiate()
 		
-	## Add it as a child and save the reference to the mesh node	
+	## Add it as a child and save the reference to the mesh node and finally create the collision shape	
 	if pickable_object != null:
 		add_child(pickable_object)
-		mesh_node = pickable_object.get_child(0) as MeshInstance3D		
+		mesh_node = pickable_object.get_child(0) as MeshInstance3D
+		collision_shape.shape = mesh_node.mesh.create_convex_shape()
 			
 ## Change the mesh material	with the highlight material
 func highlight() -> void:

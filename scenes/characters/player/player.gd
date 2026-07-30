@@ -19,9 +19,11 @@ const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking
 
 @onready var animation_player: AnimationPlayer = $character/AnimationPlayer ## Reference to the AnimationPlayer to handle animations
 @onready var camera: Camera3D = %Camera3D ## Reference to the Camera3D node. 
+@onready var select_raycast: RayCast3D = %SelectRaycast		## Reference to the RayCast used for pick up objects
+@onready var equipment: EquipmentComponent = %EquipmentComponent 	## refenrec eto tehe quipment component
 
 
-
+var current_pickable_focused_item : PickableItem = null	## This will hold a PickableItem that is currently pickable (in range and hit by the select_raycast)
 var input_dir := Vector2.ZERO ## Store the direction of movement from player input. Represents the player hitting W-A-S-D
 
 func _ready() -> void:
@@ -32,6 +34,10 @@ func _process(_delta: float) -> void:
 	## Setup the input direction using the get_vector function that maps a Vector2 to a input: 
 	## negative x motion (strafe left), positive x motion (stafe right), negative y motion (go backward), postive y motion (go forward)
 	input_dir = Input.get_vector("strafe_left","strafe_right","backward","forward")
+	
+	## Setup for the equipment button (E) to pickup an object and if he can pickup an object...
+	if Input.is_action_just_pressed("use") and can_pickup_object():
+		pickup_object()		## pick it up!
 	
 func _physics_process(delta: float) -> void:	
 	check_jump_input()	## handles player jump
@@ -85,6 +91,9 @@ func _physics_process(delta: float) -> void:
 	
 	## Apply movemenet
 	move_and_slide()
+	
+	## Check if a pickable item is being looked at (inside the select_raycast range)
+	check_for_selection()
 
 func _input(event: InputEvent) -> void:
 	## HANDLE MOUSE LOOK (looking around)
@@ -119,3 +128,46 @@ func check_jump_input() -> void:
 func process_gravity() -> void:
 	if not is_on_floor():
 		velocity.y -= gravity # apply gravity downwards
+
+func check_for_selection() -> void:
+	## First, we check if the select_raycast is looking at anything
+	var target_node: Node = null
+	
+	## Check if the select_raycast is colliding with something
+	## Currently selet_raycast is set to collide only with PICKABLE ITEMS in its collision mask
+	## So the "is_colliding" will return true only if it's colliding with a pickable item
+	if select_raycast.is_colliding():
+		## Save the collider of the collided item!
+		var collider := select_raycast.get_collider()
+		
+		## Let's make sure this is indeed a Pickable Item
+		if collider is PickableItem:
+			target_node = collider	## Save this as our target node
+	
+	## Now we check to se if what the player is currently looking at is different from what he was looking at a moment ago
+	if target_node != current_pickable_focused_item:
+		if current_pickable_focused_item:
+			## Player was looking at a different object earlier
+			current_pickable_focused_item.unhighlight()	## We must deselect it, so we unhighlight the previous object
+		
+		current_pickable_focused_item = target_node	## We set it the current focused item to the new item we're looking at
+		
+		if current_pickable_focused_item is PickableItem:
+			current_pickable_focused_item.highlight()	## Let's highlight it now
+
+## This returns true if there is an pickable item being looked at right now		
+func can_pickup_object() -> bool:
+	return current_pickable_focused_item != null
+	
+## Pickup the item that is being looked at
+func pickup_object() -> void:
+	var picakable_object := current_pickable_focused_item
+	
+	## if the pickable object contains weapon data (so it is.. a weapon!)
+	if picakable_object.weapon_data != null:
+		equipment.equip_weapon(picakable_object.weapon_data) ## pick it up (set the equpment component to the weapon data of the piackable object))
+		picakable_object.queue_free()	## destroys the picakable object since it is now equpped
+		
+		
+	
+		
