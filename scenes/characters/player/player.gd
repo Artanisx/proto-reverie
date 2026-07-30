@@ -165,7 +165,7 @@ func pickup_object() -> void:
 	
 	## if the pickable object contains weapon data (so it is.. a weapon!)
 	if picakable_object.weapon_data != null:
-		equipment.equip_weapon(picakable_object.weapon_data) ## pick it up (set the equpment component to the weapon data of the piackable object))
+		equipment.equip_weapon(picakable_object.weapon_data, picakable_object.global_transform) ## pick it up (set the equpment component to the weapon data of the piackable object, also pass its position - the transform - for a little tween animation)
 		picakable_object.queue_free()	## destroys the picakable object since it is now equpped
 		
 		
