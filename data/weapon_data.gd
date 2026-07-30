@@ -13,7 +13,7 @@ extends Resource
 @export var reach: float		## Weapon Range (how far the weapon can reach enemies with a swing)
 @export var throw_rotation_speed: float	## Weapon Rotation Speed while in air
 @export var throw_movement_speed: float	## Weapon Movement Speed while in air
-@export var glb_mesh: PackedScene		## Weapon Scene (Godot Scene)
+@export var glb_mesh: PackedScene		## Weapon Mesh (.glb file)
 
 ## Calculates a damage amount between min and max
 func get_damage_dealt() -> int:
