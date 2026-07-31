@@ -21,10 +21,10 @@ const ROOMS_MAP := {
 	RoomType.R10x10_2W_TOP_LEFT: preload("res://scenes/rooms/10x_10_2_way_room_top_left.tscn"), #2 doors (up, left)
 	RoomType.R10x10_2W_TOP_RIGHT: preload("res://scenes/rooms/10x_10_2_way_room_top_right.tscn"), #2 doors (up, right)
 	RoomType.R10x10_2W_VERTICAL: preload("res://scenes/rooms/10x_10_2_way_room_vertical.tscn"), #2 doors (up, down)
-	RoomType.R10x10_3W_BOTTOM: preload("res://scenes/rooms/10x_10_3_way_room_bottom.tscn"), #3 doors (up, left, right)
-	RoomType.R10x10_3W_LEFT: preload("res://scenes/rooms/10x_10_3_way_room_left.tscn"), #3 doors (up, down, right)
-	RoomType.R10x10_3W_RIGHT: preload("res://scenes/rooms/10x_10_3_way_room_right.tscn"), #3 doors (up, down, left)
-	RoomType.R10x10_3W_TOP: preload("res://scenes/rooms/10x_10_3_way_room_top.tscn"), #3 doors (down, left, right)
+	RoomType.R10x10_3W_BOTTOM: preload("res://scenes/rooms/10x_10_3_way_room_bottom.tscn"), #3 doors (down, left, right)
+	RoomType.R10x10_3W_LEFT: preload("res://scenes/rooms/10x_10_3_way_room_left.tscn"), #3 doors (up, down, left)
+	RoomType.R10x10_3W_RIGHT: preload("res://scenes/rooms/10x_10_3_way_room_right.tscn"), #3 doors (up, down, right)
+	RoomType.R10x10_3W_TOP: preload("res://scenes/rooms/10x_10_3_way_room_top.tscn"), #3 doors (up, left, right)
 	RoomType.R10x10_4W: preload("res://scenes/rooms/10x_10_4_way_room.tscn") # 4 doors (down, left, right, up)
 } 
 
@@ -54,12 +54,15 @@ func _ready() -> void:
 	place_entrance()
 	generate_path(start, critical_path_length, "CP") # CP stands for CRITICAL PATH
 	generate_branches()
-	print_level()
+	##print_level()
+	reverse_print_level()
 	
 	## Actual room placement
 	calculate_room_positions() 
-	print_level_grid()
-	print_level_map()
+	##print_level_grid()
+	reverse_print_level_grid()
+	##print_level_map()
+	reverse_print_level_map()
 	generate_level()
 	
 	check_generated_level()
@@ -386,7 +389,7 @@ func place_room(room_position: Vector2i, type: RoomType = RoomType.R10x10_4W, ki
 	var room : BaseRoom = ROOMS_MAP[type].instantiate()
 	
 	## Position the new room in the given coordinates
-	room.position = Vector3(room_position.x, 0, room_position.y)
+	room.position = Vector3(room_position.x, 0, room_position.y)	
 	
 	## Define its kind
 	room.kind = kind
@@ -581,11 +584,11 @@ func check_neighboors(room_grid_pos_x : int, room_grid_pos_y: int, r_type: RoomT
 	## [1][2][3]
 	## [4][x,y][5]
 	## [6][7][8]
-	## We only care about 2 (x,y+1) ; 4 (x-1,y); 5(x+1, y); 7 (x,y-1)
+	## We only care about 2 (x,y+1) ; 4 (x+1,y); 5(x-1, y); 7 (x,y-1)
 	
 	var neighboor_dict: Dictionary = { 2: Vector2i(room_grid_pos_x, room_grid_pos_y + 1),
-									   4: Vector2i(room_grid_pos_x - 1, room_grid_pos_y),
-									   5: Vector2i(room_grid_pos_x + 1, room_grid_pos_y),
+									   4: Vector2i(room_grid_pos_x + 1, room_grid_pos_y),
+									   5: Vector2i(room_grid_pos_x - 1, room_grid_pos_y),
 									   7: Vector2i(room_grid_pos_x, room_grid_pos_y - 1)}
 									
 		
@@ -605,47 +608,54 @@ func check_neighboors(room_grid_pos_x : int, room_grid_pos_y: int, r_type: RoomT
 			check_neighboor(neighboor_dict[2], false, true, false, false)
 		RoomType.R10x10_1W_LEFT:
 			door_direction = Vector2i.LEFT
+			## check_neighboor(neighboor_dict[2], up_forbidden, down_forbidden, left_forbidden, right_forbidden)
 			# 7 cannot have door up
-			check_neighboor(neighboor_dict[7], false, true, false, false)
+			check_neighboor(neighboor_dict[7], true, false, false, false)
 			# 5 cannot have door left
-			check_neighboor(neighboor_dict[7], false, false, true, false)
+			check_neighboor(neighboor_dict[5], false, false, true, false)
 			# 4 CAN have door right
-			check_neighboor(neighboor_dict[7], false, false, false, false)
+			check_neighboor(neighboor_dict[4], false, false, false, false)
 			# 2 cannot have door down
-			check_neighboor(neighboor_dict[7], false, true, false, false)
+			check_neighboor(neighboor_dict[2], false, true, false, false)
 		RoomType.R10x10_1W_RIGHT:
 			door_direction = Vector2i.RIGHT
+			## check_neighboor(neighboor_dict[2], up_forbidden, down_forbidden, left_forbidden, right_forbidden)
 			# 7 cannot have door up
 			check_neighboor(neighboor_dict[7], true, false, false, false)
 			# 5 CAN have door left
-			check_neighboor(neighboor_dict[7], false, false, false, false)
+			check_neighboor(neighboor_dict[5], false, false, false, false)
 			# 4 cannot have door right
-			check_neighboor(neighboor_dict[7], false, false, false, true)
+			check_neighboor(neighboor_dict[4], false, false, false, true)
 			# 2 cannot have door down
-			check_neighboor(neighboor_dict[7], false, true, false, false)
+			check_neighboor(neighboor_dict[2], false, true, false, false)
 		RoomType.R10x10_1W_TOP:
 			door_direction = Vector2i.UP
+			## check_neighboor(neighboor_dict[2], up_forbidden, down_forbidden, left_forbidden, right_forbidden)
 			# 7 cannot have door up
 			check_neighboor(neighboor_dict[7], true, false, false, false)
 			# 5 cannot have door left
-			check_neighboor(neighboor_dict[7], false, false, true, false)
+			check_neighboor(neighboor_dict[5], false, false, true, false)
 			# 4 cannot have door right
-			check_neighboor(neighboor_dict[7], false, false, false, true)
+			check_neighboor(neighboor_dict[4], false, false, false, true)
 			# 2 CAN have door down
-			check_neighboor(neighboor_dict[7], false, false, false, false)
+			check_neighboor(neighboor_dict[2], false, false, false, false)
 	
-	## We need to check each of 2,4,7 and 7 and swap the room accordingly if needed.
+	## Double checked and it shoudl be correct
 	
 	
 func check_neighboor(room_pos: Vector2i, up_forbidden : bool, down_forbidden : bool, left_forbidden : bool, right_forbidden : bool) -> void:
-	## Before checking those neighboors, make sure they exists
-	if room_map[room_pos.x][room_pos.y].room_identifier == "":
-		print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") doesn't exist so skip")
-		return
-	
 	## A room cannot be x negative or y negative
 	if room_pos.x < 0 or room_pos.y < 0:
 		return
+		
+	## A room cannot exceed the grid either
+	if room_pos.x > dimensions.x - 1 or room_pos.y > dimensions.y - 1:
+		return
+	
+	## Before checking those neighboors, make sure they exists
+	if room_map[room_pos.x][room_pos.y].room_identifier == "":
+		print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") doesn't exist so skip")
+		return	
 	
 	## Check if this room is already fine as it doesn't have anything forbidden
 	if not up_forbidden and not down_forbidden and not left_forbidden and not right_forbidden:
@@ -679,6 +689,38 @@ func check_neighboor(room_pos: Vector2i, up_forbidden : bool, down_forbidden : b
 			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_BOTTOM")
 			neigh_instance.queue_free()
 			place_room(neigh_pos, RoomType.R10x10_1W_BOTTOM, neigh_kind)
+		## Check for invalid 3ways room		
+		elif neigh_type == RoomType.R10x10_3W_LEFT:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_BOTTOM_LEFT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_2W_BOTTOM_LEFT, neigh_kind)
+		elif neigh_type == RoomType.R10x10_3W_RIGHT:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_BOTTOM_RIGHT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_2W_BOTTOM_RIGHT, neigh_kind)
+		elif neigh_type == RoomType.R10x10_3W_TOP:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_HORIZZONTAL")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_2W_HORIZZONTAL, neigh_kind)
+		##lastly check for invalid 4w
+		elif neigh_type == RoomType.R10x10_4W:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_3W_BOTTOM")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_3W_BOTTOM, neigh_kind)
+	elif down_forbidden:
+		## Check for invalid 2Ways room
+		if neigh_type == RoomType.R10x10_2W_BOTTOM_LEFT:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_LEFT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_1W_LEFT, neigh_kind)
+		elif neigh_type == RoomType.R10x10_2W_BOTTOM_RIGHT:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_RIGHT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_1W_RIGHT, neigh_kind)
+		elif neigh_type == RoomType.R10x10_2W_VERTICAL:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_TOP")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_1W_TOP, neigh_kind)
 		## Check for invalid 3ways room
 		elif neigh_type == RoomType.R10x10_3W_BOTTOM:
 			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_HORIZZONTAL")
@@ -697,38 +739,6 @@ func check_neighboor(room_pos: Vector2i, up_forbidden : bool, down_forbidden : b
 			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_3W_TOP")
 			neigh_instance.queue_free()
 			place_room(neigh_pos, RoomType.R10x10_3W_TOP, neigh_kind)
-	elif down_forbidden:
-		## Check for invalid 2Ways room
-		if neigh_type == RoomType.R10x10_2W_BOTTOM_LEFT:			
-			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_LEFT")
-			neigh_instance.queue_free()
-			place_room(neigh_pos, RoomType.R10x10_1W_LEFT, neigh_kind)
-		elif neigh_type == RoomType.R10x10_2W_BOTTOM_RIGHT:
-			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_RIGHT")
-			neigh_instance.queue_free()
-			place_room(neigh_pos, RoomType.R10x10_1W_RIGHT, neigh_kind)
-		elif neigh_type == RoomType.R10x10_2W_VERTICAL:
-			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_TOP")
-			neigh_instance.queue_free()
-			place_room(neigh_pos, RoomType.R10x10_1W_TOP, neigh_kind)
-		## Check for invalid 3ways room
-		elif neigh_type == RoomType.R10x10_3W_BOTTOM:
-			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_HORIZZONTAL")
-			neigh_instance.queue_free()
-			place_room(neigh_pos, RoomType.R10x10_2W_HORIZZONTAL, neigh_kind)
-		elif neigh_type == RoomType.R10x10_3W_LEFT:
-			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_BOTTOM_LEFT")
-			neigh_instance.queue_free()
-			place_room(neigh_pos, RoomType.R10x10_2W_BOTTOM_LEFT, neigh_kind)
-		elif neigh_type == RoomType.R10x10_3W_RIGHT:
-			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_BOTTOM_RIGHT")
-			neigh_instance.queue_free()
-			place_room(neigh_pos, RoomType.R10x10_2W_BOTTOM_RIGHT, neigh_kind)
-		##lastly check for invalid 4w
-		elif neigh_type == RoomType.R10x10_4W:
-			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_3W_BOTTOM")
-			neigh_instance.queue_free()
-			place_room(neigh_pos, RoomType.R10x10_3W_BOTTOM, neigh_kind)
 	elif left_forbidden:
 		## Check for invalid 2Ways room
 		if neigh_type == RoomType.R10x10_2W_BOTTOM_LEFT:			
@@ -745,18 +755,22 @@ func check_neighboor(room_pos: Vector2i, up_forbidden : bool, down_forbidden : b
 			place_room(neigh_pos, RoomType.R10x10_1W_TOP, neigh_kind)
 		## Check for invalid 3ways room
 		elif neigh_type == RoomType.R10x10_3W_BOTTOM:
-			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_BOTTOM_LEFT")
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_BOTTOM_RIGHT")
 			neigh_instance.queue_free()
-			place_room(neigh_pos, RoomType.R10x10_2W_BOTTOM_LEFT, neigh_kind)		
-		elif neigh_type == RoomType.R10x10_3W_RIGHT:
+			place_room(neigh_pos, RoomType.R10x10_2W_BOTTOM_RIGHT, neigh_kind)		
+		elif neigh_type == RoomType.R10x10_3W_LEFT:
 			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_VERTICAL")
 			neigh_instance.queue_free()
-			place_room(neigh_pos, RoomType.R10x10_2W_VERTICAL, neigh_kind)
+			place_room(neigh_pos, RoomType.R10x10_2W_VERTICAL, neigh_kind)		
+		elif neigh_type == RoomType.R10x10_3W_TOP:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_TOP_RIGHT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_2W_TOP_RIGHT, neigh_kind)
 		##lastly check for invalid 4w
 		elif neigh_type == RoomType.R10x10_4W:
-			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_3W_LEFT")
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_3W_RIGHT")
 			neigh_instance.queue_free()
-			place_room(neigh_pos, RoomType.R10x10_3W_LEFT, neigh_kind)
+			place_room(neigh_pos, RoomType.R10x10_3W_RIGHT, neigh_kind)
 	elif right_forbidden:
 		## Check for invalid 2Ways room
 		if neigh_type == RoomType.R10x10_2W_BOTTOM_RIGHT:			
@@ -773,23 +787,68 @@ func check_neighboor(room_pos: Vector2i, up_forbidden : bool, down_forbidden : b
 			place_room(neigh_pos, RoomType.R10x10_1W_TOP, neigh_kind)
 		## Check for invalid 3ways room
 		elif neigh_type == RoomType.R10x10_3W_BOTTOM:
-			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_BOTTOM_RIGHT")
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_BOTTOM_LEFT")
 			neigh_instance.queue_free()
-			place_room(neigh_pos, RoomType.R10x10_2W_BOTTOM_RIGHT, neigh_kind)		
-		elif neigh_type == RoomType.R10x10_3W_LEFT:
+			place_room(neigh_pos, RoomType.R10x10_2W_BOTTOM_LEFT, neigh_kind)		
+		elif neigh_type == RoomType.R10x10_3W_RIGHT:
 			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_VERTICAL")
 			neigh_instance.queue_free()
 			place_room(neigh_pos, RoomType.R10x10_2W_VERTICAL, neigh_kind)
 		elif neigh_type == RoomType.R10x10_3W_TOP:
-			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_TOP_RIGHT")
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_TOP_LEFT")
 			neigh_instance.queue_free()
-			place_room(neigh_pos, RoomType.R10x10_2W_TOP_RIGHT, neigh_kind)
+			place_room(neigh_pos, RoomType.R10x10_2W_TOP_LEFT, neigh_kind)
 		##lastly check for invalid 4w
 		elif neigh_type == RoomType.R10x10_4W:
-			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_3W_RIGHT")
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_3W_LEFT")
 			neigh_instance.queue_free()
-			place_room(neigh_pos, RoomType.R10x10_3W_RIGHT, neigh_kind)
+			place_room(neigh_pos, RoomType.R10x10_3W_LEFT, neigh_kind)
 		
-	
+	##CHECKED and shoudl be fine...
 			
+## This function will print the dungeon, so we can see what's been generated. Meant for debugging.
+func reverse_print_level() -> void:
+	var level_as_string : String = ""
 	
+	## Iterate Y from top to bottom
+	for y in range (dimensions.y - 1, -1, -1):
+		## Iterate X in REVERSE order to match the game view (mirrored)
+		for x in range(dimensions.x - 1, -1, -1):
+			if room_map[x][y].room_identifier != "":
+				level_as_string += "[" + room_map[x][y].room_identifier + "]"	
+			else:
+				level_as_string += "[     ]"		
+			
+		level_as_string += '\n'
+	
+	print(level_as_string)
+	
+## This function will print the dungeon, but with the identifier we also print the x,y coordinates of the map
+func reverse_print_level_map() -> void:
+	var level_as_string : String = ""
+	
+	## Iterate Y from top to bottom
+	for y in range (dimensions.y - 1, -1, -1):
+		## Iterate X in REVERSE order to match the game view (mirrored)
+		for x in range(dimensions.x - 1, -1, -1):
+			if room_map[x][y].room_identifier != "":
+				level_as_string += "[" + room_map[x][y].room_identifier + "](" + str(x) + "," + str(y) + ")"
+			else:
+				level_as_string += "["+ str(x) + "," + str(y) +"]"		
+			
+		level_as_string += '\n'
+	
+	print(level_as_string)
+
+## This function will print the level grid, which contains rooms positions Meant for debugging.
+func reverse_print_level_grid() -> void:
+	var level_as_string : String = ""
+	
+	## Iterate Y from top to bottom
+	for y in range (dimensions.y - 1, -1, -1):
+		## Iterate X in REVERSE order to match the game view (mirrored)
+		for x in range(dimensions.x - 1, -1, -1):			
+			level_as_string += "[" + str(room_map[x][y].world_position) + "]"			
+		level_as_string += '\n'
+	
+	print(level_as_string)	
