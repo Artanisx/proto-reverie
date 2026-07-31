@@ -60,6 +60,9 @@ func _ready() -> void:
 	calculate_room_positions() 
 	print_level_grid()
 	generate_level()
+	
+	##check_generated_level()
+	
 	print_rooms()
 	
 	## Finally call the super (baselevel) _ready function to initialize the player
@@ -190,7 +193,7 @@ func generate_path(from: Vector2i, length: int, marker : String) -> bool:
 				# it returned false, the critical path failed at some point. 
 				branch_candidates.erase(current) ## since this is not valid, we remove it as a possible branch candidate from its list
 				# We need to reverse the change we made and return back as it wasn't the right way to go
-				room_map[current.x][current.y].room_identifier = 0 ## set this room back to zero (empty)
+				room_map[current.x][current.y].room_identifier = "" ## set this room back to zero (empty)
 				current -= direction #go back 
 		## We need to rotate the direction and tyr again!
 		direction = Vector2i(direction.y, -direction.x)				
@@ -368,8 +371,11 @@ func place_room(room_position: Vector2i, type: RoomType = RoomType.R10x10_4W, ki
 	## Position the new room in the given coordinates
 	room.position = Vector3(room_position.x, 0, room_position.y)
 	
-	## Define its type
+	## Define its kind
 	room.kind = kind
+	
+	## Define its type
+	room.type = type
 	
 	## Place additional nodes depending on its kind
 	place_room_nodes(room)
@@ -528,3 +534,279 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		minimap_icon.position = Vector3(0.0, MINIMAP_ICONS_HEIGHT, 0.0) 
 		minimap_icon.scale = Vector3(20.0, 20.0, 20.0)
 		room.add_child(minimap_icon)	
+
+## This function checks the placed rooms to see if the doors are correct
+func check_generated_level() -> void:
+	## We need to iterate in the room_map 2D array that stores our generated level
+	## We need to make sure that neighbor rooms to the special rooms (start, endro, endbr) that are 1 way
+	## only have a door towards them if they are facing that open way.
+	## This function iterates through all rooms and fixes connections
+	## where adjacent rooms have doors facing special rooms that don't have doors there.
+	
+	for i in range(dimensions.x):
+		for j in range(dimensions.y):
+			var current_room_data : RoomData = room_map[i][j]
+			
+			## Skip if no room exists here
+			if current_room_data.room_instance == null:
+				continue
+			
+			var current_kind := current_room_data.room_instance.kind
+			
+			## Only process special rooms (START, END, BRANCHPATHEND)
+			if current_kind != BaseRoom.RoomKind.START and \
+			   current_kind != BaseRoom.RoomKind.END and \
+			   current_kind != BaseRoom.RoomKind.BRANCHPATHEND:
+				continue
+			
+			## For each special room, check all 4 directions
+			## Determine which direction the special room's door is open
+			var special_door_direction := get_special_room_door_direction(current_room_data)
+			
+			## Now check all adjacent rooms
+			## UP neighbor
+			if j + 1 < dimensions.y:
+				var neighbor_up : RoomData = room_map[i][j + 1]
+				if neighbor_up.room_instance != null:
+					## If the special room does NOT have a door UP, the neighbor should NOT have a door DOWN
+					if special_door_direction != "up":
+						fix_neighbor_door(neighbor_up, "down", false)
+					else:
+						fix_neighbor_door(neighbor_up, "down", true)
+			
+			## DOWN neighbor
+			if j - 1 >= 0:
+				var neighbor_down : RoomData = room_map[i][j - 1]
+				if neighbor_down.room_instance != null:
+					## If the special room does NOT have a door DOWN, the neighbor should NOT have a door UP
+					if special_door_direction != "down":
+						fix_neighbor_door(neighbor_down, "up", false)
+					else:
+						fix_neighbor_door(neighbor_down, "up", true)
+			
+			## RIGHT neighbor
+			if i + 1 < dimensions.x:
+				var neighbor_right :RoomData= room_map[i + 1][j]
+				if neighbor_right.room_instance != null:
+					## If the special room does NOT have a door RIGHT, the neighbor should NOT have a door LEFT
+					if special_door_direction != "right":
+						fix_neighbor_door(neighbor_right, "left", false)
+					else:
+						fix_neighbor_door(neighbor_right, "left", true)
+			
+			## LEFT neighbor
+			if i - 1 >= 0:
+				var neighbor_left :RoomData= room_map[i - 1][j]
+				if neighbor_left.room_instance != null:
+					## If the special room does NOT have a door LEFT, the neighbor should NOT have a door RIGHT
+					if special_door_direction != "left":
+						fix_neighbor_door(neighbor_left, "right", false)
+					else:
+						fix_neighbor_door(neighbor_left, "right", true)
+
+func get_special_room_door_direction(room_data: RoomData) -> String:
+	## Returns which direction the special room's door is open
+	## Special rooms are 1-way rooms, so they only have one door
+	
+	var room := room_data.room_instance
+	var room_type := room.type  ## Assuming BaseRoom has a room_type property
+	
+	match room_type:
+		RoomType.R10x10_1W_TOP:
+			return "up"
+		RoomType.R10x10_1W_BOTTOM:
+			return "down"
+		RoomType.R10x10_1W_LEFT:
+			return "left"
+		RoomType.R10x10_1W_RIGHT:
+			return "right"
+		_:
+			## Fallback: check the room's kind
+			match room.kind:
+				BaseRoom.RoomKind.START:
+					## START room should connect to CP - check which direction the CP is
+					return get_start_room_connection_direction(room_data)
+				BaseRoom.RoomKind.END:
+					## END room should connect to CP - check which direction the CP is
+					return get_end_room_connection_direction(room_data)
+				BaseRoom.RoomKind.BRANCHPATHEND:
+					## BRANCHPATHEND room should connect to branch path
+					return get_branch_end_connection_direction(room_data)
+				_:
+					return "none"
+
+func get_start_room_connection_direction(room_data: RoomData) -> String:
+	## START room connects to the CP in one specific direction
+	## Check which adjacent cell has the CP with the highest length
+	
+	var i := room_data.world_position.x / room_size
+	var j := room_data.world_position.y / room_size
+	
+	## Check all directions for CP
+	if j - 1 >= 0 and room_map[i][j - 1].room_identifier.contains("CP"):
+		return "down"
+	if j + 1 < dimensions.y and room_map[i][j + 1].room_identifier.contains("CP"):
+		return "up"
+	if i + 1 < dimensions.x and room_map[i + 1][j].room_identifier.contains("CP"):
+		return "right"
+	if i - 1 >= 0 and room_map[i - 1][j].room_identifier.contains("CP"):
+		return "left"
+	
+	return "none"
+
+func get_end_room_connection_direction(room_data: RoomData) -> String:
+	## END room connects to the CP with length 2
+	
+	var i := room_data.world_position.x / room_size
+	var j := room_data.world_position.y / room_size
+	
+	if j - 1 >= 0 and room_map[i][j - 1].room_identifier.contains("CP") and calculate_cp_length(room_map[i][j - 1].room_identifier) == 2:
+		return "down"
+	if j + 1 < dimensions.y and room_map[i][j + 1].room_identifier.contains("CP") and calculate_cp_length(room_map[i][j + 1].room_identifier) == 2:
+		return "up"
+	if i + 1 < dimensions.x and room_map[i + 1][j].room_identifier.contains("CP") and calculate_cp_length(room_map[i + 1][j].room_identifier) == 2:
+		return "right"
+	if i - 1 >= 0 and room_map[i - 1][j].room_identifier.contains("CP") and calculate_cp_length(room_map[i - 1][j].room_identifier) == 2:
+		return "left"
+	
+	return "none"
+
+func get_branch_end_connection_direction(room_data: RoomData) -> String:
+	## BRANCHPATHEND room connects to the branch path
+	
+	var i := room_data.world_position.x / room_size
+	var j := room_data.world_position.y / room_size
+	
+	## Check all directions for the branch path
+	if j - 1 >= 0 and room_map[i][j - 1].room_identifier.contains("B"):
+		return "down"
+	if j + 1 < dimensions.y and room_map[i][j + 1].room_identifier.contains("B"):
+		return "up"
+	if i + 1 < dimensions.x and room_map[i + 1][j].room_identifier.contains("B"):
+		return "right"
+	if i - 1 >= 0 and room_map[i - 1][j].room_identifier.contains("B"):
+		return "left"
+	
+	return "none"
+
+func fix_neighbor_door(neighbor_data: RoomData, direction: String, should_have_door: bool) -> void:
+	## This function changes the neighbor room type to add/remove a door in the specified direction
+	
+	var neighbor_room := neighbor_data.room_instance
+	var current_type := neighbor_room.type
+	
+	## Define the mapping of current room types to desired room types
+	var new_type := get_correct_room_type(current_type, direction, should_have_door)
+	
+	## If the type needs to change, replace the room
+	if new_type != current_type:
+		## Remove the old room from the scene
+		neighbor_room.queue_free()
+		
+		## Instantiate the new room
+		var new_room : BaseRoom = ROOMS_MAP[new_type].instantiate()
+		new_room.position = neighbor_room.position
+		new_room.kind = neighbor_room.kind
+		
+		## Place additional nodes
+		place_room_nodes(new_room)
+		
+		## Add to scene
+		rooms_container.add_child(new_room)
+		
+		## Update the room_map with the new room instance
+		neighbor_data.room_instance = new_room
+		
+		## Debug print
+		#print("Fixed room at " + str(neighbor_room.position) + ": changed from " + str(current_type) + " to " + str(new_type) + " (direction: " + direction + ", should_have_door: " + str(should_have_door) + ")")
+
+func get_correct_room_type(current_type: RoomType, direction: String, should_have_door: bool) -> RoomType:
+	## Given a current room type and a direction, determine the correct room type
+	## based on whether the room should have a door in that direction
+	
+	## Count how many doors the current room has
+	var has_up := is_room_type_has_door(current_type, "up")
+	var has_down := is_room_type_has_door(current_type, "down")
+	var has_left := is_room_type_has_door(current_type, "left")
+	var has_right := is_room_type_has_door(current_type, "right")
+	
+	## Adjust the door count based on the direction
+	match direction:
+		"up":
+			has_up = should_have_door
+		"down":
+			has_down = should_have_door
+		"left":
+			has_left = should_have_door
+		"right":
+			has_right = should_have_door
+	
+	## Now determine the new room type based on the door configuration
+	if has_up and has_down and has_left and has_right:
+		return RoomType.R10x10_4W
+	elif has_up and has_down and not has_left and not has_right:
+		return RoomType.R10x10_2W_VERTICAL
+	elif has_left and has_right and not has_up and not has_down:
+		return RoomType.R10x10_2W_HORIZZONTAL
+	elif has_up and has_left and not has_down and not has_right:
+		return RoomType.R10x10_2W_TOP_LEFT
+	elif has_up and has_right and not has_down and not has_left:
+		return RoomType.R10x10_2W_TOP_RIGHT
+	elif has_down and has_left and not has_up and not has_right:
+		return RoomType.R10x10_2W_BOTTOM_LEFT
+	elif has_down and has_right and not has_up and not has_left:
+		return RoomType.R10x10_2W_BOTTOM_RIGHT
+	elif has_up and has_down and has_left and not has_right:
+		return RoomType.R10x10_3W_RIGHT
+	elif has_up and has_down and has_right and not has_left:
+		return RoomType.R10x10_3W_LEFT
+	elif has_up and has_left and has_right and not has_down:
+		return RoomType.R10x10_3W_BOTTOM
+	elif has_down and has_left and has_right and not has_up:
+		return RoomType.R10x10_3W_TOP
+	elif has_up and not has_down and not has_left and not has_right:
+		return RoomType.R10x10_1W_TOP
+	elif has_down and not has_up and not has_left and not has_right:
+		return RoomType.R10x10_1W_BOTTOM
+	elif has_left and not has_up and not has_down and not has_right:
+		return RoomType.R10x10_1W_LEFT
+	elif has_right and not has_up and not has_down and not has_left:
+		return RoomType.R10x10_1W_RIGHT
+	else:
+		## Fallback: should not happen, but return 4W to be safe
+		return RoomType.R10x10_4W
+
+func is_room_type_has_door(room_type: RoomType, direction: String) -> bool:
+	match room_type:
+		RoomType.R10x10_4W:
+			return true  ## All directions
+		RoomType.R10x10_2W_VERTICAL:
+			return direction == "up" or direction == "down"
+		RoomType.R10x10_2W_HORIZZONTAL:
+			return direction == "left" or direction == "right"
+		RoomType.R10x10_2W_TOP_LEFT:
+			return direction == "up" or direction == "left"
+		RoomType.R10x10_2W_TOP_RIGHT:
+			return direction == "up" or direction == "right"
+		RoomType.R10x10_2W_BOTTOM_LEFT:
+			return direction == "down" or direction == "left"
+		RoomType.R10x10_2W_BOTTOM_RIGHT:
+			return direction == "down" or direction == "right"
+		RoomType.R10x10_3W_BOTTOM:
+			return direction == "up" or direction == "left" or direction == "right"
+		RoomType.R10x10_3W_LEFT:
+			return direction == "up" or direction == "down" or direction == "right"
+		RoomType.R10x10_3W_RIGHT:
+			return direction == "up" or direction == "down" or direction == "left"
+		RoomType.R10x10_3W_TOP:
+			return direction == "down" or direction == "left" or direction == "right"
+		RoomType.R10x10_1W_TOP:
+			return direction == "up"
+		RoomType.R10x10_1W_BOTTOM:
+			return direction == "down"
+		RoomType.R10x10_1W_LEFT:
+			return direction == "left"
+		RoomType.R10x10_1W_RIGHT:
+			return direction == "right"
+		_:
+			return false
