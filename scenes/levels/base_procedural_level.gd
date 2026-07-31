@@ -577,10 +577,44 @@ func check_generated_level() -> void:
 # 2: The position Y in the grid of the special room, so we can find the neighboors
 # 3: the room_type, meaning R10x10_1W_BOTTOM or similar, so we know which way they can have a room towards it
 func check_neighboors(room_grid_pos_x : int, room_grid_pos_y: int, r_type: RoomType) -> void:
+	## The Neighboors are:
 	## [1][2][3]
 	## [4][x,y][5]
 	## [6][7][8]
-	## We only care about 2, 4, 5, 7
-	## Meaning, we care about: 
+	## We only care about 2 (x,y+1) ; 4 (x-1,y); 5(x+1, y); 7 (x,y-1)
+	
+	## Calculate the door direction. It can only be one of these types
+	var door_direction : Vector2i = Vector2i.ZERO
+	match(r_type):
+		RoomType.R10x10_1W_BOTTOM:
+			door_direction = Vector2i.DOWN
+			# 7 CAN have door up
+			# 5 cannot have door left
+			# 4 cannot have door right
+			# 2 cannot have door down
+		RoomType.R10x10_1W_LEFT:
+			door_direction = Vector2i.LEFT
+			# 7 cannot have door up
+			# 5 cannot have door left
+			# 4 CAN have door right
+			# 2 cannot have door down
+		RoomType.R10x10_1W_RIGHT:
+			door_direction = Vector2i.RIGHT
+			# 7 cannot have door up
+			# 5 CAN have door left
+			# 4 cannot have door right
+			# 2 cannot have door down
+		RoomType.R10x10_1W_TOP:
+			door_direction = Vector2i.UP
+			# 7 cannot have door up
+			# 5 cannot have door left
+			# 4 cannot have door right
+			# 2 CAN have door down
+	
+	## We need to check each of 2,4,7 and 7 and swap the room accordingly if needed.
+	## For example:
+	## if door_direction == Vector2i.DOWN
+	## checking 7 room_type we can allow it to keep a bottom door, but 5,4,2 cannot have their door looking at it
+	## so we check each of them and swap from a 4W to a 3W or from a 3W to a 2W or from a 2W to a 1W, removing the forbidden door
 	
 	pass
