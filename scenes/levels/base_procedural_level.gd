@@ -11,21 +11,21 @@ extends BaseLevel
 
 ## Dictionary for room prefabs
 const ROOMS_MAP := {
-	RoomType.R10x10_1W_BOTTOM: preload("res://scenes/rooms/10x_10_1_way_room_bottom.tscn"),
-	RoomType.R10x10_1W_LEFT: preload("res://scenes/rooms/10x_10_1_way_room_left.tscn"),
-	RoomType.R10x10_1W_RIGHT: preload("res://scenes/rooms/10x_10_1_way_room_right.tscn"),
-	RoomType.R10x10_1W_TOP: preload("res://scenes/rooms/10x_10_1_way_room_top.tscn"),
-	RoomType.R10x10_2W_BOTTOM_LEFT: preload("res://scenes/rooms/10x_10_2_way_room_bottom_left.tscn"),
-	RoomType.R10x10_2W_BOTTOM_RIGHT: preload("res://scenes/rooms/10x_10_2_way_room_bottom_right.tscn"),
-	RoomType.R10x10_2W_HORIZZONTAL: preload("res://scenes/rooms/10x_10_2_way_room_horizzontal.tscn"),
-	RoomType.R10x10_2W_TOP_LEFT: preload("res://scenes/rooms/10x_10_2_way_room_top_left.tscn"),
-	RoomType.R10x10_2W_TOP_RIGHT: preload("res://scenes/rooms/10x_10_2_way_room_top_right.tscn"),
-	RoomType.R10x10_2W_VERTICAL: preload("res://scenes/rooms/10x_10_2_way_room_vertical.tscn"),
-	RoomType.R10x10_3W_BOTTOM: preload("res://scenes/rooms/10x_10_3_way_room_bottom.tscn"),
-	RoomType.R10x10_3W_LEFT: preload("res://scenes/rooms/10x_10_3_way_room_left.tscn"),
-	RoomType.R10x10_3W_RIGHT: preload("res://scenes/rooms/10x_10_3_way_room_right.tscn"),
-	RoomType.R10x10_3W_TOP: preload("res://scenes/rooms/10x_10_3_way_room_top.tscn"),
-	RoomType.R10x10_4W: preload("res://scenes/rooms/10x_10_4_way_room.tscn")
+	RoomType.R10x10_1W_BOTTOM: preload("res://scenes/rooms/10x_10_1_way_room_bottom.tscn"), #1 door (down)
+	RoomType.R10x10_1W_LEFT: preload("res://scenes/rooms/10x_10_1_way_room_left.tscn"), #1 door (left)
+	RoomType.R10x10_1W_RIGHT: preload("res://scenes/rooms/10x_10_1_way_room_right.tscn"), #1 door (right)
+	RoomType.R10x10_1W_TOP: preload("res://scenes/rooms/10x_10_1_way_room_top.tscn"), #1 door (up)
+	RoomType.R10x10_2W_BOTTOM_LEFT: preload("res://scenes/rooms/10x_10_2_way_room_bottom_left.tscn"), #2 doors (left, down)
+	RoomType.R10x10_2W_BOTTOM_RIGHT: preload("res://scenes/rooms/10x_10_2_way_room_bottom_right.tscn"), #2 doors (right, down)
+	RoomType.R10x10_2W_HORIZZONTAL: preload("res://scenes/rooms/10x_10_2_way_room_horizzontal.tscn"), #2 doors (right, left)
+	RoomType.R10x10_2W_TOP_LEFT: preload("res://scenes/rooms/10x_10_2_way_room_top_left.tscn"), #2 doors (up, left)
+	RoomType.R10x10_2W_TOP_RIGHT: preload("res://scenes/rooms/10x_10_2_way_room_top_right.tscn"), #2 doors (up, right)
+	RoomType.R10x10_2W_VERTICAL: preload("res://scenes/rooms/10x_10_2_way_room_vertical.tscn"), #2 doors (up, down)
+	RoomType.R10x10_3W_BOTTOM: preload("res://scenes/rooms/10x_10_3_way_room_bottom.tscn"), #3 doors (up, left, right)
+	RoomType.R10x10_3W_LEFT: preload("res://scenes/rooms/10x_10_3_way_room_left.tscn"), #3 doors (up, down, right)
+	RoomType.R10x10_3W_RIGHT: preload("res://scenes/rooms/10x_10_3_way_room_right.tscn"), #3 doors (up, down, left)
+	RoomType.R10x10_3W_TOP: preload("res://scenes/rooms/10x_10_3_way_room_top.tscn"), #3 doors (down, left, right)
+	RoomType.R10x10_4W: preload("res://scenes/rooms/10x_10_4_way_room.tscn") # 4 doors (down, left, right, up)
 } 
 
 const MINIMAP_ICONS_HEIGHT : float = 3.5 ## Y position for minimap icons
