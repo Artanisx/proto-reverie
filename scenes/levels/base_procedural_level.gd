@@ -65,7 +65,7 @@ func _ready() -> void:
 	reverse_print_level_map()
 	generate_level()
 	
-	#check_generated_level()
+	check_generated_level()
 	
 	print_rooms()
 	
@@ -245,6 +245,16 @@ func generate_level() -> void:
 	var is_there_room_down: bool = false
 	var is_there_room_left: bool = false
 	var is_there_room_right: bool = false
+	
+	### IMPORTANT!! REMEMEBR THESE ARE THE COORDINATES
+	## POSTIIVE Z  TOP  (equivale a positive Y)
+	## NEGATIVE Z  DOWN (equivale a negative y)	
+	## POSTIIVE X LEFT
+	## NEGATIVE X RIGHT	
+	##     z+
+	## x+       x-
+	##     z-			
+
 	
 	for i in range(dimensions.x):
 		for j in range(dimensions.y):  
