@@ -35,7 +35,7 @@ enum RoomType{R10x10_1W_BOTTOM, R10x10_1W_LEFT, R10x10_1W_RIGHT, R10x10_1W_TOP,
 			  R10x10_2W_BOTTOM_LEFT, R10x10_2W_BOTTOM_RIGHT, R10x10_2W_HORIZZONTAL, R10x10_2W_TOP_LEFT, R10x10_2W_TOP_RIGHT, R10x10_2W_VERTICAL,
 			  R10x10_3W_BOTTOM, R10x10_3W_LEFT, R10x10_3W_RIGHT, R10x10_3W_TOP,
 			  R10x10_4W}
-
+			
 @export var dimensions: Vector2i = Vector2i(7,5) ## Defines the size of the level
 @export var start: Vector2i = Vector2i(-1,-1) ## Defines where in the grid the starting room will be placed. If not defined (or it is invalid), a random place will be picked.
 @export var critical_path_length: int = 13 ## Defines the shortest possible path from the start to the end room
@@ -587,40 +587,209 @@ func check_neighboors(room_grid_pos_x : int, room_grid_pos_y: int, r_type: RoomT
 									   4: Vector2i(room_grid_pos_x - 1, room_grid_pos_y),
 									   5: Vector2i(room_grid_pos_x + 1, room_grid_pos_y),
 									   7: Vector2i(room_grid_pos_x, room_grid_pos_y - 1)}
-	
+									
+		
 	## Calculate the door direction. It can only be one of these types
 	var door_direction : Vector2i = Vector2i.ZERO
 	match(r_type):
 		RoomType.R10x10_1W_BOTTOM:
 			door_direction = Vector2i.DOWN
+			## check_neighboor(neighboor_dict[2], up_forbidden, down_forbidden, left_forbidden, right_forbidden)
 			# 7 CAN have door up
+			check_neighboor(neighboor_dict[7], false, false, false, false)
 			# 5 cannot have door left
+			check_neighboor(neighboor_dict[5], false, false, true, false)
 			# 4 cannot have door right
+			check_neighboor(neighboor_dict[4], false, false, false, true)
 			# 2 cannot have door down
+			check_neighboor(neighboor_dict[2], false, true, false, false)
 		RoomType.R10x10_1W_LEFT:
 			door_direction = Vector2i.LEFT
 			# 7 cannot have door up
+			check_neighboor(neighboor_dict[7], false, true, false, false)
 			# 5 cannot have door left
+			check_neighboor(neighboor_dict[7], false, false, true, false)
 			# 4 CAN have door right
+			check_neighboor(neighboor_dict[7], false, false, false, false)
 			# 2 cannot have door down
+			check_neighboor(neighboor_dict[7], false, true, false, false)
 		RoomType.R10x10_1W_RIGHT:
 			door_direction = Vector2i.RIGHT
 			# 7 cannot have door up
+			check_neighboor(neighboor_dict[7], true, false, false, false)
 			# 5 CAN have door left
+			check_neighboor(neighboor_dict[7], false, false, false, false)
 			# 4 cannot have door right
+			check_neighboor(neighboor_dict[7], false, false, false, true)
 			# 2 cannot have door down
+			check_neighboor(neighboor_dict[7], false, true, false, false)
 		RoomType.R10x10_1W_TOP:
 			door_direction = Vector2i.UP
 			# 7 cannot have door up
+			check_neighboor(neighboor_dict[7], true, false, false, false)
 			# 5 cannot have door left
+			check_neighboor(neighboor_dict[7], false, false, true, false)
 			# 4 cannot have door right
+			check_neighboor(neighboor_dict[7], false, false, false, true)
 			# 2 CAN have door down
+			check_neighboor(neighboor_dict[7], false, false, false, false)
 	
 	## We need to check each of 2,4,7 and 7 and swap the room accordingly if needed.
-	## For example:
-	## if door_direction == Vector2i.DOWN
-	## checking 7 room_type we can allow it to keep a bottom door, but 5,4,2 cannot have their door looking at it
-	## so we check each of them and swap from a 4W to a 3W or from a 3W to a 2W or from a 2W to a 1W, removing the forbidden door
 	
+	
+func check_neighboor(room_pos: Vector2i, up_forbidden : bool, down_forbidden : bool, left_forbidden : bool, right_forbidden : bool) -> void:
 	## Before checking those neighboors, make sure they exists
-	## check_neighboor()
+	if room_map[room_pos.x][room_pos.y].room_identifier == "":
+		print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") doesn't exist so skip")
+		return
+	
+	## A room cannot be x negative or y negative
+	if room_pos.x < 0 or room_pos.y < 0:
+		return
+	
+	## Check if this room is already fine as it doesn't have anything forbidden
+	if not up_forbidden and not down_forbidden and not left_forbidden and not right_forbidden:
+		## Nothing is forbidden, so we simply return
+		print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") doesn't have anything forbidden, so skip")
+		return
+		
+		
+	var neighboor: RoomData = room_map[room_pos.x][room_pos.y]
+	var neigh_kind = neighboor.room_instance.kind
+	var neigh_type = neighboor.room_instance.type
+	var neigh_pos = neighboor.world_position
+	var neigh_instance = neighboor.room_instance
+	
+	## We need to check because there is something forbidden. 	
+	## We check each of them and swap from a 4W to a 3W or from a 3W to a 2W or from a 2W to a 1W, removing the forbidden door
+	## We don't need to check for 1W rooms, they cannot be wrong.
+	## We need to check 4W, 3W and 2W
+	
+	if up_forbidden:
+		## Check for invalid 2Ways room
+		if neigh_type == RoomType.R10x10_2W_TOP_LEFT:			
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_LEFT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_1W_LEFT, neigh_kind)
+		elif neigh_type == RoomType.R10x10_2W_TOP_RIGHT:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_RIGHT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_1W_RIGHT, neigh_kind)
+		elif neigh_type == RoomType.R10x10_2W_VERTICAL:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_BOTTOM")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_1W_BOTTOM, neigh_kind)
+		## Check for invalid 3ways room
+		elif neigh_type == RoomType.R10x10_3W_BOTTOM:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_HORIZZONTAL")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_2W_HORIZZONTAL, neigh_kind)
+		elif neigh_type == RoomType.R10x10_3W_LEFT:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_TOP_LEFT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_2W_TOP_LEFT, neigh_kind)
+		elif neigh_type == RoomType.R10x10_3W_RIGHT:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_TOP_RIGHT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_2W_TOP_RIGHT, neigh_kind)
+		##lastly check for invalid 4w
+		elif neigh_type == RoomType.R10x10_4W:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_3W_TOP")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_3W_TOP, neigh_kind)
+	elif down_forbidden:
+		## Check for invalid 2Ways room
+		if neigh_type == RoomType.R10x10_2W_BOTTOM_LEFT:			
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_LEFT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_1W_LEFT, neigh_kind)
+		elif neigh_type == RoomType.R10x10_2W_BOTTOM_RIGHT:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_RIGHT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_1W_RIGHT, neigh_kind)
+		elif neigh_type == RoomType.R10x10_2W_VERTICAL:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_TOP")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_1W_TOP, neigh_kind)
+		## Check for invalid 3ways room
+		elif neigh_type == RoomType.R10x10_3W_BOTTOM:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_HORIZZONTAL")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_2W_HORIZZONTAL, neigh_kind)
+		elif neigh_type == RoomType.R10x10_3W_LEFT:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_BOTTOM_LEFT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_2W_BOTTOM_LEFT, neigh_kind)
+		elif neigh_type == RoomType.R10x10_3W_RIGHT:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_BOTTOM_RIGHT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_2W_BOTTOM_RIGHT, neigh_kind)
+		##lastly check for invalid 4w
+		elif neigh_type == RoomType.R10x10_4W:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_3W_BOTTOM")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_3W_BOTTOM, neigh_kind)
+	elif left_forbidden:
+		## Check for invalid 2Ways room
+		if neigh_type == RoomType.R10x10_2W_BOTTOM_LEFT:			
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_BOTTOM")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_1W_BOTTOM, neigh_kind)
+		elif neigh_type == RoomType.R10x10_2W_HORIZZONTAL:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_RIGHT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_1W_RIGHT, neigh_kind)
+		elif neigh_type == RoomType.R10x10_2W_TOP_LEFT:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_TOP")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_1W_TOP, neigh_kind)
+		## Check for invalid 3ways room
+		elif neigh_type == RoomType.R10x10_3W_BOTTOM:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_BOTTOM_LEFT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_2W_BOTTOM_LEFT, neigh_kind)		
+		elif neigh_type == RoomType.R10x10_3W_RIGHT:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_VERTICAL")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_2W_VERTICAL, neigh_kind)
+		##lastly check for invalid 4w
+		elif neigh_type == RoomType.R10x10_4W:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_3W_LEFT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_3W_LEFT, neigh_kind)
+	elif right_forbidden:
+		## Check for invalid 2Ways room
+		if neigh_type == RoomType.R10x10_2W_BOTTOM_RIGHT:			
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_BOTTOM")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_1W_BOTTOM, neigh_kind)
+		elif neigh_type == RoomType.R10x10_2W_HORIZZONTAL:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_LEFT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_1W_LEFT, neigh_kind)
+		elif neigh_type == RoomType.R10x10_2W_TOP_RIGHT:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_1W_TOP")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_1W_TOP, neigh_kind)
+		## Check for invalid 3ways room
+		elif neigh_type == RoomType.R10x10_3W_BOTTOM:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_BOTTOM_RIGHT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_2W_BOTTOM_RIGHT, neigh_kind)		
+		elif neigh_type == RoomType.R10x10_3W_LEFT:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_VERTICAL")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_2W_VERTICAL, neigh_kind)
+		elif neigh_type == RoomType.R10x10_3W_TOP:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_2W_TOP_RIGHT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_2W_TOP_RIGHT, neigh_kind)
+		##lastly check for invalid 4w
+		elif neigh_type == RoomType.R10x10_4W:
+			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_3W_RIGHT")
+			neigh_instance.queue_free()
+			place_room(neigh_pos, RoomType.R10x10_3W_RIGHT, neigh_kind)
+		
+	
+			
+	
