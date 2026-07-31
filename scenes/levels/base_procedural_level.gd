@@ -65,7 +65,7 @@ func _ready() -> void:
 	reverse_print_level_map()
 	generate_level()
 	
-	check_generated_level()
+	#check_generated_level()
 	
 	print_rooms()
 	
@@ -277,9 +277,9 @@ func generate_level() -> void:
 						is_there_room_down = true
 					if j+1 < dimensions.y and room_map[i][j+1].room_identifier != "" and room_map[i][j+1].room_identifier.contains("CP") and calculate_cp_length(room_map[i][j+1].room_identifier) == critical_path_length:
 						is_there_room_up = true
-					if i+1 < dimensions.x and room_map[i+1][j].room_identifier != "" and room_map[i+1][j].room_identifier.contains("CP") and calculate_cp_length(room_map[i+1][j].room_identifier) == critical_path_length:
-						is_there_room_right = true
 					if i-1 >= 0 and room_map[i-1][j].room_identifier != "" and room_map[i-1][j].room_identifier.contains("CP") and calculate_cp_length(room_map[i-1][j].room_identifier) == critical_path_length:
+						is_there_room_right = true
+					if i+1 < dimensions.x and room_map[i+1][j].room_identifier != "" and room_map[i+1][j].room_identifier.contains("CP") and calculate_cp_length(room_map[i+1][j].room_identifier) == critical_path_length:
 						is_there_room_left = true
 				
 				## CHECK if it's a END room
@@ -288,9 +288,9 @@ func generate_level() -> void:
 						is_there_room_down = true
 					if j+1 < dimensions.y and room_map[i][j+1].room_identifier != "" and room_map[i][j+1].room_identifier.contains("CP") and calculate_cp_length(room_map[i][j+1].room_identifier) == 2:
 						is_there_room_up = true
-					if i+1 < dimensions.x and room_map[i+1][j].room_identifier != "" and room_map[i+1][j].room_identifier.contains("CP") and calculate_cp_length(room_map[i+1][j].room_identifier) == 2:
-						is_there_room_right = true
 					if i-1 >= 0 and room_map[i-1][j].room_identifier != "" and room_map[i-1][j].room_identifier.contains("CP") and calculate_cp_length(room_map[i-1][j].room_identifier) == 2:
+						is_there_room_right = true
+					if i+1 < dimensions.x and room_map[i+1][j].room_identifier != "" and room_map[i+1][j].room_identifier.contains("CP") and calculate_cp_length(room_map[i+1][j].room_identifier) == 2:
 						is_there_room_left = true
 				
 				## CHECK if it's a BRANCHPATHEND room
@@ -303,9 +303,9 @@ func generate_level() -> void:
 						is_there_room_down = true
 					if j+1 < dimensions.y and room_map[i][j+1].room_identifier != "" and room_map[i][j+1].room_identifier.contains("B") and calculate_branch_length(branch_num_name, room_map[i][j+1].room_identifier) == 2:
 						is_there_room_up = true
-					if i+1 < dimensions.x and room_map[i+1][j].room_identifier != "" and room_map[i+1][j].room_identifier.contains("B") and calculate_branch_length(branch_num_name, room_map[i+1][j].room_identifier) == 2:
-						is_there_room_right = true
 					if i-1 >= 0 and room_map[i-1][j].room_identifier != "" and room_map[i-1][j].room_identifier.contains("B") and calculate_branch_length(branch_num_name, room_map[i-1][j].room_identifier) == 2:
+						is_there_room_right = true
+					if i+1 < dimensions.x and room_map[i+1][j].room_identifier != "" and room_map[i+1][j].room_identifier.contains("B") and calculate_branch_length(branch_num_name, room_map[i+1][j].room_identifier) == 2:
 						is_there_room_left = true
 				
 				else:
@@ -314,9 +314,9 @@ func generate_level() -> void:
 						is_there_room_down = true	
 					if j+1 < dimensions.y and room_map[i][j+1].room_identifier != "":
 						is_there_room_up = true
-					if i+1 < dimensions.x and room_map[i+1][j].room_identifier != "":
-						is_there_room_right = true
 					if i-1 >= 0 and room_map[i-1][j].room_identifier != "":
+						is_there_room_right = true
+					if i+1 < dimensions.x and room_map[i+1][j].room_identifier != "":
 						is_there_room_left = true
 				
 					
@@ -333,10 +333,10 @@ func generate_level() -> void:
 					place_room(room_map[i][j].world_position, RoomType.R10x10_2W_HORIZZONTAL, kind)
 				#	print("Placing a RoomType.R10x10_2W_HORIZZONTAL in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif not is_there_room_up and is_there_room_down and not is_there_room_right and not is_there_room_left:
-					place_room(room_map[i][j].world_position, RoomType.R10x10_1W_TOP, kind)
+					place_room(room_map[i][j].world_position, RoomType.R10x10_1W_BOTTOM, kind)
 				#	print("Placing a RoomType.R10x10_1W_TOP in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif is_there_room_up and not is_there_room_down and not is_there_room_right and not is_there_room_left:
-					place_room(room_map[i][j].world_position, RoomType.R10x10_1W_BOTTOM, kind)
+					place_room(room_map[i][j].world_position, RoomType.R10x10_1W_TOP, kind)
 				#	print("Placing a RoomType.R10x10_1W_BOTTOM in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif not is_there_room_up and not is_there_room_down and is_there_room_right and not is_there_room_left:
 					place_room(room_map[i][j].world_position, RoomType.R10x10_1W_RIGHT, kind)
@@ -345,19 +345,19 @@ func generate_level() -> void:
 					place_room(room_map[i][j].world_position, RoomType.R10x10_1W_LEFT, kind)
 				#	print("Placing a RoomType.R10x10_1W_LEFT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif is_there_room_up and not is_there_room_down and is_there_room_right and not is_there_room_left:
-					place_room(room_map[i][j].world_position, RoomType.R10x10_2W_BOTTOM_RIGHT, kind)
+					place_room(room_map[i][j].world_position, RoomType.R10x10_2W_TOP_RIGHT, kind)
 				#	print("Placing a RoomType.R10x10_2W_BOTTOM_RIGHT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif is_there_room_up and not is_there_room_down and not is_there_room_right and is_there_room_left:
-					place_room(room_map[i][j].world_position, RoomType.R10x10_2W_BOTTOM_LEFT, kind)
+					place_room(room_map[i][j].world_position, RoomType.R10x10_2W_TOP_LEFT, kind)
 				#	print("Placing a RoomType.R10x10_2W_BOTTOM_LEFT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif not is_there_room_up and is_there_room_down and is_there_room_right and not is_there_room_left:
-					place_room(room_map[i][j].world_position, RoomType.R10x10_2W_TOP_RIGHT, kind)
+					place_room(room_map[i][j].world_position, RoomType.R10x10_2W_BOTTOM_RIGHT, kind)
 				#	print("Placing a RoomType.R10x10_2W_TOP_RIGHT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif not is_there_room_up and is_there_room_down and not is_there_room_right and is_there_room_left:
-					place_room(room_map[i][j].world_position, RoomType.R10x10_2W_TOP_LEFT, kind)
+					place_room(room_map[i][j].world_position, RoomType.R10x10_2W_BOTTOM_LEFT, kind)
 				#	print("Placing a RoomType.R10x10_2W_TOP_LEFT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif is_there_room_up and not is_there_room_down and is_there_room_right and is_there_room_left:
-					place_room(room_map[i][j].world_position, RoomType.R10x10_3W_BOTTOM, kind)
+					place_room(room_map[i][j].world_position, RoomType.R10x10_3W_TOP, kind)
 				#	print("Placing a RoomType.R10x10_3W_BOTTOM in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif is_there_room_up and is_there_room_down and not is_there_room_right and is_there_room_left:
 					place_room(room_map[i][j].world_position, RoomType.R10x10_3W_LEFT, kind)
@@ -366,7 +366,7 @@ func generate_level() -> void:
 					place_room(room_map[i][j].world_position, RoomType.R10x10_3W_RIGHT, kind)
 				#	print("Placing a RoomType.R10x10_3W_RIGHT in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))
 				elif not is_there_room_up and is_there_room_down and is_there_room_right and is_there_room_left:
-					place_room(room_map[i][j].world_position, RoomType.R10x10_3W_TOP, kind)
+					place_room(room_map[i][j].world_position, RoomType.R10x10_3W_BOTTOM, kind)
 				#	print("Placing a RoomType.R10x10_3W_TOP in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))				
 				
 				## Resets flags for the next run
