@@ -18,6 +18,9 @@ enum RoomKind{START,END,CRITICALPATH,BRANCHROOM,BRANCHPATHEND}
 ## Var that hold the RoomKind, defaults to a start room
 var kind : RoomKind = RoomKind.START
 
+## Var that hold the RoomType, defaults to a 4 way room
+var type : BaseProceduralLevel.RoomType = BaseProceduralLevel.RoomType.R10x10_4W
+
 var cell_ids_with_no_ceiling := []
 
 func _ready() -> void:

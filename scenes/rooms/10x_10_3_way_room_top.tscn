@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bx51fif0cdly2" path="res://scenes/rooms/base_room.tscn" id="1_c0rgs"]
 
 [node name="10x10_3WayRoom_top" unique_id=1003464471 instance=ExtResource("1_c0rgs")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 
 [node name="Floors" parent="." index="0" unique_id=793733367]
 data = {
