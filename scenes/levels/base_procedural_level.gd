@@ -45,7 +45,6 @@ enum RoomType{R10x10_1W_BOTTOM, R10x10_1W_LEFT, R10x10_1W_RIGHT, R10x10_1W_TOP,
 
 @onready var rooms_container: Node3D = $Rooms
 
-
 var room_map : Array ## 2D array of RoomData, mirroring the level grid structure
 var branch_candidates : Array[Vector2i] ## List of room that can have branches added to them, so which rooms can support these detours
 
@@ -53,19 +52,18 @@ func _ready() -> void:
 	initialize_level()
 	place_entrance()
 	generate_path(start, critical_path_length, "CP") # CP stands for CRITICAL PATH
-	generate_branches()
-	##print_level()
+	generate_branches()	
+	
 	reverse_print_level()
 	
 	## Actual room placement
-	calculate_room_positions() 
-	##print_level_grid()
-	reverse_print_level_grid()
-	##print_level_map()
-	reverse_print_level_map()
-	generate_level()
+	calculate_room_positions() 	
 	
-	check_generated_level()
+	reverse_print_level_grid()	
+	reverse_print_level_map()
+	
+	generate_level()	
+	check_generated_level()		## Fixes doors if they go towards a special room that is closed that way
 	
 	print_rooms()
 	
@@ -82,12 +80,12 @@ func initialize_level() -> void:
 			var empty_room := RoomData.new("", Vector2i.ZERO, null)
 			room_map[x].append(empty_room)
 			
-	## With Dimension X = 7 and Y = 5, at this point we have a 2d array with 7 columns and 5 rows, all filled with 0
-	## [0][0][0][0][0][0][0]
-	## [0][0][0][0][0][0][0]
-	## [0][0][0][0][0][0][0]
-	## [0][0][0][0][0][0][0]
-	## [0][0][0][0][0][0][0]
+	## With Dimension X = 7 and Y = 5, at this point we have a 2d array with 7 columns and 5 rows, all filled with " "
+	## [ ][ ][ ][ ][ ][ ][ ]
+	## [ ][ ][ ][ ][ ][ ][ ]
+	## [ ][ ][ ][ ][ ][ ][ ]
+	## [ ][ ][ ][ ][ ][ ][ ]
+	## [ ][ ][ ][ ][ ][ ][ ]
 
 ## This function will print the dungeon, so we can see what's been generated. Meant for debugging.
 func print_level() -> void:
@@ -237,9 +235,6 @@ func generate_branches() -> void:
 			branch_candidates.erase(candidate) #failure, remove this	
 
 ## This function will generate the whole level
-## TODO:
-## 1- ENDRO should really be a 1way room only, connected to CPL:2, or else it could happen ENDRO is very near the start or that is not clean if it could be reached by earlier than cp or from a Branch
-## 2- Branches atm are weird, since the CP can be next to itself, branches coudl be useless unless they are used specifically for special stuff like chests/special bossess
 func generate_level() -> void:
 	var is_there_room_up: bool = false
 	var is_there_room_down: bool = false
@@ -500,7 +495,7 @@ func is_endpath_room(room_to_check: String) -> bool:
 ## For example, for a End Room it places a blue light and a blue minimap_icon
 ## Can be used to spawn enemies, items, props...
 ## For now it supports END, START and BRANCHPATHEND
-## It can easily include a place_room_nodes_regular_room() to populate regular rooms in a separate function.				
+## It can easily include a place_room_nodes_regular_room() to populate regular rooms in a separate function.
 func place_room_nodes(room_to_place: BaseRoom) -> void:
 	var kind : BaseRoom.RoomKind = room_to_place.kind
 	var room : BaseRoom = room_to_place
@@ -575,7 +570,7 @@ func check_generated_level() -> void:
 	for y in range (dimensions.y - 1, -1, -1):
 		for x in dimensions.x:
 			## We now check if the room is a special room
-			var room : RoomData = room_map[x][y]						## RoomData structure that holds all the info
+			#var room : RoomData = room_map[x][y]						## RoomData structure that holds all the info
 			var room_instance : BaseRoom = room_map[x][y].room_instance ## BaseRoom instance that's instatiated
 			if room_instance == null:	## no room here
 				continue				## next iteration
@@ -602,11 +597,9 @@ func check_neighboors(room_grid_pos_x : int, room_grid_pos_y: int, r_type: RoomT
 									   7: Vector2i(room_grid_pos_x, room_grid_pos_y - 1)}
 									
 		
-	## Calculate the door direction. It can only be one of these types
-	var door_direction : Vector2i = Vector2i.ZERO
+	## Calculate the door direction. It can only be one of these types	
 	match(r_type):
-		RoomType.R10x10_1W_BOTTOM:
-			door_direction = Vector2i.DOWN
+		RoomType.R10x10_1W_BOTTOM:			
 			## check_neighboor(neighboor_dict[2], up_forbidden, down_forbidden, left_forbidden, right_forbidden)
 			# 7 CAN have door up
 			check_neighboor(neighboor_dict[7], false, false, false, false)
@@ -616,8 +609,7 @@ func check_neighboors(room_grid_pos_x : int, room_grid_pos_y: int, r_type: RoomT
 			check_neighboor(neighboor_dict[4], false, false, false, true)
 			# 2 cannot have door down
 			check_neighboor(neighboor_dict[2], false, true, false, false)
-		RoomType.R10x10_1W_LEFT:
-			door_direction = Vector2i.LEFT
+		RoomType.R10x10_1W_LEFT:			
 			## check_neighboor(neighboor_dict[2], up_forbidden, down_forbidden, left_forbidden, right_forbidden)
 			# 7 cannot have door up
 			check_neighboor(neighboor_dict[7], true, false, false, false)
@@ -627,8 +619,7 @@ func check_neighboors(room_grid_pos_x : int, room_grid_pos_y: int, r_type: RoomT
 			check_neighboor(neighboor_dict[4], false, false, false, false)
 			# 2 cannot have door down
 			check_neighboor(neighboor_dict[2], false, true, false, false)
-		RoomType.R10x10_1W_RIGHT:
-			door_direction = Vector2i.RIGHT
+		RoomType.R10x10_1W_RIGHT:			
 			## check_neighboor(neighboor_dict[2], up_forbidden, down_forbidden, left_forbidden, right_forbidden)
 			# 7 cannot have door up
 			check_neighboor(neighboor_dict[7], true, false, false, false)
@@ -638,8 +629,7 @@ func check_neighboors(room_grid_pos_x : int, room_grid_pos_y: int, r_type: RoomT
 			check_neighboor(neighboor_dict[4], false, false, false, true)
 			# 2 cannot have door down
 			check_neighboor(neighboor_dict[2], false, true, false, false)
-		RoomType.R10x10_1W_TOP:
-			door_direction = Vector2i.UP
+		RoomType.R10x10_1W_TOP:			
 			## check_neighboor(neighboor_dict[2], up_forbidden, down_forbidden, left_forbidden, right_forbidden)
 			# 7 cannot have door up
 			check_neighboor(neighboor_dict[7], true, false, false, false)
@@ -648,9 +638,7 @@ func check_neighboors(room_grid_pos_x : int, room_grid_pos_y: int, r_type: RoomT
 			# 4 cannot have door right
 			check_neighboor(neighboor_dict[4], false, false, false, true)
 			# 2 CAN have door down
-			check_neighboor(neighboor_dict[2], false, false, false, false)
-	
-	## Double checked and it shoudl be correct
+			check_neighboor(neighboor_dict[2], false, false, false, false)	
 	
 	
 func check_neighboor(room_pos: Vector2i, up_forbidden : bool, down_forbidden : bool, left_forbidden : bool, right_forbidden : bool) -> void:
@@ -664,21 +652,21 @@ func check_neighboor(room_pos: Vector2i, up_forbidden : bool, down_forbidden : b
 	
 	## Before checking those neighboors, make sure they exists
 	if room_map[room_pos.x][room_pos.y].room_identifier == "":
-		print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") doesn't exist so skip")
+		#print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") doesn't exist so skip")
 		return	
 	
 	## Check if this room is already fine as it doesn't have anything forbidden
 	if not up_forbidden and not down_forbidden and not left_forbidden and not right_forbidden:
 		## Nothing is forbidden, so we simply return
-		print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") doesn't have anything forbidden, so skip")
+		#print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") doesn't have anything forbidden, so skip")
 		return
 		
 		
 	var neighboor: RoomData = room_map[room_pos.x][room_pos.y]
-	var neigh_kind = neighboor.room_instance.kind
-	var neigh_type = neighboor.room_instance.type
-	var neigh_pos = neighboor.world_position
-	var neigh_instance = neighboor.room_instance
+	var neigh_kind : BaseRoom.RoomKind = neighboor.room_instance.kind
+	var neigh_type : RoomType = neighboor.room_instance.type
+	var neigh_pos : Vector2i = neighboor.world_position
+	var neigh_instance : BaseRoom = neighboor.room_instance
 	
 	## We need to check because there is something forbidden. 	
 	## We check each of them and swap from a 4W to a 3W or from a 3W to a 2W or from a 2W to a 1W, removing the forbidden door
@@ -812,11 +800,9 @@ func check_neighboor(room_pos: Vector2i, up_forbidden : bool, down_forbidden : b
 		elif neigh_type == RoomType.R10x10_4W:
 			print("this room (x:" + str(room_pos.x) + " y:" + str(room_pos.y) + ") should change to a RoomType.R10x10_3W_LEFT")
 			neigh_instance.queue_free()
-			place_room(neigh_pos, RoomType.R10x10_3W_LEFT, neigh_kind)
-		
-	##CHECKED and shoudl be fine...
+			place_room(neigh_pos, RoomType.R10x10_3W_LEFT, neigh_kind)	
 			
-## This function will print the dungeon, so we can see what's been generated. Meant for debugging.
+## This function will print the dungeon matching the actual room placements in the world, so we can see what's been generated. Meant for debugging.
 func reverse_print_level() -> void:
 	var level_as_string : String = ""
 	
@@ -833,7 +819,7 @@ func reverse_print_level() -> void:
 	
 	print(level_as_string)
 	
-## This function will print the dungeon, but with the identifier we also print the x,y coordinates of the map
+## This function will print the dungeon matching the actual room placements in the world, but with the identifier we also print the x,y coordinates of the map
 func reverse_print_level_map() -> void:
 	var level_as_string : String = ""
 	
@@ -850,7 +836,7 @@ func reverse_print_level_map() -> void:
 	
 	print(level_as_string)
 
-## This function will print the level grid, which contains rooms positions Meant for debugging.
+## This function will print the level grid matching the actual room placements in the world, which contains rooms positions Meant for debugging.
 func reverse_print_level_grid() -> void:
 	var level_as_string : String = ""
 	
