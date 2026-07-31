@@ -583,6 +583,11 @@ func check_neighboors(room_grid_pos_x : int, room_grid_pos_y: int, r_type: RoomT
 	## [6][7][8]
 	## We only care about 2 (x,y+1) ; 4 (x-1,y); 5(x+1, y); 7 (x,y-1)
 	
+	var neighboor_dict: Dictionary = { 2: Vector2i(room_grid_pos_x, room_grid_pos_y + 1),
+									   4: Vector2i(room_grid_pos_x - 1, room_grid_pos_y),
+									   5: Vector2i(room_grid_pos_x + 1, room_grid_pos_y),
+									   7: Vector2i(room_grid_pos_x, room_grid_pos_y - 1)}
+	
 	## Calculate the door direction. It can only be one of these types
 	var door_direction : Vector2i = Vector2i.ZERO
 	match(r_type):
@@ -618,3 +623,4 @@ func check_neighboors(room_grid_pos_x : int, room_grid_pos_y: int, r_type: RoomT
 	## so we check each of them and swap from a 4W to a 3W or from a 3W to a 2W or from a 2W to a 1W, removing the forbidden door
 	
 	## Before checking those neighboors, make sure they exists
+	## check_neighboor()
