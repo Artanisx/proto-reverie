@@ -59,6 +59,7 @@ func _ready() -> void:
 	## Actual room placement
 	calculate_room_positions() 
 	print_level_grid()
+	print_level_map()
 	generate_level()
 	
 	check_generated_level()
@@ -96,6 +97,22 @@ func print_level() -> void:
 				level_as_string += "[" + room_map[x][y].room_identifier + "]"	
 			else:
 				level_as_string += "[     ]"	## this is empty, there's no room		
+			
+		level_as_string += '\n'
+	
+	print(level_as_string)
+	
+## This function will print the dungeon, but with the identifier we also print the x,y coordinates of the map
+func print_level_map() -> void:
+	var level_as_string : String = ""
+	
+	## We count from top row and counting down to 0. Hence we start by y - 1 (array start at zero) and count -1, -1 to reach the top. We read from top to bottom.
+	for y in range (dimensions.y - 1, -1, -1):
+		for x in dimensions.x:
+			if room_map[x][y].room_identifier != "":	 ## if there's a room
+				level_as_string += "[" + room_map[x][y].room_identifier + "](" + str(x) + "," + str(y) + ")"
+			else:
+				level_as_string += "["+ str(x) + "," + str(y) +"]"	## this is empty, there's no room		
 			
 		level_as_string += '\n'
 	
@@ -540,4 +557,30 @@ func check_generated_level() -> void:
 	## We need to iterate in the room_map 2D array that stores our generated level
 	## We need to make sure that neighbor rooms to the special rooms (start, endro, endbr) that are 1 way
 	## only have a door towards them if they are facing that open way.
+	
+	## First we iterate through the room_map
+	for y in range (dimensions.y - 1, -1, -1):
+		for x in dimensions.x:
+			## We now check if the room is a special room
+			var room : RoomData = room_map[x][y]						## RoomData structure that holds all the info
+			var room_instance : BaseRoom = room_map[x][y].room_instance ## BaseRoom instance that's instatiated
+			if room_instance == null:	## no room here
+				continue				## next iteration
+			var room_kind : BaseRoom.RoomKind = room_instance.kind ## i.e. BaseRoom.RoomKind.START
+			var room_type : RoomType = room_instance.type		## i.e. RoomType.R10x10_1W_BOTTOM
+			if room_kind == BaseRoom.RoomKind.START or room_kind == BaseRoom.RoomKind.END or room_kind == BaseRoom.RoomKind.BRANCHPATHEND:
+				# Now we need to check the neighboors and work on them
+				check_neighboors(x, y, room_type)
+
+## This function takes:
+# 1: The position X in the grid of the special room, so we can find the neighboors
+# 2: The position Y in the grid of the special room, so we can find the neighboors
+# 3: the room_type, meaning R10x10_1W_BOTTOM or similar, so we know which way they can have a room towards it
+func check_neighboors(room_grid_pos_x : int, room_grid_pos_y: int, r_type: RoomType) -> void:
+	## [1][2][3]
+	## [4][x,y][5]
+	## [6][7][8]
+	## We only care about 2, 4, 5, 7
+	## Meaning, we care about: 
+	
 	pass
