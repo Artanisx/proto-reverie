@@ -617,4 +617,4 @@ func check_neighboors(room_grid_pos_x : int, room_grid_pos_y: int, r_type: RoomT
 	## checking 7 room_type we can allow it to keep a bottom door, but 5,4,2 cannot have their door looking at it
 	## so we check each of them and swap from a 4W to a 3W or from a 3W to a 2W or from a 2W to a 1W, removing the forbidden door
 	
-	pass
+	## Before checking those neighboors, make sure they exists
