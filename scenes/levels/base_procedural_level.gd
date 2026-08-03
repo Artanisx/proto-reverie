@@ -42,11 +42,13 @@ enum RoomType{R10x10_1W_BOTTOM, R10x10_1W_LEFT, R10x10_1W_RIGHT, R10x10_1W_TOP,
 @export var branches: int = 3 # How many detours there should be
 @export var branch_length: Vector2i = Vector2i(1,4) # How long a detour is (from minimum to maximum rooms)
 @export var room_size: int = 21 # The size of the room, including the portion related to the doors for proper placement.
+@export var rng_seed: int = -1 ## Seed for procedural generation. Use -1 for random seed.
 
 @onready var rooms_container: Node3D = $Rooms
 
 var room_map : Array ## 2D array of RoomData, mirroring the level grid structure
 var branch_candidates : Array[Vector2i] ## List of room that can have branches added to them, so which rooms can support these detours
+var rng: RandomNumberGenerator ## Random number generator for seeded generation
 
 func _ready() -> void:
 	initialize_level()
@@ -67,11 +69,20 @@ func _ready() -> void:
 	
 	print_rooms()
 	
+	print("Seed used: " + str(get_used_seed()))
+	
 	## Finally call the super (baselevel) _ready function to initialize the player
 	super()
 	
 ## This function will procedurally generate the level assembling rooms
 func initialize_level() -> void:
+	## Initialize the random number generator
+	rng = RandomNumberGenerator.new()
+	if rng_seed >= 0:
+		rng.seed = rng_seed
+	else:
+		rng.randomize()
+
 	## ## Initialize the room_map array
 	for x in dimensions.x:
 		room_map.append([])	# First we add empty arrays to form the columns of the map
@@ -79,7 +90,7 @@ func initialize_level() -> void:
 			## Create a RoomData with default values
 			var empty_room := RoomData.new("", Vector2i.ZERO, null)
 			room_map[x].append(empty_room)
-			
+
 	## With Dimension X = 7 and Y = 5, at this point we have a 2d array with 7 columns and 5 rows, all filled with " "
 	## [ ][ ][ ][ ][ ][ ][ ]
 	## [ ][ ][ ][ ][ ][ ][ ]
@@ -133,11 +144,11 @@ func print_level_grid() -> void:
 	
 ## This function will place the first room, where the player will spawn
 func place_entrance() -> void:	
-	### Check if the start position is valid. 
+	### Check if the start position is valid.
 	if start.x < 0 or start.x >= dimensions.x:
-		start.x = randi_range(0, dimensions.x - 1)
+		start.x = rng.randi_range(0, dimensions.x - 1)
 	if start.y < 0 or start.y >= dimensions.y:
-		start.y = randi_range(0, dimensions.y - 1)
+		start.y = rng.randi_range(0, dimensions.y - 1)
 		
 	## Update the room_map with the start room identifier
 	room_map[start.x][start.y].room_identifier = "START"
@@ -167,7 +178,7 @@ func generate_path(from: Vector2i, length: int, marker : String) -> bool:
 	var direction : Vector2i
 	
 	## Pick a random direction
-	match randi_range(0, 3):
+	match rng.randi_range(0, 3):
 		0: 
 			direction = Vector2i.UP
 		1:
@@ -225,10 +236,10 @@ func generate_branches() -> void:
 	# while there are still more branches to be created (branches variable being the setting)
 	while branches_created < branches and branch_candidates.size(): ## also check there are still branch_candidates, to prevent infinite loop
 		# select a branch candidate at random from the list
-		candidate = branch_candidates[randi_range(0, branch_candidates.size() -1)]
+		candidate = branch_candidates[rng.randi_range(0, branch_candidates.size() -1)]
 		# generate a new path from this candidate of the branch_length we set. the marker branches created plus 1 (so each branch will be 1,1,1 or 2,2,2 etc)
 		## first, we define a random lenght for this branch based upon settings
-		var b_length : int = randi_range(branch_length.x, branch_length.y)
+		var b_length : int = rng.randi_range(branch_length.x, branch_length.y)
 		if generate_path(candidate, b_length, "B" + str(branches_created + 1) + "ML" + str(b_length)): 	## BXMLY where X is branch number and Y is max length
 			branches_created += 1 #success
 		else:
@@ -847,4 +858,8 @@ func reverse_print_level_grid() -> void:
 			level_as_string += "[" + str(room_map[x][y].world_position) + "]"			
 		level_as_string += '\n'
 	
-	print(level_as_string)	
+	print(level_as_string)
+
+## Returns the seed used for generation. If no seed was set (seed < 0), returns the randomly generated seed that was used.
+func get_used_seed() -> int:
+	return rng.seed
