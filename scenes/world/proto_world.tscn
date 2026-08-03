@@ -45,6 +45,7 @@ shadow_enabled = true
 dimensions = Vector2i(10, 7)
 critical_path_length = 17
 branch_length = Vector2i(2, 4)
+rng_seed = -1
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=428158854]
 anchors_preset = 15
