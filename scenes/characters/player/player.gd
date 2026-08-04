@@ -22,22 +22,25 @@ const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking
 @onready var select_raycast: RayCast3D = %SelectRaycast		## Reference to the RayCast used for pick up objects
 @onready var equipment: EquipmentComponent = %EquipmentComponent 	## refenrec eto tehe quipment component
 
+enum State {MOVING, PICKING_UP, THROWING}
 
 var current_pickable_focused_item : PickableItem = null	## This will hold a PickableItem that is currently pickable (in range and hit by the select_raycast)
 var input_dir := Vector2.ZERO ## Store the direction of movement from player input. Represents the player hitting W-A-S-D
+var state : State	## State the player is in
+var state_node : PlayerState ## The Node that holds the current state the player is in
 
 func _ready() -> void:
 	# Capture the mouse so it doesn't go outside of the window (F8 to stop debugging)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	# Call the switch_state function to set the starting state
+	switch_state(State.MOVING)
 	
 func _process(_delta: float) -> void:
 	## Setup the input direction using the get_vector function that maps a Vector2 to a input: 
 	## negative x motion (strafe left), positive x motion (stafe right), negative y motion (go backward), postive y motion (go forward)
 	input_dir = Input.get_vector("strafe_left","strafe_right","backward","forward")
 	
-	## Setup for the equipment button (E) to pickup an object and if he can pickup an object...
-	if Input.is_action_just_pressed("use") and can_pickup_object():
-		pickup_object()		## pick it up!
+
 		
 	## Setup for the thrown button (R) to thrown an object and if he can thrown an object...
 	if Input.is_action_just_pressed("throw") and equipment.has_weapon():
@@ -45,8 +48,11 @@ func _process(_delta: float) -> void:
 	
 func _physics_process(delta: float) -> void:	
 	check_jump_input()	## handles player jump
-	process_gravity()	## process gravity so is_on_floor() works properly
-	
+	process_gravity()	## process gravity so is_on_floor() works properly	
+	move_and_slide() ## Apply movemenet			
+	check_for_selection() ## Check if a pickable item is being looked at (inside the select_raycast range)
+
+func process_movement(delta: float) -> void:
 	## HANDLE MOVEMENT (moving around)
 	## Move the player using its velocity vector
 	## We call this in _physics_process because we need to make sure all collision calculations (physics) are done before
@@ -82,22 +88,6 @@ func _physics_process(delta: float) -> void:
 		## Again, we only want to update X and Z, not Y that is the up/down vector
 		velocity.x = move_toward(velocity.x, desired_velocity.x, acceleration * delta)
 		velocity.z = move_toward(velocity.z, desired_velocity.z, acceleration * delta)
-	
-	## Apply animation	
-	var horizontal_velocity := Vector3(velocity.x, 0.0, velocity.z)
-	
-	## Calculate the velocity and set either the run or idle animation accordingly
-	if horizontal_velocity.length_squared() > 0.1 and is_on_floor():
-		animation_player.play("run")
-	else:
-		animation_player.play("idle")
-	
-	
-	## Apply movemenet
-	move_and_slide()
-	
-	## Check if a pickable item is being looked at (inside the select_raycast range)
-	check_for_selection()
 
 func _input(event: InputEvent) -> void:
 	## HANDLE MOUSE LOOK (looking around)
@@ -124,6 +114,28 @@ func _input(event: InputEvent) -> void:
 		
 		# Clamp camera X rotation (up/down) to restrict the angles
 		camera.rotation.x = clampf(camera.rotation.x, MAX_ANGLE_LOOK_DOWN, MAX_ANGLE_LOOK_UP)	
+
+## Switch to the passed State
+## The function will add a Node that will contain the behaviour for the passed state
+func switch_state(new_state: State) -> void:
+	## INIT: Remove the previous PlayerState node if it exists
+	if state_node != null:
+		state_node.queue_free()
+	## 0 -- Create a dictionary containing all the states and related PlayerState classess
+	var state_map := {
+		State.MOVING: PlayerStateMoving,
+		State.PICKING_UP: PlayerStatePickingUp
+	}	
+	## 1 - Create the proper PlayerState node
+	state_node = state_map[new_state].new(self)
+	## 1.5 - Listen to the transition_state signal and connect to this function
+	state_node.transition_requested.connect(switch_state)	
+	## 1.6 - Add a name to the node so it is clear in the tree
+	state_node.name = "State_" + State.keys()[new_state]
+	## 1.7 - Store the player state
+	state = new_state	
+	## 2 - Add it to the player scene	
+	add_child(state_node)
 
 func check_jump_input() -> void:
 	if is_on_floor() and Input.is_action_just_pressed("jump"):
@@ -163,11 +175,3 @@ func check_for_selection() -> void:
 func can_pickup_object() -> bool:
 	return current_pickable_focused_item != null
 	
-## Pickup the item that is being looked at
-func pickup_object() -> void:
-	var picakable_object := current_pickable_focused_item	
-	
-	## if the pickable object contains weapon data (so it is.. a weapon!)
-	if picakable_object.weapon_data != null:
-		equipment.equip_weapon(picakable_object.weapon_data, picakable_object.global_transform) ## pick it up (set the equpment component to the weapon data of the piackable object, also pass its position - the transform - for a little tween animation)
-		picakable_object.queue_free()	## destroys the picakable object since it is now equpped
