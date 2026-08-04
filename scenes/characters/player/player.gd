@@ -40,13 +40,7 @@ func _process(_delta: float) -> void:
 	## negative x motion (strafe left), positive x motion (stafe right), negative y motion (go backward), postive y motion (go forward)
 	input_dir = Input.get_vector("strafe_left","strafe_right","backward","forward")
 	
-
-		
-	## Setup for the thrown button (R) to thrown an object and if he can thrown an object...
-	if Input.is_action_just_pressed("throw") and equipment.has_weapon():
-		equipment.thrown_weapon()
-	
-func _physics_process(delta: float) -> void:	
+func _physics_process(_delta: float) -> void:	
 	check_jump_input()	## handles player jump
 	process_gravity()	## process gravity so is_on_floor() works properly	
 	move_and_slide() ## Apply movemenet			
@@ -124,7 +118,8 @@ func switch_state(new_state: State) -> void:
 	## 0 -- Create a dictionary containing all the states and related PlayerState classess
 	var state_map := {
 		State.MOVING: PlayerStateMoving,
-		State.PICKING_UP: PlayerStatePickingUp
+		State.PICKING_UP: PlayerStatePickingUp,
+		State.THROWING: PlayerStateThrowing
 	}	
 	## 1 - Create the proper PlayerState node
 	state_node = state_map[new_state].new(self)
