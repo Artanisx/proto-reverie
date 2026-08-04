@@ -37,7 +37,7 @@ collide_with_bodies = false
 
 [node name="character" parent="." unique_id=902149486 instance=ExtResource("2_t61fv")]
 
-[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 1051702559) index="0" unique_id=2062208085]
+[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 673065318) index="0" unique_id=443732606]
 bones/0/position = Vector3(-1.776356e-15, 0.62109935, -0.08423395)
 bones/3/rotation = Quaternion(-0.2513728, -0.34018144, 0.77154964, 0.47518358)
 bones/4/rotation = Quaternion(-0.5391095, -0.1774649, 0.03091945, 0.8227461)
@@ -57,7 +57,7 @@ bone_idx = 8
 unique_name_in_owner = true
 transform = Transform3D(0.22814482, 0.2324464, -0.94547284, -0.08349022, -0.9628353, -0.25686145, -0.970041, 0.13753916, -0.20025888, -0.02997258, -2.910383e-11, 0.07420103)
 
-[node name="AnimationPlayer" parent="character" index="1" unique_id=461979395]
+[node name="AnimationPlayer" parent="character" index="1" unique_id=36450177]
 autoplay = &"idle"
 
 [node name="EquipmentComponent" parent="." unique_id=535100031 node_paths=PackedStringArray("weapon_placeholder", "weapon_spawn_position") instance=ExtResource("6_6avc5")]

@@ -10,6 +10,15 @@ extends PlayerState
 		
 ## Execute what needs to be done immediately when the node enters the tree, so when we switch to this state (basically kind of a _ready)	
 func  _enter_tree() -> void:
-	player.equipment.thrown_weapon()
+	## Play the throw animation
+	player.animation_player.play("throw_weapon")
 	
-	transition_state(Player.State.MOVING)	## Emit the signal and transition back to Moving
+	## Hookup to the finish signal
+	player.animation_player.animation_finished.connect(on_animation_finished)
+	
+func on_animation_finished(_animation_name: String) -> void:
+	## Throw the weapon
+	player.equipment.thrown_weapon() 
+	
+	## Emit the signal and transition back to Moving
+	transition_state(Player.State.MOVING)	
