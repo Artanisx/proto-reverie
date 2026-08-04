@@ -30,6 +30,7 @@ const ROOMS_MAP := {
 
 ## Some const for pickable items
 const PICKABLE_ITEM_PREFAB = preload("res://scenes/equipment/pickable_item.tscn")
+const GOBLIN_PREFAB = preload("res://scenes/characters/enemies/goblin.tscn")
 const WEAPON_SWORD_DATA = preload("res://data/weapons/shortsword.tres")
 
 const MINIMAP_ICONS_HEIGHT : float = 3.5 ## Y position for minimap icons
@@ -561,6 +562,11 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		pickable_object.weapon_data = weapon_dt
 		pickable_object.position = Vector3(0.0, 0.1, 0.0)
 		room.entities.add_child(pickable_object)
+		
+		## Add an enemy to the start room
+		var goblin: Enemy = GOBLIN_PREFAB.instantiate()		
+		goblin.position = Vector3(5.0, 0.0, 5.0)
+		room.entities.add_child(goblin)
 		
 	## If it's an BRANCH PATH END ROOM (whre a chest/boss may lie) let's add a red omnilight3d
 	if kind == BaseRoom.RoomKind.BRANCHPATHEND:
