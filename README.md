@@ -11,10 +11,9 @@ Pixel Art done by me using [Aseprite](https://www.aseprite.org/) while following
 ## Tutorial Progress
 Episode 06: https://www.youtube.com/watch?v=2tYm-Ix84cg&list=PLT26e2jOwbdg&index=7
 
-Time Index: 0:00:00
+Time Index: 0:30:59
 
-What: From start!
-
+What: Proper Throw!
 
 Next Episode will be 07: https://www.youtube.com/watch?v=tyRnhaquM_I&list=PLT26e2jOwbdg&index=8
 
