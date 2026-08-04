@@ -48,12 +48,19 @@ func equip_weapon(data: WeaponData, pickup_transform: Transform3D = Transform3D.
 		animate_to_hand(weapon)
 
 ## Thrown the currently equipped weapon	
-func thrown_weapon() -> void:
+func thrown_weapon(is_being_dropped: bool = false) -> void:
 	if has_weapon():
 		## Instantiate the thrown item
 		var thrown_item := THROWN_ITEM_PREFAB.instantiate() as ThrownItem
 		thrown_item.weapon_data = weapon_data ## weapon data is the equipped weapon data of course
-		thrown_item.global_transform = weapon_spawn_position.global_transform	## startting position should be where the weapon spawn position is
+		thrown_item.is_being_dropped = is_being_dropped ## Save the arugment, to see if the waepon should be dropped or it being thrown
+		
+		## Save the weapon_placeholder position (hands)
+		var spawn_transform := weapon_placeholder.global_transform
+		if not is_being_dropped:
+			spawn_transform = weapon_spawn_position.global_transform ## startting position should be where the weapon spawn position is, not in the hands (weapon_placeholder)
+		
+		thrown_item.global_transform = spawn_transform	## Apply the transform depending on the above
 		
 		## Add this instance as a child of the current loaded level  (not the player or it would be attached to it)
 		GameState.current_level.add_child(thrown_item)	## the weapon will drop to the ground atm
