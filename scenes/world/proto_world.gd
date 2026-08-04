@@ -1,4 +1,4 @@
-class_name World
+class_name ProtoWorld
 extends Node3D
 
 @onready var minimap_camera: MinimapCamera = $MarginContainer/PanelContainer/Minimap/SubViewport/MinimapCamera
@@ -7,6 +7,7 @@ extends Node3D
 
 func _ready() -> void:
 	minimap_camera.minimap_ready.connect(on_minimap_ready.bind())
+	GameState.register_level(test_procedural_level)	 ## Register the currently loaded level
 
 func on_minimap_ready() -> void:
 	##print("received minimap readyness")
