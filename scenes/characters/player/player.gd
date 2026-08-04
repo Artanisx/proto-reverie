@@ -38,6 +38,10 @@ func _process(_delta: float) -> void:
 	## Setup for the equipment button (E) to pickup an object and if he can pickup an object...
 	if Input.is_action_just_pressed("use") and can_pickup_object():
 		pickup_object()		## pick it up!
+		
+	## Setup for the thrown button (R) to thrown an object and if he can thrown an object...
+	if Input.is_action_just_pressed("throw") and equipment.has_weapon():
+		equipment.thrown_weapon()
 	
 func _physics_process(delta: float) -> void:	
 	check_jump_input()	## handles player jump
@@ -161,13 +165,9 @@ func can_pickup_object() -> bool:
 	
 ## Pickup the item that is being looked at
 func pickup_object() -> void:
-	var picakable_object := current_pickable_focused_item
+	var picakable_object := current_pickable_focused_item	
 	
 	## if the pickable object contains weapon data (so it is.. a weapon!)
 	if picakable_object.weapon_data != null:
 		equipment.equip_weapon(picakable_object.weapon_data, picakable_object.global_transform) ## pick it up (set the equpment component to the weapon data of the piackable object, also pass its position - the transform - for a little tween animation)
 		picakable_object.queue_free()	## destroys the picakable object since it is now equpped
-		
-		
-	
-		

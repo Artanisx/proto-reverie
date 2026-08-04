@@ -64,5 +64,6 @@ autoplay = &"idle"
 unique_name_in_owner = true
 is_always_in_front = true
 weapon_placeholder = NodePath("../character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder")
+thrown_force = 10.0
 
 [editable path="character"]
