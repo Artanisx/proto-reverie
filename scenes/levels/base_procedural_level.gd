@@ -28,6 +28,10 @@ const ROOMS_MAP := {
 	RoomType.R10x10_4W: preload("res://scenes/rooms/10x_10_4_way_room.tscn") # 4 doors (down, left, right, up)
 } 
 
+## Some const for pickable items
+const PICKABLE_ITEM_PREFAB = preload("res://scenes/equipment/pickable_item.tscn")
+const WEAPON_SWORD_DATA = preload("res://data/weapons/shortsword.tres")
+
 const MINIMAP_ICONS_HEIGHT : float = 3.5 ## Y position for minimap icons
 
 ## Enum for room types
@@ -529,7 +533,7 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		minimap_icon.set_layer_mask_value(2, true)
 		minimap_icon.position = Vector3(0.0, MINIMAP_ICONS_HEIGHT, 0.0) 
 		minimap_icon.scale = Vector3(20.0, 20.0, 20.0)
-		room.add_child(minimap_icon)
+		room.add_child(minimap_icon)	
 		
 	## If it's an START ROOM let's add a green omnilight3d
 	if kind == BaseRoom.RoomKind.START:
@@ -550,6 +554,13 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		minimap_icon.position = Vector3(0.0, MINIMAP_ICONS_HEIGHT, 0.0) 
 		minimap_icon.scale = Vector3(20.0, 20.0, 20.0)
 		room.add_child(minimap_icon)
+		
+		## Add a sword to the Start Room		
+		var pickable_object: PickableItem = PICKABLE_ITEM_PREFAB.instantiate()	
+		var weapon_dt: WeaponData = WEAPON_SWORD_DATA	
+		pickable_object.weapon_data = weapon_dt
+		pickable_object.position = Vector3(0.0, 0.1, 0.0)
+		room.entities.add_child(pickable_object)
 		
 	## If it's an BRANCH PATH END ROOM (whre a chest/boss may lie) let's add a red omnilight3d
 	if kind == BaseRoom.RoomKind.BRANCHPATHEND:

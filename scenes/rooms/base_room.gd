@@ -12,6 +12,9 @@ extends Node3D
 @onready var ceilings: GridMap = %Ceilings
 @onready var floors: GridMap = %Floors
 
+## This node will hold all entities for the room
+var entities: Node3D
+
 ## Enum for room kinds
 enum RoomKind{START,END,CRITICALPATH,BRANCHROOM,BRANCHPATHEND}
 
@@ -23,8 +26,14 @@ var type : BaseProceduralLevel.RoomType = BaseProceduralLevel.RoomType.R10x10_4W
 
 var cell_ids_with_no_ceiling := []
 
+func _init() -> void:
+	## Add a Node3D that will hold all entities for this room
+	entities = Node3D.new() # Create a new Node3D.
+	entities.name = "Entities"
+	add_child(entities) # Add it as a child of this room
+	
 func _ready() -> void:
-	fill_ceilings()
+	fill_ceilings()	
 	
 func fill_ceilings() -> void:
 	# For each cell in the Floors, if the cell is one of the ones WITHOUT a ceiling...

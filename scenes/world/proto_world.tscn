@@ -29,7 +29,7 @@ corner_radius_bottom_left = 8
 shadow_color = Color(0, 1.4439226e-07, 0.45277554, 0.6)
 shadow_size = 16
 
-[node name="World" type="Node3D" unique_id=572461608]
+[node name="ProtoWorld" type="Node3D" unique_id=572461608]
 script = ExtResource("1_hhpbp")
 
 [node name="UI" parent="." unique_id=903971547 instance=ExtResource("2_hyncs")]
@@ -45,7 +45,6 @@ shadow_enabled = true
 dimensions = Vector2i(10, 7)
 critical_path_length = 17
 branch_length = Vector2i(2, 4)
-rng_seed = -1
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=428158854]
 anchors_preset = 15
