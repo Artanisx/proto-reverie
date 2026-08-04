@@ -12,7 +12,7 @@ const THROWN_ITEM_PREFAB := preload("res://scenes/equipment/thrown_item.tscn")	#
 @export var is_always_in_front: bool	## If this is true, the equipped item will have its material replaced by the one with ZClip scale enabled to be drawn in front. Only set it true for the player.
 @export var weapon_data: WeaponData		## Weapon data of this equipment
 @export var weapon_placeholder: Node3D	## The node reference where the Equipment will be attached to
-@export var thrown_force : float ## force for the thrown
+@export var weapon_spawn_position: Node3D ## The position from where the thrownable weapon will spawn so it move in the right direction / rotation
 
 ## This does:
 ## - Equip the weapon
@@ -53,7 +53,7 @@ func thrown_weapon() -> void:
 		## Instantiate the thrown item
 		var thrown_item := THROWN_ITEM_PREFAB.instantiate() as ThrownItem
 		thrown_item.weapon_data = weapon_data ## weapon data is the equipped weapon data of course
-		thrown_item.global_transform = weapon_placeholder.global_transform	## startting position should be where the weapon holder is
+		thrown_item.global_transform = weapon_spawn_position.global_transform	## startting position should be where the weapon spawn position is
 		
 		## Add this instance as a child of the current loaded level  (not the player or it would be attached to it)
 		GameState.current_level.add_child(thrown_item)	## the weapon will drop to the ground atm

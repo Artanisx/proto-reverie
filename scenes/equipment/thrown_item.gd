@@ -27,6 +27,15 @@ func _ready() -> void:
 		var mesh_node := thrown_object.get_child(0) as MeshInstance3D
 		collision_shape.shape = mesh_node.mesh.create_convex_shape()
 		
+		# Stop gravity so the object doesnt' fall to theground right away
+		gravity_scale = 0
+		
+		## Add to linear velocity, so it moves forward (z)
+		linear_velocity = -global_basis.z * weapon_data.throw_movement_speed
+		
+		## Add to angular_velocity in order to have some rotation
+		angular_velocity = -global_basis.y * weapon_data.throw_rotation_speed
+		
 		## Listen to the body_entered signal and call on_body_entered, needed for checking for collision with enemy/ground
 		body_entered.connect(on_body_entered)	## This is to check wheter the weapon collides with an enemy
 
@@ -34,6 +43,9 @@ func _ready() -> void:
 ## However, we need this to happen only once per collision!
 ## The ThrownItem should have SOLVER>CONTACT MONITOR > ON and SOLVER>MAX CONTACT REPORT: 1 on the rigidbody3d component
 func on_body_entered(_body: Node) -> void:
+	# First, apply gravity as soon as the item hits something
+	gravity_scale = 1	
+	
 	## The item just collided with something, fire the sleeping_state_changed
 	## This signal is fired when the item goes to sleep which happens after godot stops checking for collisions, which happens after the item stops moving for a bit		
 	if not sleeping_state_changed.is_connected(on_sleep): ## However, since the on_body_entered will be called a few times, we make sure we call the callback only once
@@ -41,7 +53,7 @@ func on_body_entered(_body: Node) -> void:
 
 ## This will be called after the weapon stopped moving after being thrown somewhere
 ## At this point we'll need to transform the weapon from the thrownitem (flying state) to the pickableitem (item that can be picked up state)
-func on_sleep() -> void:
+func on_sleep() -> void:	
 	# Swap from thrown item to pickable item
 	
 	## Instantiate the pickable item
