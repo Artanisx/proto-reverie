@@ -55,8 +55,8 @@ func thrown_weapon() -> void:
 		thrown_item.weapon_data = weapon_data ## weapon data is the equipped weapon data of course
 		thrown_item.global_transform = weapon_placeholder.global_transform	## startting position should be where the weapon holder is
 		
-		## Add this instance as a child of the root of the game (not the player or it would be attached to it)
-		get_tree().get_root().add_child(thrown_item)	## the weapon will drop to the ground atm
+		## Add this instance as a child of the current loaded level  (not the player or it would be attached to it)
+		GameState.current_level.add_child(thrown_item)	## the weapon will drop to the ground atm
 		
 		## Destroy the weapon in hand
 		weapon_data = null

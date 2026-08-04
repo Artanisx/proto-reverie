@@ -49,8 +49,8 @@ func on_sleep() -> void:
 	pickable_item.weapon_data = weapon_data ## weapon data is the thrown weapon data of course
 	pickable_item.global_transform = global_transform	## startting position should be where the thrown weapon is
 	
-	## Add this instance as a child of the root of the game (not the player or it would be attached to it)
-	get_tree().get_root().add_child(pickable_item)	## the weapon will be in the level, on the ground then
+	## Add this instance as a child of the level currently loaded (not the player or it would be attached to it)
+	GameState.current_level.add_child(pickable_item)	## the weapon will be in the level, on the ground then
 	
 	## Destroy the thrown weapon	
 	queue_free()	
