@@ -54,5 +54,5 @@ func freeze_ragdoll() -> void:
 	for child in skeleton_simulator.get_children():
 		if child is PhysicalBone3D:
 			var bone := child as PhysicalBone3D
-			var bone_rid := child.get_rid() as RID
+			var bone_rid := bone.get_rid() as RID
 			PhysicsServer3D.body_set_state(bone_rid, PhysicsServer3D.BODY_STATE_SLEEPING, true)
