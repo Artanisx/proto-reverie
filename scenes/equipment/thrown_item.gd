@@ -11,6 +11,9 @@ const PICKABLE_ITEM_PREFAB := preload("res://scenes/equipment/pickable_item.tscn
 @export var weapon_data: WeaponData
 @onready var collision_shape: CollisionShape3D = %CollisionShape
 
+## Store if the weapon is not thrown, but dropped (for example by a dead enemy)
+var is_being_dropped: bool 
+
 ## Store the original rotation of this thrown item so that it can be reapplied once it's impaled (using the same direction/rotation for proper impalement)
 var original_basis: Basis
 
@@ -34,14 +37,15 @@ func _ready() -> void:
 		var mesh_node := thrown_object.get_child(0) as MeshInstance3D
 		collision_shape.shape = mesh_node.mesh.create_convex_shape()
 		
-		# Stop gravity so the object doesnt' fall to theground right away
-		gravity_scale = 0
-		
-		## Add to linear velocity, so it moves forward (z)
-		linear_velocity = -global_basis.z * weapon_data.throw_movement_speed
-		
-		## Add to angular_velocity in order to have some rotation
-		angular_velocity = -global_basis.y * weapon_data.throw_rotation_speed
+		if not is_being_dropped:		
+			# Stop gravity so the object doesnt' fall to theground right away
+			gravity_scale = 0
+			
+			## Add to linear velocity, so it moves forward (z)
+			linear_velocity = -global_basis.z * weapon_data.throw_movement_speed
+			
+			## Add to angular_velocity in order to have some rotation
+			angular_velocity = -global_basis.y * weapon_data.throw_rotation_speed
 		
 		## Listen to the body_entered signal and call on_body_entered, needed for checking for collision with enemy/ground
 		body_entered.connect(on_body_entered)	## This is to check wheter the weapon collides with an enemy
@@ -50,8 +54,8 @@ func _ready() -> void:
 ## However, we need this to happen only once per collision!
 ## The ThrownItem should have SOLVER>CONTACT MONITOR > ON and SOLVER>MAX CONTACT REPORT: 1 on the rigidbody3d component
 func on_body_entered(body: Node) -> void:
-	if body is Enemy:
-		## the weapon is hitting an enemy...
+	if body is Enemy and not is_being_dropped:
+		## the weapon is hitting an enemy and the weapon itself is thrown (and not simply dropping)...
 		body.impale(self, original_basis)	## impale them!!!
 	else:
 		## The weapon is hitting the walls/ground etc...

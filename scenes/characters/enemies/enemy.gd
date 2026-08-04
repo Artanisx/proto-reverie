@@ -6,6 +6,7 @@ extends CharacterBody3D
 ## This handles any Enemy scene
 
 @onready var animation_player: AnimationPlayer = $character/AnimationPlayer
+@onready var equipment: EquipmentComponent = %EquipmentComponent
 
 ## To be used to "stick" the player thrown weapon into
 @onready var physical_bone_torso: PhysicalBone3D = %"Physical Bone Torso"
@@ -32,15 +33,6 @@ func impale(thrown_item: ThrownItem, item_basis: Basis) -> void:
 	
 	## Switch state to the IMPALING state, passing the state_data
 	switch_state(State.IMPALING, state_data)
-
-## This function will start the ragdoll for the death
-## Optionally we can apply an impulse force so it is receiving the impact
-func register_death(impulse: Vector3 = Vector3.ZERO) -> void:
-	## Create an EnemyStateData class and fill it with the argument needed for the dying state	
-	var state_data: EnemyStateData = EnemyStateData.new().set_impulse(impulse)
-	
-	## Switch state to the DYING state, passing the state_data
-	switch_state(State.DYING, state_data)
 
 ## Switch to the passed State
 ## The function will add a Node that will contain the behaviour for the passed state

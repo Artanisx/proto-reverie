@@ -23,7 +23,7 @@ func _enter_tree() -> void:
 	## Impalement is oneshot, so transition to dying
 	
 	## We apply a bit of impulse forward and up
-	var impulse = state_data.thrown_item_basis * Vector3.FORWARD * IMPALE_INTENSITY + Vector3.UP * IMPALE_INTENSITY	
+	var impulse: Vector3 = state_data.thrown_item_basis * Vector3.FORWARD * IMPALE_INTENSITY + Vector3.UP * IMPALE_INTENSITY	
 	
 	## Transition to DYING state passing the impulse we calculated to a new enemystatedata with impulse set
 	transition_state(Enemy.State.DYING, EnemyStateData.new().set_impulse(impulse))	

@@ -11,6 +11,9 @@ extends EnemyState
 const DURATION_RAGDOLL_SIMULATION : float = 3.0
 
 func _enter_tree() -> void:
+	## 0 - Drop the weapon
+	enemy.equipment.thrown_weapon(true)
+	
 	## 1- Disable collision shape since we are no longer handling phsyics with it
 	enemy.collision_shape.disabled = true
 	## 2- Enable the skeleton simulator
