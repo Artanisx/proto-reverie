@@ -11,13 +11,20 @@ const PICKABLE_ITEM_PREFAB := preload("res://scenes/equipment/pickable_item.tscn
 @export var weapon_data: WeaponData
 @onready var collision_shape: CollisionShape3D = %CollisionShape
 
+## Store the original rotation of this thrown item so that it can be reapplied once it's impaled (using the same direction/rotation for proper impalement)
+var original_basis: Basis
+
 ## As soon as the node is spawned we must:
 ## - Create the mesh for the thrown item
 ## - Add it as a child
 ## - Create the proper collision shape
 func _ready() -> void:	
 	## Then, we instantiate the mesh
-	var thrown_object : Node3D = null		
+	var thrown_object : Node3D = null
+	
+	## Store the start rotation/transform
+	original_basis = global_transform.basis
+	
 	if weapon_data:
 		thrown_object = weapon_data.glb_mesh.instantiate()
 		
@@ -42,14 +49,19 @@ func _ready() -> void:
 ## This will be called each time the weapon collides with something
 ## However, we need this to happen only once per collision!
 ## The ThrownItem should have SOLVER>CONTACT MONITOR > ON and SOLVER>MAX CONTACT REPORT: 1 on the rigidbody3d component
-func on_body_entered(_body: Node) -> void:
-	# First, apply gravity as soon as the item hits something
-	gravity_scale = 1	
-	
-	## The item just collided with something, fire the sleeping_state_changed
-	## This signal is fired when the item goes to sleep which happens after godot stops checking for collisions, which happens after the item stops moving for a bit		
-	if not sleeping_state_changed.is_connected(on_sleep): ## However, since the on_body_entered will be called a few times, we make sure we call the callback only once
-		sleeping_state_changed.connect(on_sleep)	## Create the connection only once
+func on_body_entered(body: Node) -> void:
+	if body is Enemy:
+		## the weapon is hitting an enemy...
+		body.impale(self, original_basis)	## impale them!!!
+	else:
+		## The weapon is hitting the walls/ground etc...
+		# First, apply gravity as soon as the item hits something
+		gravity_scale = 1	
+		
+		## The item just collided with something, fire the sleeping_state_changed
+		## This signal is fired when the item goes to sleep which happens after godot stops checking for collisions, which happens after the item stops moving for a bit		
+		if not sleeping_state_changed.is_connected(on_sleep): ## However, since the on_body_entered will be called a few times, we make sure we call the callback only once
+			sleeping_state_changed.connect(on_sleep)	## Create the connection only once
 
 ## This will be called after the weapon stopped moving after being thrown somewhere
 ## At this point we'll need to transform the weapon from the thrownitem (flying state) to the pickableitem (item that can be picked up state)
