@@ -16,7 +16,6 @@ func  _enter_tree() -> void:
 	## Hookup to the finish signal
 	player.animation_player.animation_finished.connect(on_animation_finished)
 	
-func on_animation_finished(_animation_name: String) -> void:
 	## Pickup the item that is being looked at
 	var picakable_object := player.current_pickable_focused_item	
 	
@@ -25,4 +24,5 @@ func on_animation_finished(_animation_name: String) -> void:
 		player.equipment.equip_weapon(picakable_object.weapon_data, picakable_object.global_transform) ## pick it up (set the equpment component to the weapon data of the piackable object, also pass its position - the transform - for a little tween animation)
 		picakable_object.queue_free()	## destroys the picakable object since it is now equpped
 	
+func on_animation_finished(_animation_name: String) -> void:	
 	transition_state(Player.State.MOVING)	## Emit the signal and transition to Moving
