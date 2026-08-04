@@ -10,6 +10,13 @@ extends PlayerState
 
 ## Execute what needs to be done immediately when the node enters the tree, so when we switch to this state (basically kind of a _ready)	
 func  _enter_tree() -> void:
+	## Play the pickup animation
+	player.animation_player.play("pickup")
+	
+	## Hookup to the finish signal
+	player.animation_player.animation_finished.connect(on_animation_finished)
+	
+func on_animation_finished(_animation_name: String) -> void:
 	## Pickup the item that is being looked at
 	var picakable_object := player.current_pickable_focused_item	
 	
