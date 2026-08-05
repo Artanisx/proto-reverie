@@ -14,6 +14,7 @@ cell_size = Vector3(1, 1, 1)
 cell_center_y = false
 
 [node name="RoomNavigation" type="NavigationRegion3D" parent="." unique_id=1602827462]
+unique_name_in_owner = true
 use_edge_connections = false
 
 [node name="Floors" type="GridMap" parent="RoomNavigation" unique_id=793733367]

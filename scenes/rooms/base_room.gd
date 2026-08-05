@@ -12,6 +12,8 @@ extends Node3D
 @onready var ceilings: GridMap = %Ceilings
 @onready var floors: GridMap = %Floors
 @onready var enemies: Node3D = %Enemies
+@onready var room_navigation: NavigationRegion3D = %RoomNavigation
+
 
 
 ## This node will hold all entities for the room
@@ -37,6 +39,7 @@ func _init() -> void:
 func _ready() -> void:
 	fill_ceilings()
 	prep_enemies()
+	bake_nav_room()
 	
 func fill_ceilings() -> void:
 	# For each cell in the Floors, if the cell is one of the ones WITHOUT a ceiling...
@@ -57,6 +60,13 @@ func fill_ceilings() -> void:
 			## this means it needs to have a ceiling.
 			## Paint said cell in the ceilings grid map, at the these coordinate, with the ceiling tile (id 0)
 			ceilings.set_cell_item(cell_coords, 0)			
+
+##This function will bake the nav rooms at runtime, not efficient but heh...
+func bake_nav_room() -> void:
+	var navigation_mesh: NavigationMesh = NavigationMesh.new()
+	navigation_mesh.set_cell_height(0.1)
+	room_navigation.set_navigation_mesh(navigation_mesh)	
+	room_navigation.bake_navigation_mesh(true)	
 
 ## This will listen to the screamed signal emitted by enemies
 func prep_enemies() -> void:
