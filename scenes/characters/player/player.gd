@@ -36,6 +36,10 @@ func _ready() -> void:
 	if capture_mouse_enabled:
 		# Capture the mouse so it doesn't go outside of the window (F8 to stop debugging)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
+	## Register the player reference to the GameState global
+	GameState.register_player(self)	
+		
 	# Call the switch_state function to set the starting state
 	switch_state(State.MOVING)
 	
