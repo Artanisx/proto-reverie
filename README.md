@@ -9,12 +9,12 @@ Pixel Art done by me using [Aseprite](https://www.aseprite.org/) while following
 3D Art done by me using [Blender](https://www.blender.org/) while following along).
 
 ## Tutorial Progress
-Episode 08: https://www.youtube.com/watch?v=P3ByaVqt8qc&list=PLT26e2jOwbdg&index=9
+Episode 09: https://www.youtube.com/watch?v=OIT3_mXGZ-M&list=PLT26e2jOwbdg&index=10
 
-Time Index: 0:42:21
+Time Index: 0:00:00
 
 What: Start
 
-Next Episode will be 09: https://www.youtube.com/watch?v=OIT3_mXGZ-M&list=PLT26e2jOwbdg&index=10
+Next Episode will be 10: https://www.youtube.com/watch?v=MrFh4RIzRzc&list=PLT26e2jOwbdg&index=11
 
 Playlist: https://www.youtube.com/playlist?list=PLT26e2jOwbdg
