@@ -34,12 +34,13 @@ func _init() -> void:
 	## Add a Node3D that will hold all entities for this room
 	entities = Node3D.new() # Create a new Node3D.
 	entities.name = "Entities"
-	add_child(entities) # Add it as a child of this room
+	add_child(entities) # Add it as a child of this room	
 	
 func _ready() -> void:
 	fill_ceilings()
 	prep_enemies()
 	bake_nav_room()
+	print("C'è enemsies? sono in ready: " +str(enemies))
 	
 func fill_ceilings() -> void:
 	# For each cell in the Floors, if the cell is one of the ones WITHOUT a ceiling...
