@@ -39,21 +39,21 @@ collide_with_bodies = false
 [node name="character" parent="." unique_id=902149486 instance=ExtResource("2_t61fv")]
 
 [node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 1869001789) index="0" unique_id=1880506493]
-bones/0/position = Vector3(-1.776356e-15, 0.62109935, -0.08423395)
-bones/0/rotation = Quaternion(0.06415983, 1.1896365e-07, 7.648451e-09, 0.99793965)
-bones/1/rotation = Quaternion(-0.24423768, -1.1559904e-07, -2.9115395e-08, 0.9697154)
+bones/0/position = Vector3(-8.712936e-10, 0.6496375, -0.08423395)
+bones/0/rotation = Quaternion(0.05798986, 0.10078444, -0.0039022665, 0.9932092)
+bones/1/rotation = Quaternion(-0.30874556, 0.015813492, -0.002801169, 0.95100915)
 bones/3/rotation = Quaternion(-0.2513728, -0.34018144, 0.77154964, 0.47518358)
 bones/4/rotation = Quaternion(-0.5391095, -0.1774649, 0.03091945, 0.8227461)
-bones/6/rotation = Quaternion(0.28121728, -0.08643704, 0.81589663, -0.49775317)
-bones/7/rotation = Quaternion(-0.5840134, -0.16368856, 0.013311086, 0.79495746)
+bones/6/rotation = Quaternion(0.27919623, -0.13185023, 0.66096884, -0.6839483)
+bones/7/rotation = Quaternion(-0.2914223, -0.28407493, 0.0973909, 0.9082343)
 bones/7/scale = Vector3(1, 1.0000001, 1.0000001)
-bones/9/rotation = Quaternion(0.02117573, -0.11775691, 0.98521113, 0.12265455)
-bones/10/rotation = Quaternion(0.38341573, 0.0015788153, 0.045187976, 0.9224685)
-bones/12/rotation = Quaternion(-0.021175804, -0.11775666, 0.9852111, -0.12265462)
-bones/13/rotation = Quaternion(0.3834156, -0.0015788155, -0.045187946, 0.9224685)
+bones/9/rotation = Quaternion(-0.07463959, -0.19833988, 0.97163814, 0.10492615)
+bones/10/rotation = Quaternion(0.30255076, 0.017081076, 0.019865386, 0.95277315)
+bones/12/rotation = Quaternion(-0.12555316, 0.0013481039, 0.9843424, -0.12371191)
+bones/13/rotation = Quaternion(0.22482894, -0.001667073, -0.026497506, 0.9740365)
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="character/Armature/Skeleton3D" index="1" unique_id=1334627026]
-transform = Transform3D(-0.009950966, -0.9985972, 0.05200185, 0.36564374, 0.044769235, 0.92967707, -0.9307015, 0.028265268, 0.36468557, 0.4578342, 0.9251892, -0.30380818)
+transform = Transform3D(-0.16562638, -0.6661548, -0.72719014, 0.6218375, -0.6428586, 0.44727027, -0.76543176, -0.3781143, 0.5207145, 0.5521622, 1.1944262, -0.46687192)
 bone_name = "LowerArm.R_leaf"
 bone_idx = 8
 
