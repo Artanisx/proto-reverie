@@ -32,6 +32,9 @@ During the Merge, there might be conflicts.
 
 [Gist that Explains how to handle Merge Conflicts](https://gist.github.com/Artanisx/e2329603860149e71b614e185dc9bd16#file-handle-merge-conflicts-md)
 
+# Solve Errors while loading rooms
+Open ProtoWorld scene and launch it with "Run current Scene (F6)". This will fix the 45 errors while parsing rooms.
+
 # Credits
 Pixel Art done by me using [Aseprite](https://www.aseprite.org/). This being a prototype I'm using art I created following along this [tutorial repository](https://github.com/Artanisx/goblins-den) <br>
 3D Art done by me using [Blender](https://www.blender.org/). This being a prototype I'm using art I created following along this [tutorial repository](https://github.com/Artanisx/goblins-den).
