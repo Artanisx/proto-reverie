@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://csm8qril8g0dl" path="res://scenes/rooms/entrance.tscn" id="2_iemd2"]
 [ext_resource type="PackedScene" uid="uid://wyhhenbq2q5u" path="res://scenes/rooms/foyer.tscn" id="3_xicp7"]
 [ext_resource type="PackedScene" uid="uid://chb2ubq7crhsa" path="res://scenes/equipment/pickable_item.tscn" id="4_iemd2"]
+[ext_resource type="PackedScene" uid="uid://b1lbjtxcq5hci" path="res://scenes/rooms/kitchen.tscn" id="4_td8hj"]
 [ext_resource type="Resource" uid="uid://bytsvb4l5x04r" path="res://data/weapons/shortsword.tres" id="5_h8tnv"]
 [ext_resource type="Resource" uid="uid://bi7a1l4dgu480" path="res://data/weapons/axe.tres" id="5_xicp7"]
 
@@ -13,14 +14,17 @@
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
 
 [node name="Foyer" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="1" unique_id=285906244 instance=ExtResource("3_xicp7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14, 0, 4)
+
+[node name="Kitchen" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="2" unique_id=2083906823 instance=ExtResource("4_td8hj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -12)
 
 [node name="PlayerSpawn" parent="." index="1" unique_id=151405447]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.69746363)
 
 [node name="Floors" parent="Hallways" parent_id_path=PackedInt32Array(382016852) index="0" unique_id=1751004530]
 data = {
-"cells": PackedInt32Array(0, 65531, 1, 1, 65531, 655361)
+"cells": PackedInt32Array(0, 65531, 1, 1, 65531, 655361, 65521, 65531, 655361, 65520, 65531, 1)
 }
 
 [node name="PickableItem" parent="." index="3" unique_id=1358123269 instance=ExtResource("4_iemd2")]
