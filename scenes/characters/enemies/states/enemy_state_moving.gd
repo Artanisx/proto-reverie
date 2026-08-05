@@ -43,14 +43,20 @@ func _physics_process(delta: float) -> void:
 			## Play the run animation
 			enemy.animation_player.play("run")
 			
-			## Set the velocity to move forwad so z axis (since we already turned towards the player, means we're moving towards the player)
-			## but... in order to apply movement forward and not touch the Y componetn (so gravity is affect) we need to exclude it from the movement
-			var target_velocity = -enemy.global_basis.z * enemy.speed
-			target_velocity.y = enemy.velocity.y ## Preserve the enemy original Y velocity so we don't mess with the gravity
+			## Set the navigation agent
+			## In order to do that, the room must have a Navigation Region 3D baked (either pre, or during run time)
 			
-			## Apply the velocity to apply movement	
-			enemy.velocity = target_velocity
+			## Pass the target position where we want the enemy to go to the nav agent so it knows where to go
+			enemy.nav_agent.target_position = target_position
 			
+			## Run through the astar alghoritm and find the next destination to get from current to target-pos
+			var next_path_position := enemy.nav_agent.get_next_path_position()
+			
+			## Calculate the direction from the enemy to the next destination
+			var direction := enemy.global_position.direction_to(next_path_position)	
+			
+			## Set the velocity (so the enemy will move accordingly)
+			enemy.velocity = direction * enemy.speed			
 			
 		## Make sure we process enemy movement or else any change to velocity will do nothing as move_and_slide() call is required to make them effective
 		enemy.process_movement(delta)

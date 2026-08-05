@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://chb2ubq7crhsa" path="res://scenes/equipment/pickable_item.tscn" id="4_iemd2"]
 [ext_resource type="Resource" uid="uid://bytsvb4l5x04r" path="res://data/weapons/shortsword.tres" id="5_h8tnv"]
 [ext_resource type="Resource" uid="uid://bi7a1l4dgu480" path="res://data/weapons/axe.tres" id="5_xicp7"]
-[ext_resource type="PackedScene" uid="uid://b7ocgy8gc1rn5" path="res://scenes/characters/enemies/goblin.tscn" id="6_h8tnv"]
 
 [node name="Level-01-Welcome" unique_id=433839496 instance=ExtResource("1_0mf82")]
 
@@ -28,9 +27,6 @@ data = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.7396646, 0.58697796, -12.925728)
 weapon_data = ExtResource("5_h8tnv")
 
-[node name="Goblin" parent="." index="4" unique_id=1741756622 instance=ExtResource("6_h8tnv")]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1, 0, -15)
-
-[node name="PickableItem2" parent="." index="5" unique_id=282069584 instance=ExtResource("4_iemd2")]
+[node name="PickableItem2" parent="." index="4" unique_id=282069584 instance=ExtResource("4_iemd2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8620536, 0.30366582, -9.261325)
 weapon_data = ExtResource("5_xicp7")

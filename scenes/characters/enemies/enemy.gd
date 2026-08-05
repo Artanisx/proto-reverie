@@ -5,6 +5,9 @@ extends CharacterBody3D
 ##
 ## This handles any Enemy scene
 
+## This signal is emitted when a enemy is hit by the player to warn the others
+signal screamed
+
 const GRAVITY: float = 20.0
 const AIR_FRICTION: float = 20.0
 
@@ -22,6 +25,10 @@ const AIR_FRICTION: float = 20.0
 ## To be used for detecting the player
 @onready var player_detection_area: Area3D = %PlayerDetectionArea
 @onready var weapon_reach_raycast: RayCast3D = %WeaponReachRaycast	## needed to check wheter the player is in range facing the enemy
+
+## TO be used for navigation
+@onready var nav_agent: NavigationAgent3D = %NavigationAgent3D
+
 
 @export var duration_between_attacks : int 	## How often the enemy attacks, in ms
 @export var player : Player					## Player reference
@@ -48,6 +55,9 @@ func _ready() -> void:
 func impale(thrown_item: ThrownItem, item_basis: Basis) -> void:
 	## Create an EnemyStateData class and fill it with the arguments needed for the impaling state	
 	var state_data: EnemyStateData = EnemyStateData.new().set_thrown_item(thrown_item).set_thrown_item_basis(item_basis)	
+	
+	## Emit screamed signal to warn other enemies
+	screamed.emit()
 	
 	## Switch state to the IMPALING state, passing the state_data
 	switch_state(State.IMPALING, state_data)
@@ -96,6 +106,9 @@ func switch_state(new_state: State, data: EnemyStateData = EnemyStateData.new())
 func try_receive_hit(source_player: Player, damage: int) -> void:
 	## Register the player since they just hit the enemy
 	player = source_player
+	
+	## Emit screamed signal to warn other enemies
+	screamed.emit()
 	
 	## Calc the hit direction from the player to this enemy
 	var hit_direction : Vector3 = source_player.global_position.direction_to(global_position).normalized() 
