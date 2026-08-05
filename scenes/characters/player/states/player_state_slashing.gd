@@ -16,5 +16,10 @@ func  _enter_tree() -> void:
 	## Hookup to the finish signal
 	player.animation_player.animation_finished.connect(on_animation_finished)
 	
+## Since we want to be able to move while slashing, we call player.process() super
+func _physics_process(delta: float) -> void:
+	## Process Movement
+	player.process_movement(delta)
+	
 func on_animation_finished(_animation_name: String) -> void:	
 	transition_state(Player.State.MOVING)	## Emit the signal and transition to Moving
