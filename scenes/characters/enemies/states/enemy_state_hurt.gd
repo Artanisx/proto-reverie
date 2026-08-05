@@ -9,20 +9,30 @@ extends EnemyState
 ## Hurt > Moving
 ## Hurt > Dying
 
+const KNOCKBACK_FORCE: float = 2.0 ## The force of knockback suffered when hit
+
 ## Execute what needs to be done immediately when the node enters the tree, so when we switch to this state (basically kind of a _ready)	
 func  _enter_tree() -> void:
 	## Take damage
 	enemy.health.take_damage(state_data.damage)
 	
+	## Apply some pushback force from the direction of the impact (player)
+	enemy.pushback_force += state_data.impact_direction * KNOCKBACK_FORCE	
+	
 	## Check wheter the enemy is still alive
 	if enemy.health.is_dead():
-		transition_state(Enemy.State.DYING)	## Emit the signal and transition to Dying
+		## Apply an inpulse so that there's a knockback also when dying from a hit
+		var data := EnemyStateData.new().set_impulse(state_data.impact_direction * 120.0 + Vector3.UP * 80)
+		transition_state(Enemy.State.DYING, data)	## Emit the signal and transition to Dying
 	else:		
 		## Play the hurt animation
 		enemy.animation_player.play("hurt")
 		
 		## Hookup to the finish signal
 		enemy.animation_player.animation_finished.connect(on_animation_finished)
+
+func _physics_process(delta: float) -> void:
+	enemy.process_movement(delta) ## We need to process the movement
 	
 func on_animation_finished(_animation_name: String) -> void:	
 	transition_state(Enemy.State.MOVING)	## Emit the signal and transition to Moving

@@ -5,6 +5,9 @@ extends CharacterBody3D
 ##
 ## This handles any Enemy scene
 
+const GRAVITY: float = 20.0
+const AIR_FRICTION: float = 20.0
+
 @onready var animation_player: AnimationPlayer = $character/AnimationPlayer
 @onready var equipment: EquipmentComponent = %EquipmentComponent
 @onready var health: HealthComponent = %HealthComponent
@@ -26,6 +29,7 @@ extends CharacterBody3D
 
 enum State {MOVING, IMPALING, DYING, DEAD, SLASHING, HURT}
 
+var pushback_force: Vector3 = Vector3.ZERO ## If set, it will cause this enemy to be pushed from this force (Vector3)
 var state : State	## State the enemy is in
 var state_node : EnemyState ## The Node that holds the current state the enemy is in
 var time_since_last_attack: int  ## Needed for timing the attacks, in ms
@@ -76,7 +80,7 @@ func switch_state(new_state: State, data: EnemyStateData = EnemyStateData.new())
 	## 1 - Create the proper EnemyState node
 	state_node = state_map[new_state].new(self, data)
 	## 1.5 - Listen to the transition_state signal and connect to this function
-	state_node.transition_requested.connect(switch_state)	
+	state_node.transition_requested.connect(switch_state)
 	## 1.6 - Add a name to the node so it is clear in the tree
 	state_node.name = "State_" + State.keys()[new_state]
 	## 1.7 - Store the player state
@@ -86,8 +90,38 @@ func switch_state(new_state: State, data: EnemyStateData = EnemyStateData.new())
 
 ## Check wheter the enemy will receive a hit
 ## This takes into account the enemy having a shield
-func try_receive_hit(damage: int) -> void:
-	switch_state(State.HURT, EnemyStateData.new().set_damage(damage)) ## Switch to the HURT state and pass damage
+## 1- source_player: the player causing the damage, used for position calculation for the knockback
+## 2- damage: the damage amount
+func try_receive_hit(source_player: Player, damage: int) -> void:
+	## Calc the hit direction from the player to this enemy
+	var hit_direction : Vector3 = source_player.global_position.direction_to(global_position).normalized() 
+	switch_state(State.HURT, EnemyStateData.new().set_damage(damage).set_impact_direction(hit_direction)) ## Switch to the HURT state and pass damage and direction
+
+## Take care of moving the Enemy
+func process_movement(delta: float) -> void:
+	## Apply Gravity
+	process_gravity(delta)
+	
+	## Apply pushback forces (like knockback)
+	process_pushback(delta)
+	
+	## Apply movement
+	move_and_slide()
+	
+## Take care of gravity for the Enemy, being a rigidtbody we need to apply it oursevles
+func process_gravity(delta: float) -> void:
+	if not is_on_floor():
+		velocity.y -= GRAVITY * delta
+		
+## Take care of processing push backs (like knockback after being hit) for the Enemy
+func process_pushback(delta: float) -> void:
+	## We must be sure the pushback force goes to zero as time goes on so it's not constant
+	## Basically the force will slowly diminish towards 0
+	## Since it's a rigidbody, phsyics wont' be applied so we need to take care of this ourselves
+	pushback_force = pushback_force.move_toward(Vector3.ZERO, delta * AIR_FRICTION) 
+	
+	## Apply the pushback force to the velocity vector
+	velocity += pushback_force
 
 func on_player_detected(body: Player) -> void:
 	## The player is in range, register it
