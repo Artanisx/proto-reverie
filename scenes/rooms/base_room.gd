@@ -11,6 +11,8 @@ extends Node3D
 
 @onready var ceilings: GridMap = %Ceilings
 @onready var floors: GridMap = %Floors
+@onready var enemies: Node3D = %Enemies
+
 
 ## This node will hold all entities for the room
 var entities: Node3D
@@ -33,7 +35,8 @@ func _init() -> void:
 	add_child(entities) # Add it as a child of this room
 	
 func _ready() -> void:
-	fill_ceilings()	
+	fill_ceilings()
+	prep_enemies()
 	
 func fill_ceilings() -> void:
 	# For each cell in the Floors, if the cell is one of the ones WITHOUT a ceiling...
@@ -54,3 +57,15 @@ func fill_ceilings() -> void:
 			## this means it needs to have a ceiling.
 			## Paint said cell in the ceilings grid map, at the these coordinate, with the ceiling tile (id 0)
 			ceilings.set_cell_item(cell_coords, 0)			
+
+## This will listen to the screamed signal emitted by enemies
+func prep_enemies() -> void:
+	for enemy: Enemy in enemies.get_children():
+		enemy.screamed.connect(on_scream_heard)
+
+## Each enemy will be warned (aggro)
+## Basically if one enemy emits the screamed signal, this will be heard and all enemies will aggro the player
+func on_scream_heard() -> void:
+	for enemy: Enemy in enemies.get_children():
+		## This enemy should register the player so he's aware of them
+		enemy.player = GameState.current_player

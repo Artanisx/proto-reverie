@@ -15,6 +15,10 @@ func  _enter_tree() -> void:
 	
 	## Hookup to the finish signal
 	player.animation_player.animation_finished.connect(on_animation_finished)
+
+## Let's make sure the player can move while throwing
+func _physics_process(delta: float) -> void:
+	player.process_movement(delta)
 	
 func on_animation_finished(_animation_name: String) -> void:
 	## Throw the weapon
