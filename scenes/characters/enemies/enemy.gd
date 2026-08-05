@@ -15,12 +15,25 @@ extends CharacterBody3D
 @onready var skeleton_simulator: PhysicalBoneSimulator3D = %PhysicalBoneSimulator3D
 @onready var collision_shape: CollisionShape3D = %CollisionShape
 
-enum State {MOVING, IMPALING, DYING, DEAD}
+## To be used for detecting the player
+@onready var player_detection_area: Area3D = %PlayerDetectionArea
+
+
+@export var duration_between_attacks : int 	## How often the enemy attacks, in ms
+@export var player : Player					## Player reference
+@onready var weapon_reach_raycast: RayCast3D = %WeaponReachRaycast	## needed to check wheter the player is in range facing the enemy
+
+
+enum State {MOVING, IMPALING, DYING, DEAD, SLASHING, HURT}
 
 var state : State	## State the enemy is in
 var state_node : EnemyState ## The Node that holds the current state the enemy is in
+var time_since_last_attack: int  ## Needed for timing the attacks, in ms
 
 func _ready() -> void:
+	## Connets the body_entered signal of the player detection area
+	player_detection_area.body_entered.connect(on_player_detected)
+	
 	# Call the switch_state function to set the starting state
 	switch_state(State.MOVING)
 
@@ -34,6 +47,17 @@ func impale(thrown_item: ThrownItem, item_basis: Basis) -> void:
 	## Switch state to the IMPALING state, passing the state_data
 	switch_state(State.IMPALING, state_data)
 
+## Check if enemy knows the player exists (and it's still valid instance, so not dead/queued free)
+func has_registered_player() -> bool:
+	return player != null and is_instance_valid(player)
+	
+## Check if the player is within reach (melee range) in order to melee attack
+func is_player_within_reach() -> bool:	
+	if has_registered_player() and equipment.has_weapon():
+		## Check if the player is in range of the weapon's reach and facing it (so it won't fire from behind)
+		return weapon_reach_raycast.is_colliding()
+	return false
+
 ## Switch to the passed State
 ## The function will add a Node that will contain the behaviour for the passed state
 func switch_state(new_state: State, data: EnemyStateData = EnemyStateData.new()) -> void:
@@ -45,7 +69,9 @@ func switch_state(new_state: State, data: EnemyStateData = EnemyStateData.new())
 		State.MOVING: EnemyStateMoving,
 		State.IMPALING: EnemyStateImpaling,
 		State.DYING: EnemyStateDying,
-		State.DEAD: EnemyStateDead
+		State.DEAD: EnemyStateDead,
+		State.SLASHING: EnemyStateSlashing,
+		State.HURT: EnemyStateHurt
 	}	
 	## 1 - Create the proper EnemyState node
 	state_node = state_map[new_state].new(self, data)
@@ -57,3 +83,12 @@ func switch_state(new_state: State, data: EnemyStateData = EnemyStateData.new())
 	state = new_state	
 	## 2 - Add it to the player scene	
 	add_child(state_node)
+
+## Check wheter the enemy will receive a hit
+## This takes into account the enemy having a shield
+func try_receive_hit() -> void:
+	switch_state(State.HURT) ## For now we simply get hurt
+
+func on_player_detected(body: Player) -> void:
+	## The player is in range, register it
+	player = body

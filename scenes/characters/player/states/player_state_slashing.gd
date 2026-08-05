@@ -16,6 +16,11 @@ func  _enter_tree() -> void:
 	## Hookup to the finish signal
 	player.animation_player.animation_finished.connect(on_animation_finished)
 	
+	## Check wheter an enemy is in reach (so it will get it)
+	if player.weapon_reach_raycast.is_colliding():
+		var enemy := player.weapon_reach_raycast.get_collider() as Enemy
+		enemy.try_receive_hit()	 ## try to hit the enemy that collided with the raycast
+		
 ## Since we want to be able to move while slashing, we call player.process() super
 func _physics_process(delta: float) -> void:
 	## Process Movement
