@@ -11,7 +11,7 @@ Pixel Art done by me using [Aseprite](https://www.aseprite.org/) while following
 ## Tutorial Progress
 Episode 08: https://www.youtube.com/watch?v=P3ByaVqt8qc&list=PLT26e2jOwbdg&index=9
 
-Time Index: 0:32:58
+Time Index: 0:42:21
 
 What: Start
 

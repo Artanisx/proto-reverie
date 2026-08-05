@@ -19,7 +19,6 @@ extends CharacterBody3D
 ## To be used for detecting the player
 @onready var player_detection_area: Area3D = %PlayerDetectionArea
 
-
 @export var duration_between_attacks : int 	## How often the enemy attacks, in ms
 @export var player : Player					## Player reference
 @onready var weapon_reach_raycast: RayCast3D = %WeaponReachRaycast	## needed to check wheter the player is in range facing the enemy
