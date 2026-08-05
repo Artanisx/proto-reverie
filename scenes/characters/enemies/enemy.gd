@@ -7,6 +7,7 @@ extends CharacterBody3D
 
 @onready var animation_player: AnimationPlayer = $character/AnimationPlayer
 @onready var equipment: EquipmentComponent = %EquipmentComponent
+@onready var health: HealthComponent = %HealthComponent
 
 ## To be used to "stick" the player thrown weapon into
 @onready var physical_bone_torso: PhysicalBone3D = %"Physical Bone Torso"
@@ -86,8 +87,8 @@ func switch_state(new_state: State, data: EnemyStateData = EnemyStateData.new())
 
 ## Check wheter the enemy will receive a hit
 ## This takes into account the enemy having a shield
-func try_receive_hit() -> void:
-	switch_state(State.HURT) ## For now we simply get hurt
+func try_receive_hit(damage: int) -> void:
+	switch_state(State.HURT, EnemyStateData.new().set_damage(damage)) ## Switch to the HURT state and pass damage
 
 func on_player_detected(body: Player) -> void:
 	## The player is in range, register it

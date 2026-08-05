@@ -22,6 +22,7 @@ const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking
 @onready var camera: Camera3D = %Camera3D ## Reference to the Camera3D node. 
 @onready var select_raycast: RayCast3D = %SelectRaycast		## Reference to the RayCast used for pick up objects
 @onready var equipment: EquipmentComponent = %EquipmentComponent 	## refenrec eto tehe quipment component
+@onready var health: HealthComponent = %HealthComponent			## refenrec eto tehe health component
 @onready var weapon_reach_raycast: RayCast3D = %WeaponReachRaycast ## needed to check wheter the player can hit the Enemy
 
 enum State {MOVING, PICKING_UP, THROWING, SLASHING}

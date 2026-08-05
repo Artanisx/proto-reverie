@@ -7,14 +7,22 @@ extends EnemyState
 ## It contains all processing, signals, etc required for this state
 ## Transitions:
 ## Hurt > Moving
+## Hurt > Dying
 
 ## Execute what needs to be done immediately when the node enters the tree, so when we switch to this state (basically kind of a _ready)	
 func  _enter_tree() -> void:
-	## Play the slash animation
-	enemy.animation_player.play("hurt")
+	## Take damage
+	enemy.health.take_damage(state_data.damage)
 	
-	## Hookup to the finish signal
-	enemy.animation_player.animation_finished.connect(on_animation_finished)
+	## Check wheter the enemy is still alive
+	if enemy.health.is_dead():
+		transition_state(Enemy.State.DYING)	## Emit the signal and transition to Dying
+	else:		
+		## Play the hurt animation
+		enemy.animation_player.play("hurt")
+		
+		## Hookup to the finish signal
+		enemy.animation_player.animation_finished.connect(on_animation_finished)
 	
 func on_animation_finished(_animation_name: String) -> void:	
 	transition_state(Enemy.State.MOVING)	## Emit the signal and transition to Moving

@@ -4,6 +4,7 @@ class_name EnemyStateData
 ##
 ## This contains just data for enemies, so enemy states can properly have parameters
 
+var damage: int
 var impulse: Vector3
 var thrown_item: ThrownItem
 var thrown_item_basis: Basis
@@ -23,4 +24,8 @@ func set_thrown_item_basis(basis: Basis) -> EnemyStateData:
 	
 func set_impulse(source: Vector3) -> EnemyStateData:
 	impulse = source
+	return self	
+	
+func set_damage(dmg: int) -> EnemyStateData:
+	damage = dmg
 	return self	

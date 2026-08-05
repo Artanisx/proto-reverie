@@ -34,7 +34,8 @@ func _process(_delta: float) -> void:
 		if player.weapon_reach_raycast.is_colliding():
 			var enemy := player.weapon_reach_raycast.get_collider() as Enemy
 			if enemy != null:
-				enemy.try_receive_hit()	 ## try to hit the enemy that collided with the raycast	
+				var damage := player.equipment.weapon_data.get_damage_dealt()
+				enemy.try_receive_hit(damage)	 ## try to hit the enemy that collided with the raycast	
 		
 ## Since we want to be able to move while slashing, we call player.process() super
 func _physics_process(delta: float) -> void:
