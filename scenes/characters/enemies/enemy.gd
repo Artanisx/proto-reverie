@@ -21,10 +21,11 @@ const AIR_FRICTION: float = 20.0
 
 ## To be used for detecting the player
 @onready var player_detection_area: Area3D = %PlayerDetectionArea
+@onready var weapon_reach_raycast: RayCast3D = %WeaponReachRaycast	## needed to check wheter the player is in range facing the enemy
 
 @export var duration_between_attacks : int 	## How often the enemy attacks, in ms
 @export var player : Player					## Player reference
-@onready var weapon_reach_raycast: RayCast3D = %WeaponReachRaycast	## needed to check wheter the player is in range facing the enemy
+@export var speed: float					## Enemy movement speed
 
 
 enum State {MOVING, IMPALING, DYING, DEAD, SLASHING, HURT}
@@ -93,6 +94,9 @@ func switch_state(new_state: State, data: EnemyStateData = EnemyStateData.new())
 ## 1- source_player: the player causing the damage, used for position calculation for the knockback
 ## 2- damage: the damage amount
 func try_receive_hit(source_player: Player, damage: int) -> void:
+	## Register the player since they just hit the enemy
+	player = source_player
+	
 	## Calc the hit direction from the player to this enemy
 	var hit_direction : Vector3 = source_player.global_position.direction_to(global_position).normalized() 
 	switch_state(State.HURT, EnemyStateData.new().set_damage(damage).set_impact_direction(hit_direction)) ## Switch to the HURT state and pass damage and direction
