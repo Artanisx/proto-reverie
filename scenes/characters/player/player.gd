@@ -16,13 +16,16 @@ const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking
 @export var mouse_sensitivity : float ## Mouse Sensitivity: Use to determine the mouse look speed. 
 @export var run_speed : float ## Speed of running movement, used for WASD + SHIFT for running. 
 @export var walk_speed : float ## Speed of regular movement, used for WASD. 
+@export var capture_mouse_enabled : bool = true ## If set to true, mouse will be captured so it can't go outside of the window.
 
 @onready var animation_player: AnimationPlayer = $character/AnimationPlayer ## Reference to the AnimationPlayer to handle animations
 @onready var camera: Camera3D = %Camera3D ## Reference to the Camera3D node. 
 @onready var select_raycast: RayCast3D = %SelectRaycast		## Reference to the RayCast used for pick up objects
 @onready var equipment: EquipmentComponent = %EquipmentComponent 	## refenrec eto tehe quipment component
+@onready var health: HealthComponent = %HealthComponent			## refenrec eto tehe health component
+@onready var weapon_reach_raycast: RayCast3D = %WeaponReachRaycast ## needed to check wheter the player can hit the Enemy
 
-enum State {MOVING, PICKING_UP, THROWING}
+enum State {MOVING, PICKING_UP, THROWING, SLASHING}
 
 var current_pickable_focused_item : PickableItem = null	## This will hold a PickableItem that is currently pickable (in range and hit by the select_raycast)
 var input_dir := Vector2.ZERO ## Store the direction of movement from player input. Represents the player hitting W-A-S-D
@@ -30,8 +33,9 @@ var state : State	## State the player is in
 var state_node : PlayerState ## The Node that holds the current state the player is in
 
 func _ready() -> void:
-	# Capture the mouse so it doesn't go outside of the window (F8 to stop debugging)
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if capture_mouse_enabled:
+		# Capture the mouse so it doesn't go outside of the window (F8 to stop debugging)
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# Call the switch_state function to set the starting state
 	switch_state(State.MOVING)
 	
@@ -119,7 +123,8 @@ func switch_state(new_state: State) -> void:
 	var state_map := {
 		State.MOVING: PlayerStateMoving,
 		State.PICKING_UP: PlayerStatePickingUp,
-		State.THROWING: PlayerStateThrowing
+		State.THROWING: PlayerStateThrowing,
+		State.SLASHING: PlayerStateSlashing
 	}	
 	## 1 - Create the proper PlayerState node
 	state_node = state_map[new_state].new(self)

@@ -13,6 +13,7 @@ const THROWN_ITEM_PREFAB := preload("res://scenes/equipment/thrown_item.tscn")	#
 @export var weapon_data: WeaponData		## Weapon data of this equipment
 @export var weapon_placeholder: Node3D	## The node reference where the Equipment will be attached to
 @export var weapon_spawn_position: Node3D ## The position from where the thrownable weapon will spawn so it move in the right direction / rotation
+@export var weapon_reach_raycast: RayCast3D	 ## Raycast to calculate the weapon reach, needed so it works only facing the enemy/player rather than from behind
 
 ## This does:
 ## - Equip the weapon
@@ -41,6 +42,9 @@ func equip_weapon(data: WeaponData, pickup_transform: Transform3D = Transform3D.
 	
 	## Add this instance as a child of the weapon placeholder
 	weapon_placeholder.add_child(weapon)
+	
+	## Update the lenght of the raycast to the weapon's reach (square root just for performance)
+	weapon_reach_raycast.target_position.z = -sqrt(weapon_data.reach)
 	
 	## Check if we passed a transform (so we want to do a tween)
 	if pickup_transform != Transform3D.IDENTITY:
