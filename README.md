@@ -9,12 +9,12 @@ Pixel Art done by me using [Aseprite](https://www.aseprite.org/) while following
 3D Art done by me using [Blender](https://www.blender.org/) while following along).
 
 ## Tutorial Progress
-Episode 10: https://www.youtube.com/watch?v=MrFh4RIzRzc&list=PLT26e2jOwbdg&index=11
+Episode 11: https://www.youtube.com/watch?v=QGc4w4J4U_c&list=PLT26e2jOwbdg&index=12
 
-Time Index: 0:42:11
+Time Index: 0:00:00
 
 What: before starting the fx challenge
 
-Next Episode will be 11: https://www.youtube.com/watch?v=QGc4w4J4U_c&list=PLT26e2jOwbdg&index=12
+Next Episode will be 12: https://www.youtube.com/watch?v=zniXqk7O90E
 
 Playlist: https://www.youtube.com/playlist?list=PLT26e2jOwbdg
