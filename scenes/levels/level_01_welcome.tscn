@@ -38,3 +38,6 @@ weapon_data = ExtResource("5_xicp7")
 
 [node name="Door" parent="Doors" parent_id_path=PackedInt32Array(1880995432) index="0" unique_id=1307811451 instance=ExtResource("8_3sqe8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -4.5)
+
+[node name="Door2" parent="Doors" parent_id_path=PackedInt32Array(1880995432) index="1" unique_id=226007757 instance=ExtResource("8_3sqe8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, -4.5)
