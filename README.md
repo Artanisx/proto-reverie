@@ -11,9 +11,9 @@ Pixel Art done by me using [Aseprite](https://www.aseprite.org/) while following
 ## Tutorial Progress
 Episode 11: https://www.youtube.com/watch?v=QGc4w4J4U_c&list=PLT26e2jOwbdg&index=12
 
-Time Index: 0:00:00
+Time Index: 0:38:29
 
-What: before starting the fx challenge
+What: Before opening doors
 
 Next Episode will be 12: https://www.youtube.com/watch?v=zniXqk7O90E
 
