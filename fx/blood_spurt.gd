@@ -9,9 +9,13 @@ extends Node3D
 @onready var blood: GPUParticles3D = %Blood
 @onready var sparks: GPUParticles3D = %Sparks
 
+## Wheter sparks should be emitted or not
+var are_sparks_shown: bool = true
+
 ## Once the node is instantiated, emit both particles
 func _ready() -> void:
-	sparks.emitting = true
+	if are_sparks_shown:
+		sparks.emitting = true
 	blood.emitting = true
 	
 	## Register to the signal of the finished effect (they are oneshots)

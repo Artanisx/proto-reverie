@@ -24,12 +24,18 @@ func  _enter_tree() -> void:
 		## Apply the Hit Stop juice for highlighting the action - This will pause the game for a bit.
 		GameEvents.impact_felt.emit(GameEvents.ImpactIntensity.MEDIUM)
 		
+		## Instnatiate the blododpusrt node from the head
+		FxHelper.create_blood_fx(enemy.physical_bone_head.global_transform)
+		
 		## Apply an inpulse so that there's a knockback also when dying from a hit
 		var data := EnemyStateData.new().set_impulse(state_data.impact_direction * 120.0 + Vector3.UP * 80)
 		transition_state(Enemy.State.DYING, data)	## Emit the signal and transition to Dying
 	else:	
 		## Apply the Hit Stop juice for highlighting the action - This will briefly pause the game
 		GameEvents.impact_felt.emit(GameEvents.ImpactIntensity.LOW)
+		
+		## Instnatiate the blododpusrt node from the head, but without sparks for a simple hit
+		FxHelper.create_blood_fx(enemy.physical_bone_head.global_transform, false)
 		
 		## Play the hurt animation
 		enemy.animation_player.play("hurt")

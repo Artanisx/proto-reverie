@@ -176,6 +176,5 @@ func check_for_selection() -> void:
 			current_pickable_focused_item.highlight()	## Let's highlight it now
 
 ## This returns true if there is an pickable item being looked at right now		
-func can_pickup_object() -> bool:
+func can_pickup_object() -> bool:			
 	return current_pickable_focused_item != null
-	
