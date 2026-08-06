@@ -8,6 +8,8 @@ extends EnemyState
 ## Transitions:
 ## Impaling > Dying
 
+
+const BLOOD_SPURT_PREFAB := preload("res://fx/blood_spurt.tscn")
 const EQUIPPED_ITEM_PREFAB := preload("res://scenes/equipment/equipped_item.tscn")	## The "Equipped" Item prefab; this is where the weapon will be placed in the enemy's body ("equipped" in his body!!)
 const IMPALE_INTENSITY : float = 100.0
 
@@ -27,6 +29,11 @@ func _enter_tree() -> void:
 	
 	## We apply a bit of impulse forward and up
 	var impulse: Vector3 = state_data.thrown_item_basis * Vector3.FORWARD * IMPALE_INTENSITY + Vector3.UP * IMPALE_INTENSITY	
+	
+	## Instnatiate the blododpusrt node from the head
+	var blood := BLOOD_SPURT_PREFAB.instantiate()	
+	GameState.current_level.add_child(blood)
+	blood.global_transform = enemy.physical_bone_head.global_transform
 	
 	## Transition to DYING state passing the impulse we calculated to a new enemystatedata with impulse set
 	transition_state(Enemy.State.DYING, EnemyStateData.new().set_impulse(impulse))	

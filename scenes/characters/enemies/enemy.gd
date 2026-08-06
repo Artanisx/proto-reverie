@@ -17,6 +17,8 @@ const AIR_FRICTION: float = 20.0
 
 ## To be used to "stick" the player thrown weapon into
 @onready var physical_bone_torso: PhysicalBone3D = %"Physical Bone Torso"
+## Refernece of the bone head to be used as a start point for the blood spurt particle effect
+@onready var physical_bone_head: PhysicalBone3D = %"Physical Bone Head"
 
 ## To be used for ragdoll physics
 @onready var skeleton_simulator: PhysicalBoneSimulator3D = %PhysicalBoneSimulator3D
@@ -28,6 +30,9 @@ const AIR_FRICTION: float = 20.0
 
 ## TO be used for navigation
 @onready var nav_agent: NavigationAgent3D = %NavigationAgent3D
+
+
+
 
 
 @export var duration_between_attacks : int 	## How often the enemy attacks, in ms
