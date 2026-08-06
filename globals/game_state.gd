@@ -1,5 +1,9 @@
 extends Node
 
+## Game State
+##
+## This is a Global accesible to all the game. Takes care of registering a player refernece and the current level reference.
+
 var current_level : BaseLevel
 var current_player : Player
 

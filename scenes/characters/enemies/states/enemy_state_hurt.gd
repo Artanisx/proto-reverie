@@ -21,10 +21,16 @@ func  _enter_tree() -> void:
 	
 	## Check wheter the enemy is still alive
 	if enemy.health.is_dead():
+		## Apply the Hit Stop juice for highlighting the action - This will pause the game for a bit.
+		GameEvents.impact_felt.emit(GameEvents.ImpactIntensity.MEDIUM)
+		
 		## Apply an inpulse so that there's a knockback also when dying from a hit
 		var data := EnemyStateData.new().set_impulse(state_data.impact_direction * 120.0 + Vector3.UP * 80)
 		transition_state(Enemy.State.DYING, data)	## Emit the signal and transition to Dying
-	else:		
+	else:	
+		## Apply the Hit Stop juice for highlighting the action - This will briefly pause the game
+		GameEvents.impact_felt.emit(GameEvents.ImpactIntensity.LOW)
+		
 		## Play the hurt animation
 		enemy.animation_player.play("hurt")
 		
