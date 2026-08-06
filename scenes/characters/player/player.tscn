@@ -8,6 +8,7 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5w87n"]
 margin = 0.3
+radius = 0.55
 height = 1.7
 
 [node name="Player" type="CharacterBody3D" unique_id=1783328250]
