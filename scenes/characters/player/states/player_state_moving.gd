@@ -9,6 +9,7 @@ extends PlayerState
 ## Moving > Picking Up
 ## Moving > Throwing
 ## Moving > Slashing
+## Moving > Kicking
 
 ## All input code needs to stay in _process
 func _process(_delta: float) -> void:
@@ -23,6 +24,10 @@ func _process(_delta: float) -> void:
 	## Setup for the thrown button (LMB) to slash with the melee weapon that player should have equipped...
 	if Input.is_action_just_pressed("action") and player.equipment.has_weapon():	
 		transition_state(Player.State.SLASHING)	## Emit the signal with the state to transition to		
+		
+	## Setup for the thrown button (F) to kick
+	if Input.is_action_just_pressed("kick"):	
+		transition_state(Player.State.KICKING)	## Emit the signal with the state to transition to		
 
 ## All movement/animation code needs to be processed at physic_process 
 func _physics_process(delta: float) -> void:

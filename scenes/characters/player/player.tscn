@@ -40,7 +40,7 @@ collide_with_bodies = false
 
 [node name="character" parent="." unique_id=902149486 instance=ExtResource("2_t61fv")]
 
-[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 1673430193) index="0" unique_id=500624386]
+[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 34925941) index="0" unique_id=1372961720]
 bones/0/position = Vector3(-1.776356e-15, 0.62109935, -0.08423395)
 bones/0/rotation = Quaternion(0.06415983, 1.1896365e-07, 7.648451e-09, 0.99793965)
 bones/1/rotation = Quaternion(-0.24423768, -1.1559904e-07, -2.9115395e-08, 0.9697154)
@@ -52,7 +52,9 @@ bones/7/scale = Vector3(1, 1.0000001, 1.0000001)
 bones/9/rotation = Quaternion(0.02117573, -0.11775691, 0.98521113, 0.12265455)
 bones/10/rotation = Quaternion(0.38341573, 0.0015788153, 0.045187976, 0.9224685)
 bones/12/rotation = Quaternion(-0.021175804, -0.11775666, 0.9852111, -0.12265462)
-bones/13/rotation = Quaternion(0.3834156, -0.0015788155, -0.045187946, 0.9224685)
+bones/12/scale = Vector3(1.000002, 1, 1.000002)
+bones/13/rotation = Quaternion(0.38341558, -0.0015788144, -0.045187954, 0.9224685)
+bones/13/scale = Vector3(0.99999994, 0.99999994, 0.99999994)
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="character/Armature/Skeleton3D" index="1" unique_id=1334627026]
 transform = Transform3D(-0.009950966, -0.9985972, 0.05200185, 0.36564374, 0.044769235, 0.92967707, -0.9307015, 0.028265268, 0.36468557, 0.4578342, 0.9251892, -0.30380818)
@@ -63,7 +65,7 @@ bone_idx = 8
 unique_name_in_owner = true
 transform = Transform3D(0.22814482, 0.2324464, -0.94547284, -0.08349022, -0.9628353, -0.25686145, -0.970041, 0.13753916, -0.20025888, -0.02997258, -2.910383e-11, 0.07420103)
 
-[node name="AnimationPlayer" parent="character" index="1" unique_id=148260867]
+[node name="AnimationPlayer" parent="character" index="1" unique_id=1577446851]
 autoplay = &"idle"
 
 [node name="EquipmentComponent" parent="." unique_id=535100031 node_paths=PackedStringArray("weapon_placeholder", "weapon_spawn_position", "weapon_reach_raycast") instance=ExtResource("6_6avc5")]

@@ -25,7 +25,7 @@ const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking
 @onready var health: HealthComponent = %HealthComponent			## refenrec eto tehe health component
 @onready var weapon_reach_raycast: RayCast3D = %WeaponReachRaycast ## needed to check wheter the player can hit the Enemy
 
-enum State {MOVING, PICKING_UP, THROWING, SLASHING}
+enum State {MOVING, PICKING_UP, THROWING, SLASHING, KICKING}
 
 var current_pickable_focused_item : PickableItem = null	## This will hold a PickableItem that is currently pickable (in range and hit by the select_raycast)
 var input_dir := Vector2.ZERO ## Store the direction of movement from player input. Represents the player hitting W-A-S-D
@@ -46,11 +46,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	## Setup the input direction using the get_vector function that maps a Vector2 to a input: 
 	## negative x motion (strafe left), positive x motion (stafe right), negative y motion (go backward), postive y motion (go forward)
-	input_dir = Input.get_vector("strafe_left","strafe_right","backward","forward")
-	
-	## DBUG ONLY: FAKES BEING HURT
-	if Input.is_action_just_pressed("kick"):
-		GameEvents.player_hurt.emit(self)
+	input_dir = Input.get_vector("strafe_left","strafe_right","backward","forward")	
 	
 func _physics_process(_delta: float) -> void:	
 	check_jump_input()	## handles player jump
@@ -132,7 +128,8 @@ func switch_state(new_state: State) -> void:
 		State.MOVING: PlayerStateMoving,
 		State.PICKING_UP: PlayerStatePickingUp,
 		State.THROWING: PlayerStateThrowing,
-		State.SLASHING: PlayerStateSlashing
+		State.SLASHING: PlayerStateSlashing,
+		State.KICKING: PlayerStateKicking
 	}	
 	## 1 - Create the proper PlayerState node
 	state_node = state_map[new_state].new(self)
