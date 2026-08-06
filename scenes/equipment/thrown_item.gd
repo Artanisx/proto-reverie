@@ -8,6 +8,7 @@ extends RigidBody3D
 
 const PICKABLE_ITEM_PREFAB := preload("res://scenes/equipment/pickable_item.tscn")	## The Pickable Item prefab, needed for transform it back to pickabel once trhwon
 
+@export var shield_data: ShieldData
 @export var weapon_data: WeaponData
 @onready var collision_shape: CollisionShape3D = %CollisionShape
 
@@ -30,6 +31,8 @@ func _ready() -> void:
 	
 	if weapon_data:
 		thrown_object = weapon_data.glb_mesh.instantiate()
+	elif shield_data:
+		thrown_object = shield_data.glb_mesh.instantiate()
 		
 	## Add it as a child and save the reference to the mesh node and finally create the collision shape	
 	if thrown_object != null:
@@ -75,6 +78,7 @@ func on_sleep() -> void:
 	## Instantiate the pickable item
 	var pickable_item := PICKABLE_ITEM_PREFAB.instantiate() as PickableItem	
 	pickable_item.weapon_data = weapon_data ## weapon data is the thrown weapon data of course
+	pickable_item.shield_data = shield_data ## shield data is the thrown shield data of course (swap)
 	pickable_item.global_transform = global_transform	## startting position should be where the thrown weapon is
 	
 	## Add this instance as a child of the level currently loaded (not the player or it would be attached to it)

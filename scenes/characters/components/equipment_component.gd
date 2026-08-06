@@ -31,6 +31,10 @@ func _ready() -> void:
 ## data: the shieldData of the item that should be instantiated in the equipped item scene
 ## pickup_transform: the Transform of the pickup itself, to be used for tweening between ground and the player's hand
 func equip_shield(data: ShieldData, pickup_transform: Transform3D = Transform3D.IDENTITY) -> void:
+	## check if the player already has a shield, so it will drop it before taking a new one
+	if has_shield():
+		drop_shield()
+	
 	## Since resources are shared between entities, we must make sure we create a copy of this.
 	## Failing to do so, would make all weapons share the same durability for instance; an enemy might get his shield damaged and player's one would be damaged as well.
 	## Since Godot handles resources per reference, we need to manually copy it instead.
@@ -58,6 +62,10 @@ func equip_shield(data: ShieldData, pickup_transform: Transform3D = Transform3D.
 ## data: the weaponData of the item that should be instantiated in the equipped item scene
 ## pickup_transform: the Transform of the pickup itself, to be used for tweening between ground and the player's hand
 func equip_weapon(data: WeaponData, pickup_transform: Transform3D = Transform3D.IDENTITY) -> void:
+	## check if the player already has a weapon, so it will drop it before taking a new one
+	if has_weapon():
+		drop_weapon()
+		
 	## Since resources are shared between entities, we must make sure we create a copy of this.
 	## Failing to do so, would make all weapons share the same durability for instance; an enemy might get his weapon damaged and player's one would be damaged as well.
 	## Since Godot handles resources per reference, we need to manually copy it instead.
@@ -108,6 +116,30 @@ func thrown_weapon(is_being_dropped: bool = false) -> void:
 		## Give a force to be thrown
 		#thrown_item.apply_impulse(Vector3.FORWARD * thrown_force, thrown_item.global_position)		
 
+## Drop thje weapon rather than trhow it
+func drop_weapon() -> void:
+	thrown_weapon(true)
+	
+## Drop the shield :(
+func drop_shield() -> void:
+	if has_shield():
+		## Instantiate the thrown item
+		var dropped_item := THROWN_ITEM_PREFAB.instantiate() as ThrownItem
+		dropped_item.shield_data = shield_data ## shield data is the equipped shjield data of course		
+		dropped_item.is_being_dropped = true ## we are dropping th e shield
+		
+		## Save the shield_placeholder position (hands)
+		var spawn_transform := shield_placeholder.global_transform
+		
+		dropped_item.global_transform = spawn_transform	## Apply the transform depending on the above
+		
+		## Add this instance as a child of the current loaded level  (not the player or it would be attached to it)
+		GameState.current_level.add_child(dropped_item)	## the weapon will drop to the ground atm
+		
+		## Destroy the shield in hand
+		shield_data = null
+		shield_placeholder.get_child(0).queue_free()		
+
 ## Tween function to animate a weapon movement from ground to player hands
 func animate_to_hand(equipped_item: EquippedItem) -> void:
 	## Create a tween on the equipped_item that now is at the ground item trasform
@@ -126,6 +158,11 @@ func animate_to_hand(equipped_item: EquippedItem) -> void:
 	
 	##second, tween the rotation property of the item, towards ZERO (player hand, or rather weapon placeholder), taking 0.2s (faster)
 	tween.parallel().tween_property(equipped_item, "rotation", Vector3.ZERO, 0.2)
+
+## Check if there's a shield equipped
+func has_shield() -> bool:	
+	## If there's shield data and there's an instance in the shield placeholder...
+	return shield_data != null and shield_placeholder.get_child_count() > 0
 	
 ## Check if there's a weapon equipped
 func has_weapon() -> bool:	

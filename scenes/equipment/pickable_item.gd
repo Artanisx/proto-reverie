@@ -10,6 +10,7 @@ extends Area3D
 const HIGHLIGHT_MATERIAL := preload("res://materials/highlight_material.tres")
 
 @export var weapon_data: WeaponData
+@export var shield_data: ShieldData
 
 @onready var collision_shape: CollisionShape3D = %CollisionShape		## Reference to the collision shape, since we'll need to create it dynamically depending on the item
 
@@ -29,8 +30,10 @@ func _ready() -> void:
 	
 	## Then, we instantiate the mesh
 	var pickable_object : Node3D = null		
-	if weapon_data:
+	if weapon_data:	## it's a weapon?
 		pickable_object = weapon_data.glb_mesh.instantiate()
+	elif shield_data: ## it's a shield then?
+		pickable_object = shield_data.glb_mesh.instantiate()
 		
 	## Add it as a child and save the reference to the mesh node and finally create the collision shape	
 	if pickable_object != null:
