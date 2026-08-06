@@ -9,5 +9,8 @@ extends Node
 
 enum ImpactIntensity {LOW, MEDIUM, HIGH}
 
-## SIGNAL for the impact of an action, with a related intensity - Used for the "Hit Stop" functionality
+## SIGNAL for the impact of an action, with a related intensity - Used for the "Hit Stop" and Camera Shake functionality
 signal impact_felt(intensity: ImpactIntensity)
+
+## SIGNAL for when the player gets hurt - Used for the "HurtVignette" functionality in the UI
+signal player_hurt(player: Player)

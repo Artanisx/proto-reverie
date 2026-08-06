@@ -48,6 +48,10 @@ func _process(_delta: float) -> void:
 	## negative x motion (strafe left), positive x motion (stafe right), negative y motion (go backward), postive y motion (go forward)
 	input_dir = Input.get_vector("strafe_left","strafe_right","backward","forward")
 	
+	## DBUG ONLY: FAKES BEING HURT
+	if Input.is_action_just_pressed("kick"):
+		GameEvents.player_hurt.emit(self)
+	
 func _physics_process(_delta: float) -> void:	
 	check_jump_input()	## handles player jump
 	process_gravity()	## process gravity so is_on_floor() works properly	
