@@ -12,5 +12,5 @@ enum ImpactIntensity {LOW, MEDIUM, HIGH}
 ## SIGNAL for the impact of an action, with a related intensity - Used for the "Hit Stop" and Camera Shake functionality
 signal impact_felt(intensity: ImpactIntensity)
 
-## SIGNAL for when the player gets hurt - Used for the "HurtVignette" functionality in the UI
+## SIGNAL for when the player gets hurt - Used for the "HurtVignette" functionality in the UI and invoked with this "GameEvents.player_hurt.emit(self)"
 signal player_hurt(player: Player)
