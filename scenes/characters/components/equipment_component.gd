@@ -10,16 +10,48 @@ const THROWN_ITEM_PREFAB := preload("res://scenes/equipment/thrown_item.tscn")	#
 
 
 @export var is_always_in_front: bool	## If this is true, the equipped item will have its material replaced by the one with ZClip scale enabled to be drawn in front. Only set it true for the player.
+@export var shield_data: ShieldData		## Shield data of this equipment
+@export var shield_placeholder: Node3D	## The node reference where the Shield will be attached to (left hand basically)
 @export var weapon_data: WeaponData		## Weapon data of this equipment
-@export var weapon_placeholder: Node3D	## The node reference where the Equipment will be attached to
+@export var weapon_placeholder: Node3D	## The node reference where the Equipment will be attached to (right hand)
 @export var weapon_spawn_position: Node3D ## The position from where the thrownable weapon will spawn so it move in the right direction / rotation
 @export var weapon_reach_raycast: RayCast3D	 ## Raycast to calculate the weapon reach, needed so it works only facing the enemy/player rather than from behind
 
 ## This does:
-## - Equip the weapon
+## - Equip the weapon and/or shield
 func _ready() -> void:
 	if weapon_data != null:
 		equip_weapon(weapon_data)
+	
+	if shield_data != null:
+		equip_shield(shield_data)
+
+## Equips the correct shield based upon the shield Resource
+## Takes two arguments:
+## data: the shieldData of the item that should be instantiated in the equipped item scene
+## pickup_transform: the Transform of the pickup itself, to be used for tweening between ground and the player's hand
+func equip_shield(data: ShieldData, pickup_transform: Transform3D = Transform3D.IDENTITY) -> void:
+	## Since resources are shared between entities, we must make sure we create a copy of this.
+	## Failing to do so, would make all weapons share the same durability for instance; an enemy might get his shield damaged and player's one would be damaged as well.
+	## Since Godot handles resources per reference, we need to manually copy it instead.
+	shield_data = data.duplicate() ## Create a duplicate of the WeaponData passed as reference
+	
+	## Instantiate the equipped item
+	var shield := EQUIPPED_ITEM_PREFAB.instantiate() as EquippedItem
+	
+	## Setup the weapon data for this 
+	shield.shield_data = shield_data
+	
+	## Setup wheter the weapon should be on front of the player camera (i.e. player is holding it)
+	shield.is_always_in_front = is_always_in_front
+	
+	## Add this instance as a child of the weapon placeholder
+	shield_placeholder.add_child(shield)
+		
+	## Check if we passed a transform (so we want to do a tween)
+	if pickup_transform != Transform3D.IDENTITY:
+		shield.global_transform = pickup_transform		## Set the shield's transform to the object on the ground transform position
+		animate_to_hand(shield)
 
 ## Equips the correct weapon based upon the Weapon Resource
 ## Takes two arguments:

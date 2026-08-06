@@ -10,15 +10,23 @@ extends Node3D
 const ZCLIP_MATERIAL := preload("res://materials/zclip_material.tres")
 
 @export var is_always_in_front: bool
+@export var shield_data: ShieldData		## The Shield Data resource of the equipped item.
 @export var weapon_data: WeaponData		## The Weapon Data resource of the equipped item.
 
 ## As soon as the node is spawned we must:
 ## - Create the mesh for the equipped item
 ## - Add it as a child
 func _ready() -> void:
-	## First, we instantiate the mesh
-	var equipped_object := weapon_data.glb_mesh.instantiate()
+	var equipped_object : Node = null
 	
+	## If we have a weapon inside...
+	if weapon_data:
+		## We instantiate the mesh for the weapon
+		equipped_object = weapon_data.glb_mesh.instantiate()
+	elif shield_data:
+		## Not a weapon, so if there's a shield, we isntanziate the mesh for the shield then
+		equipped_object = shield_data.glb_mesh.instantiate()		
+		
 	## Add it as a child, if it's not null
 	if equipped_object != null:
 		add_child(equipped_object)
