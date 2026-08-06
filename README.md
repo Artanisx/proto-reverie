@@ -11,9 +11,9 @@ Pixel Art done by me using [Aseprite](https://www.aseprite.org/) while following
 ## Tutorial Progress
 Episode 12: https://www.youtube.com/watch?v=zniXqk7O90E&pp=ugUEEgJlbg%3D%3D
 
-Time Index: 0:00:00
+Time Index: 0:32:39
 
-What: Before opening doors
+What: Before Blocking animation in blender
 
 Next Episode will be 13: https://www.youtube.com/watch?v=X-Sym6xo0KQ
 
