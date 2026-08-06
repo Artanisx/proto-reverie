@@ -96,8 +96,7 @@ func animate_to_hand(equipped_item: EquippedItem) -> void:
 	tween.parallel().tween_property(equipped_item, "rotation", Vector3.ZERO, 0.2)
 	
 ## Check if there's a weapon equipped
-func has_weapon() -> bool:
-	print("has weapon is: " + str(weapon_data != null and weapon_placeholder.get_child_count() > 0))
+func has_weapon() -> bool:	
 	## If there's weapon data and there's an instance in the weapon placeholder...
 	return weapon_data != null and weapon_placeholder.get_child_count() > 0
 	

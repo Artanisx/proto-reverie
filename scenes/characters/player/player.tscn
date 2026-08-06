@@ -40,6 +40,11 @@ collision_mask = 8
 collide_with_areas = true
 collide_with_bodies = false
 
+[node name="DoorRaycast" type="RayCast3D" parent="MainCamera" unique_id=1968807727]
+unique_name_in_owner = true
+target_position = Vector3(0, 0, -1)
+collision_mask = 32
+
 [node name="character" parent="." unique_id=902149486 instance=ExtResource("2_t61fv")]
 
 [node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 34925941) index="0" unique_id=1372961720]
