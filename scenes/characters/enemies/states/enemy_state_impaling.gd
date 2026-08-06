@@ -12,6 +12,9 @@ const EQUIPPED_ITEM_PREFAB := preload("res://scenes/equipment/equipped_item.tscn
 const IMPALE_INTENSITY : float = 100.0
 
 func _enter_tree() -> void:
+	## Apply the Hit Stop juice for highlighting the action - This will pause the game for a bit.
+	GameEvents.impact_felt.emit(GameEvents.ImpactIntensity.MEDIUM)
+	
 	var impaled_item := EQUIPPED_ITEM_PREFAB.instantiate() as EquippedItem
 	impaled_item.weapon_data = state_data.thrown_item.weapon_data		## The thrown item data should be passed to the equipped (impaled) item! If it's ana xe, an axe should be passed etc	
 	enemy.physical_bone_torso.add_child(impaled_item) 			## Then, add this instance to the torso, for proper impalation!
@@ -24,6 +27,9 @@ func _enter_tree() -> void:
 	
 	## We apply a bit of impulse forward and up
 	var impulse: Vector3 = state_data.thrown_item_basis * Vector3.FORWARD * IMPALE_INTENSITY + Vector3.UP * IMPALE_INTENSITY	
+	
+	## Instnatiate the blododpusrt node from the head
+	FxHelper.create_blood_fx(enemy.physical_bone_head.global_transform)
 	
 	## Transition to DYING state passing the impulse we calculated to a new enemystatedata with impulse set
 	transition_state(Enemy.State.DYING, EnemyStateData.new().set_impulse(impulse))	

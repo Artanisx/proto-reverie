@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b4s2e7o5n4kpe"]
 
 [ext_resource type="Script" uid="uid://1qnwebdshlgr" path="res://scenes/characters/player/player.gd" id="1_7uws0"]
+[ext_resource type="Script" uid="uid://c83i3cwebxvgh" path="res://scenes/characters/player/main_camera.gd" id="2_qd3e3"]
 [ext_resource type="PackedScene" uid="uid://doq2ddny7lxxo" path="res://assets/meshes/characters/character.glb" id="2_t61fv"]
 [ext_resource type="PackedScene" uid="uid://brmub7fj1q2ux" path="res://scenes/characters/components/health_component.tscn" id="4_hss88"]
 [ext_resource type="PackedScene" uid="uid://cdeki3jlgwcis" path="res://scenes/characters/components/equipment_component.tscn" id="6_6avc5"]
@@ -23,13 +24,14 @@ walk_speed = 3.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
 shape = SubResource("CapsuleShape3D_5w87n")
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1598329383]
+[node name="MainCamera" type="Camera3D" parent="." unique_id=1598329383]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.42628855)
 current = true
 near = 0.001
+script = ExtResource("2_qd3e3")
 
-[node name="SelectRaycast" type="RayCast3D" parent="Camera3D" unique_id=825255394]
+[node name="SelectRaycast" type="RayCast3D" parent="MainCamera" unique_id=825255394]
 unique_name_in_owner = true
 target_position = Vector3(0, 0, -2)
 collision_mask = 8
@@ -38,7 +40,7 @@ collide_with_bodies = false
 
 [node name="character" parent="." unique_id=902149486 instance=ExtResource("2_t61fv")]
 
-[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 990515998) index="0" unique_id=854047827]
+[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 1673430193) index="0" unique_id=500624386]
 bones/0/position = Vector3(-1.776356e-15, 0.62109935, -0.08423395)
 bones/0/rotation = Quaternion(0.06415983, 1.1896365e-07, 7.648451e-09, 0.99793965)
 bones/1/rotation = Quaternion(-0.24423768, -1.1559904e-07, -2.9115395e-08, 0.9697154)
@@ -61,7 +63,7 @@ bone_idx = 8
 unique_name_in_owner = true
 transform = Transform3D(0.22814482, 0.2324464, -0.94547284, -0.08349022, -0.9628353, -0.25686145, -0.970041, 0.13753916, -0.20025888, -0.02997258, -2.910383e-11, 0.07420103)
 
-[node name="AnimationPlayer" parent="character" index="1" unique_id=1460951389]
+[node name="AnimationPlayer" parent="character" index="1" unique_id=148260867]
 autoplay = &"idle"
 
 [node name="EquipmentComponent" parent="." unique_id=535100031 node_paths=PackedStringArray("weapon_placeholder", "weapon_spawn_position", "weapon_reach_raycast") instance=ExtResource("6_6avc5")]

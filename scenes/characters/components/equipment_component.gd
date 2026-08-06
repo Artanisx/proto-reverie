@@ -97,5 +97,7 @@ func animate_to_hand(equipped_item: EquippedItem) -> void:
 	
 ## Check if there's a weapon equipped
 func has_weapon() -> bool:
+	print("has weapon is: " + str(weapon_data != null and weapon_placeholder.get_child_count() > 0))
 	## If there's weapon data and there's an instance in the weapon placeholder...
 	return weapon_data != null and weapon_placeholder.get_child_count() > 0
+	
