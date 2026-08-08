@@ -29,6 +29,7 @@ func _enter_tree() -> void:
 	var timer := get_tree().create_timer(DURATION_RAGDOLL_SIMULATION)	## Create atimer of the set duration
 	timer.timeout.connect(freeze_ragdoll)								## Set its callback rto the timeout signal
 
-## This will transition to the DEAD state (that will freeze the ragdoll simulation)
+## This will transition to the DEAD state[br]
+## This will [code]freeze[/code] the ragdoll simulation
 func freeze_ragdoll() -> void:
 	transition_state(Enemy.State.DEAD)
