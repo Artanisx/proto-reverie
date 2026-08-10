@@ -40,7 +40,7 @@ const AIR_FRICTION: float = 20.0
 @export var speed: float					## Enemy movement speed
 
 
-enum State {MOVING, IMPALING, DYING, DEAD, SLASHING, HURT}
+enum State {MOVING, IMPALING, DYING, DEAD, SLASHING, HURT, BLOCKING}
 
 var pushback_force: Vector3 = Vector3.ZERO ## If set, it will cause this enemy to be pushed from this force (Vector3)
 var state : State	## State the enemy is in
@@ -59,13 +59,20 @@ func _ready() -> void:
 ## basis is the  transform (rotation etc) we want the impaled item to be
 func impale(thrown_item: ThrownItem, item_basis: Basis) -> void:
 	## Create an EnemyStateData class and fill it with the arguments needed for the impaling state	
-	var state_data: EnemyStateData = EnemyStateData.new().set_thrown_item(thrown_item).set_thrown_item_basis(item_basis)	
+	var state_data: EnemyStateData = EnemyStateData.new().set_thrown_item(thrown_item).set_thrown_item_basis(item_basis)
 	
+	## Check if the player is aware of the player
+	if player == null or not equipment.has_shield():
+		## Switch state to the IMPALING state, passing the state_data
+		switch_state(State.IMPALING, state_data)		
+	else:
+		## Switch state to the BLOCKING state, passing the state_data
+		var hit_direction : Vector3 = thrown_item.global_position.direction_to(global_position)
+		state_data.set_impact_direction(hit_direction)
+		switch_state(State.BLOCKING, state_data)
+		
 	## Emit screamed signal to warn other enemies
 	screamed.emit()
-	
-	## Switch state to the IMPALING state, passing the state_data
-	switch_state(State.IMPALING, state_data)
 
 ## Check if enemy knows the player exists (and it's still valid instance, so not dead/queued free)
 func has_registered_player() -> bool:
@@ -91,7 +98,8 @@ func switch_state(new_state: State, data: EnemyStateData = EnemyStateData.new())
 		State.DYING: EnemyStateDying,
 		State.DEAD: EnemyStateDead,
 		State.SLASHING: EnemyStateSlashing,
-		State.HURT: EnemyStateHurt
+		State.HURT: EnemyStateHurt,
+		State.BLOCKING: EnemyStateBlocking
 	}	
 	## 1 - Create the proper EnemyState node
 	state_node = state_map[new_state].new(self, data)
@@ -112,13 +120,23 @@ func try_receive_hit(source_player: Player, damage: int) -> void:
 	## Register the player since they just hit the enemy
 	player = source_player
 	
+	## Calc the hit direction from the player to this enemy
+	var hit_direction : Vector3 = source_player.global_position.direction_to(global_position)
+	
+	## Calculate data to pass to switch_state
+	var data := EnemyStateData.new().set_damage(damage).set_impact_direction(hit_direction)
+	
+	## If the enemy doesn't have a shield or if the enemy hasn't noticed the player yet (so it hasn't registered it)
+	if player == null or not equipment.has_shield():
+		## THe enemy doesn't have a shield or hasn't seen the player, so they will take direct damage instead		
+		switch_state(State.HURT, data) ## Switch to the HURT state and pass damage and direction
+	else:
+		## The enemy has a shield and has noticed the player, so they block instead of taking damage
+		switch_state(State.BLOCKING, data)  ## Switch to the BLOCKING state and pass direction  (well also damage, but won't be used)	
+
 	## Emit screamed signal to warn other enemies
 	screamed.emit()
 	
-	## Calc the hit direction from the player to this enemy
-	var hit_direction : Vector3 = source_player.global_position.direction_to(global_position).normalized() 
-	switch_state(State.HURT, EnemyStateData.new().set_damage(damage).set_impact_direction(hit_direction)) ## Switch to the HURT state and pass damage and direction
-
 ## Take care of moving the Enemy
 func process_movement(delta: float) -> void:
 	## Apply Gravity
