@@ -181,3 +181,7 @@ func check_for_selection() -> void:
 ## This returns true if there is an pickable item being looked at right now		
 func can_pickup_object() -> bool:			
 	return current_pickable_focused_item != null
+	
+## Handles taking acid damage when in contact with the Acid Trap	
+func take_acid_damage() -> void: 
+	print("ouch! player is in the acid trap!")

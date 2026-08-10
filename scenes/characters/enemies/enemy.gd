@@ -191,3 +191,10 @@ func process_pushback(delta: float) -> void:
 func on_player_detected(body: Player) -> void:
 	## The player is in range, register it
 	player = body
+
+## Handles taking acid damage when in contact with the Acid Trap	
+func take_acid_damage() -> void:
+	## Acid is oneshot damage!
+	if state_node.can_die(): ## Only if not already dying or dead, basically only in states that doesn't specifically disallow dying
+		switch_state(State.DYING)
+	

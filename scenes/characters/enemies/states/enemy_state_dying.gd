@@ -33,3 +33,7 @@ func _enter_tree() -> void:
 ## This will [code]freeze[/code] the ragdoll simulation
 func freeze_ragdoll() -> void:
 	transition_state(Enemy.State.DEAD)
+	
+## Since we're already Dying, we cannot die again!
+func can_die() -> bool:
+	return false
