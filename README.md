@@ -11,9 +11,9 @@ Pixel Art done by me using [Aseprite](https://www.aseprite.org/) while following
 ## Tutorial Progress
 Episode 13: https://www.youtube.com/watch?v=X-Sym6xo0KQ
 
-Time Index: 0:00:00
+Time Index: 0:44:34
 
-What: Before Blocking animation in blender
+What: after completing the shader
 
 Next Episode will be 14: https://www.youtube.com/watch?v=tEl8e0cRaRk
 
