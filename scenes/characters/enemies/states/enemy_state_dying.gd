@@ -12,7 +12,10 @@ const DURATION_RAGDOLL_SIMULATION : float = 3.0
 
 func _enter_tree() -> void:
 	## 0 - Drop the weapon
-	enemy.equipment.thrown_weapon(true)
+	enemy.equipment.drop_weapon()
+	
+	## 0.5 - Drop the shield
+	enemy.equipment.drop_shield()
 	
 	## 1- Disable collision shape since we are no longer handling phsyics with it
 	enemy.collision_shape.disabled = true
@@ -26,6 +29,7 @@ func _enter_tree() -> void:
 	var timer := get_tree().create_timer(DURATION_RAGDOLL_SIMULATION)	## Create atimer of the set duration
 	timer.timeout.connect(freeze_ragdoll)								## Set its callback rto the timeout signal
 
-## This will transition to the DEAD state (that will freeze the ragdoll simulation)
+## This will transition to the DEAD state[br]
+## This will [code]freeze[/code] the ragdoll simulation
 func freeze_ragdoll() -> void:
 	transition_state(Enemy.State.DEAD)

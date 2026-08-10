@@ -21,12 +21,12 @@ const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking
 @onready var animation_player: AnimationPlayer = $character/AnimationPlayer ## Reference to the AnimationPlayer to handle animations
 @onready var camera: Camera3D = %MainCamera ## Reference to the Camera3D node. 
 @onready var select_raycast: RayCast3D = %SelectRaycast		## Reference to the RayCast used for pick up objects
-@onready var door_raycast: RayCast3D = %DoorRaycast
+@onready var kick_raycast: RayCast3D = %KickRaycast
 @onready var equipment: EquipmentComponent = %EquipmentComponent 	## refenrec eto tehe quipment component
 @onready var health: HealthComponent = %HealthComponent			## refenrec eto tehe health component
 @onready var weapon_reach_raycast: RayCast3D = %WeaponReachRaycast ## needed to check wheter the player can hit the Enemy
 
-enum State {MOVING, PICKING_UP, THROWING, SLASHING, KICKING}
+enum State {MOVING, PICKING_UP, THROWING, SLASHING, KICKING, BLOCKING}
 
 var current_pickable_focused_item : PickableItem = null	## This will hold a PickableItem that is currently pickable (in range and hit by the select_raycast)
 var input_dir := Vector2.ZERO ## Store the direction of movement from player input. Represents the player hitting W-A-S-D
@@ -130,7 +130,8 @@ func switch_state(new_state: State) -> void:
 		State.PICKING_UP: PlayerStatePickingUp,
 		State.THROWING: PlayerStateThrowing,
 		State.SLASHING: PlayerStateSlashing,
-		State.KICKING: PlayerStateKicking
+		State.KICKING: PlayerStateKicking,
+		State.BLOCKING: PlayerStateBlocking
 	}	
 	## 1 - Create the proper PlayerState node
 	state_node = state_map[new_state].new(self)

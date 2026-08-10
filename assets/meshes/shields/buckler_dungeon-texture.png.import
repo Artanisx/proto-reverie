@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cn61pdxjcwm6o"
-path.s3tc="res://.godot/imported/shortsword_dungeon-texture.png-4777f8b4970cc8df31a8ebff46b8379c.s3tc.ctex"
+uid="uid://bp2151xbf7di1"
+path.s3tc="res://.godot/imported/buckler_dungeon-texture.png-1bf68d9c594848cc60fddd87c403b6c6.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/meshes/weapons/shortsword_dungeon-texture.png"
-dest_files=["res://.godot/imported/shortsword_dungeon-texture.png-4777f8b4970cc8df31a8ebff46b8379c.s3tc.ctex"]
+source_file="res://assets/meshes/shields/buckler_dungeon-texture.png"
+dest_files=["res://.godot/imported/buckler_dungeon-texture.png-1bf68d9c594848cc60fddd87c403b6c6.s3tc.ctex"]
 
 [params]
 

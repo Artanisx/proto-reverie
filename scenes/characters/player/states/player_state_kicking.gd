@@ -15,11 +15,18 @@ func  _enter_tree() -> void:
 	## Play the throw animation
 	player.animation_player.play("kick")
 	
-	## Check if we're colliding with a door, in which case we need to open it	
-	if player.door_raycast.is_colliding():
-		var door := player.door_raycast.get_collider() as Door
-		if door != null: ## Only if it's colliding with a door
-			door.open(player.global_transform)
+	## Check if we're colliding with a door or enemy and handle it accordingly	
+	if player.kick_raycast.is_colliding():
+		var collider := player.kick_raycast.get_collider() as Node
+		
+		## Is it a door?
+		if collider is Door:		
+			var door := collider as Door
+			door.open(player.global_transform)	## open it
+		## Is it an enemy?
+		elif collider is Enemy:
+			var enemy := collider as Enemy
+			enemy.try_receive_kick(player)	## issue the kick to the enemy
 				
 	## Hookup to the finish signal
 	player.animation_player.animation_finished.connect(on_animation_finished)
