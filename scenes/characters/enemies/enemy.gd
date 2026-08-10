@@ -32,15 +32,13 @@ const AIR_FRICTION: float = 20.0
 @onready var nav_agent: NavigationAgent3D = %NavigationAgent3D
 
 
-
-
-
+@export var duration_stun : float			## Time in seconds for the duration of the stunned state
 @export var duration_between_attacks : int 	## How often the enemy attacks, in ms
 @export var player : Player					## Player reference
 @export var speed: float					## Enemy movement speed
 
 
-enum State {MOVING, IMPALING, DYING, DEAD, SLASHING, HURT, BLOCKING}
+enum State {MOVING, IMPALING, DYING, DEAD, SLASHING, HURT, BLOCKING, STUNNED}
 
 var pushback_force: Vector3 = Vector3.ZERO ## If set, it will cause this enemy to be pushed from this force (Vector3)
 var state : State	## State the enemy is in
@@ -61,8 +59,8 @@ func impale(thrown_item: ThrownItem, item_basis: Basis) -> void:
 	## Create an EnemyStateData class and fill it with the arguments needed for the impaling state	
 	var state_data: EnemyStateData = EnemyStateData.new().set_thrown_item(thrown_item).set_thrown_item_basis(item_basis)
 	
-	## Check if the player is aware of the player
-	if player == null or not equipment.has_shield():
+	## Check if the enemy is NOT aware of the player, does NOT have a shield or CAN get hurt
+	if player == null or not equipment.has_shield() or state_node.can_get_hurt():
 		## Switch state to the IMPALING state, passing the state_data
 		switch_state(State.IMPALING, state_data)		
 	else:
@@ -99,7 +97,8 @@ func switch_state(new_state: State, data: EnemyStateData = EnemyStateData.new())
 		State.DEAD: EnemyStateDead,
 		State.SLASHING: EnemyStateSlashing,
 		State.HURT: EnemyStateHurt,
-		State.BLOCKING: EnemyStateBlocking
+		State.BLOCKING: EnemyStateBlocking,
+		State.STUNNED: EnemyStateStunned
 	}	
 	## 1 - Create the proper EnemyState node
 	state_node = state_map[new_state].new(self, data)
@@ -126,16 +125,42 @@ func try_receive_hit(source_player: Player, damage: int) -> void:
 	## Calculate data to pass to switch_state
 	var data := EnemyStateData.new().set_damage(damage).set_impact_direction(hit_direction)
 	
-	## If the enemy doesn't have a shield or if the enemy hasn't noticed the player yet (so it hasn't registered it)
-	if player == null or not equipment.has_shield():
+	## If the enemy doesn't have a shield or if the enemy hasn't noticed the player yet (so it hasn't registered it) or if he can be hurt
+	if player == null or not equipment.has_shield() or state_node.can_get_hurt():
 		## THe enemy doesn't have a shield or hasn't seen the player, so they will take direct damage instead		
 		switch_state(State.HURT, data) ## Switch to the HURT state and pass damage and direction
 	else:
-		## The enemy has a shield and has noticed the player, so they block instead of taking damage
-		switch_state(State.BLOCKING, data)  ## Switch to the BLOCKING state and pass direction  (well also damage, but won't be used)	
+		## The enemy has a shield and has noticed the player, so they block instead of taking damage	
+		switch_state(State.BLOCKING, data)  ## Switch to the BLOCKING state and pass direction  (well also damage, but won't be used)				
 
 	## Emit screamed signal to warn other enemies
 	screamed.emit()
+
+## Check wheter the enemy will receive a kick
+## This takes into account the enemy having a shield
+## 1- source_player: the player causing the damage, used for position calculation for the knockback
+func try_receive_kick(source_player: Player) -> void:
+	## Register the player since they just kciked the enemy
+	player = source_player
+	
+	## Calc the hit direction from the player to this enemy
+	var hit_direction : Vector3 = source_player.global_position.direction_to(global_position)
+	
+	## Calculate data to pass to switch_state
+	var data := EnemyStateData.new().set_impact_direction(hit_direction)
+	
+	## If the enemy is in a state that allows to be stunned OR he doesn't have a shield
+	if state_node.can_get_stunned() or not equipment.has_shield():
+		## The enemy doesn't have a shield or he is in a state that allows to be stunned
+		switch_state(State.STUNNED, data) ## Switch to the STUN state and pass the direction
+	else:
+		## The enemy has a shield or is in a state that cannot be stunned, so they block instead of be stunned
+		switch_state(State.BLOCKING, data)  ## Switch to the BLOCKING state and pass direction  (well also damage, but won't be used)				
+
+	## Emit screamed signal to warn other enemies
+	screamed.emit()
+	
+	
 	
 ## Take care of moving the Enemy
 func process_movement(delta: float) -> void:

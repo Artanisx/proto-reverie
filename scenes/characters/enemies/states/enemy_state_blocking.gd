@@ -17,6 +17,11 @@ func  _enter_tree() -> void:
 	## Play the slash animation
 	enemy.animation_player.play("block")
 	
+	## Apply some visual effect (hit stop and camera shake atm respond to this signal)
+	GameEvents.impact_felt.emit(GameEvents.ImpactIntensity.LOW)
+	## Also instantiate metal sparks from the shield
+	FxHelper.create_metal_spark_fx(enemy.equipment.shield_placeholder.global_position)
+	
 	## Apply some pushback force from the direction of the impact (player)
 	enemy.pushback_force += state_data.impact_direction * KNOCKBACK_FORCE	
 	

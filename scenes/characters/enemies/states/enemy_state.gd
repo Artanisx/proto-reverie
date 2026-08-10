@@ -20,3 +20,13 @@ func _init(source_enemy: Enemy, source_data: EnemyStateData = EnemyStateData.new
 ## This function emits the transition_state signal
 func transition_state(new_state: Enemy.State, source_data: EnemyStateData = EnemyStateData.new()) -> void:
 	transition_requested.emit(new_state, source_data)
+
+## Calculate wheter the enemy can be stunned
+## Genericly is always false, but in states that allows to be stunned from, this will be overridden
+func can_get_stunned() -> bool:
+	return false
+
+## Calculate wheter the enemy can be hurt
+## Genericly is always false, but in states that allows to be hurt, this will be overridden as true
+func can_get_hurt() -> bool:
+	return false
