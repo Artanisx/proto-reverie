@@ -178,6 +178,17 @@ func check_for_selection() -> void:
 		if current_pickable_focused_item is PickableItem:
 			current_pickable_focused_item.highlight()	## Let's highlight it now
 
+## To handle receiving a hit for the player
+func try_receive_hit(source_enemy: Enemy, _damage: int) -> void:
+	## First we check if the player can get hit
+	if state_node.can_get_hurt():
+		## We dont' have a hurt state yet, so let's just display some vfx for now
+		GameEvents.player_hurt.emit(self)
+	elif state == State.BLOCKING:
+		## Player cannot be hurt, and they are blocking
+		## Let's stun the enemy
+		source_enemy.try_stun()
+
 ## This returns true if there is an pickable item being looked at right now		
 func can_pickup_object() -> bool:			
 	return current_pickable_focused_item != null

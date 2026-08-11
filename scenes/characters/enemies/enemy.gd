@@ -160,7 +160,10 @@ func try_receive_kick(source_player: Player) -> void:
 	## Emit screamed signal to warn other enemies
 	screamed.emit()
 	
-	
+## Check wheter the enemy will receive a stun
+func try_stun() -> void:
+	if state_node.can_get_stunned():
+		switch_state(State.STUNNED)
 	
 ## Take care of moving the Enemy
 func process_movement(delta: float) -> void:

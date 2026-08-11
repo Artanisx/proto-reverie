@@ -10,7 +10,7 @@ extends EnemyState
 
 const GROUND_FRICTION: float = 10.0 ## How quickly the enemy stops moving after starting to block
 
-const KNOCKBACK_FORCE: float = 2.5 ## The force of knockback suffered when hit
+const KNOCKBACK_FORCE: float = 2.0 ## The force of knockback suffered when hit
 
 ## Execute what needs to be done immediately when the node enters the tree, so when we switch to this state (basically kind of a _ready)	
 func  _enter_tree() -> void:			
