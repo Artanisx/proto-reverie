@@ -2,6 +2,23 @@
 
 [ext_resource type="PackedScene" uid="uid://pnmmjg2mxbhy" path="res://assets/meshes/traps/spikes.glb" id="1_3h3hk"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3h3hk"]
+albedo_color = Color(0.80784315, 0.84313726, 0.8666667, 1)
+metallic = 1.0
+roughness = 0.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5w87n"]
+size = Vector3(0.6, 1.8, 0.2)
+
 [node name="SpikesTrap" type="Area3D" unique_id=1232335774]
 
 [node name="spikes" parent="." unique_id=1235505437 instance=ExtResource("1_3h3hk")]
+
+[node name="Spikes" parent="spikes" index="0" unique_id=1236620199]
+surface_material_override/0 = SubResource("StandardMaterial3D_3h3hk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1216848067]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.913152, -0.15046644)
+shape = SubResource("BoxShape3D_5w87n")
+
+[editable path="spikes"]
