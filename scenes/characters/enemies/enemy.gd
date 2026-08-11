@@ -204,4 +204,11 @@ func take_acid_damage() -> void:
 	## Acid is oneshot damage!
 	if state_node.can_die(): ## Only if not already dying or dead, basically only in states that doesn't specifically disallow dying
 		switch_state(State.DYING)
+		
+## To handle receiving damage from spikes trap
+## For enemy this is an instant kill
+func take_spike_damage(_spikes_trap: SpikesTrap) -> void:
+	## spikes is oneshot damage!
+	if state_node.can_die(): ## Only if not already dying or dead, basically only in states that doesn't specifically disallow dying
+		switch_state(State.DYING)
 	

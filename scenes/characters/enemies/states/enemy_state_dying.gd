@@ -10,8 +10,14 @@ extends EnemyState
 
 const DURATION_RAGDOLL_SIMULATION : float = 3.0
 
-func _enter_tree() -> void:
-	## 0 - Drop the weapon
+func _enter_tree() -> void:	
+	## 0.1 - Apply the Hit Stop juice for highlighting the action - This will pause the game for a bit.
+	GameEvents.impact_felt.emit(GameEvents.ImpactIntensity.MEDIUM)
+		
+	## 0.2 - Instnatiate the blododpusrt node from the head
+	FxHelper.create_blood_fx(enemy.physical_bone_head.global_transform)
+	
+	## 0.3 - Drop the weapon
 	enemy.equipment.drop_weapon()
 	
 	## 0.5 - Drop the shield

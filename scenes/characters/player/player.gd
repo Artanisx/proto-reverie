@@ -188,6 +188,10 @@ func try_receive_hit(source_enemy: Enemy, _damage: int) -> void:
 		## Player cannot be hurt, and they are blocking
 		## Let's stun the enemy
 		source_enemy.try_stun()
+		
+## To handle receiving damage from spikes trap
+func take_spike_damage(_spikes_trap: SpikesTrap) -> void:
+	print("Ouch! Spikes hurt!!")
 
 ## This returns true if there is an pickable item being looked at right now		
 func can_pickup_object() -> bool:			
