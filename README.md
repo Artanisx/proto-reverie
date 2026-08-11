@@ -11,9 +11,11 @@ Pixel Art done by me using [Aseprite](https://www.aseprite.org/) while following
 ## Tutorial Progress
 Episode 13: https://www.youtube.com/watch?v=X-Sym6xo0KQ
 
-Time Index: 0:44:34
+Time Index: 1:08:53
 
-What: after completing the shader
+What: after completing the spike trap
+
+WARNING: There's a bug. When enemies die they are launched into orbit!!! Error with skeleton?
 
 Next Episode will be 14: https://www.youtube.com/watch?v=tEl8e0cRaRk
 
