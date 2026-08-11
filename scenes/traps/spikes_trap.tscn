@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://c7t3d2rf4n4ts"]
+
+[ext_resource type="PackedScene" uid="uid://pnmmjg2mxbhy" path="res://assets/meshes/traps/spikes.glb" id="1_3h3hk"]
+
+[node name="SpikesTrap" type="Area3D" unique_id=1232335774]
+
+[node name="spikes" parent="." unique_id=1235505437 instance=ExtResource("1_3h3hk")]
