@@ -151,7 +151,11 @@ func try_receive_kick(source_player: Player) -> void:
 	
 	## If the enemy is in a state that allows to be stunned OR he doesn't have a shield
 	if state_node.can_get_stunned() or not equipment.has_shield():
-		## The enemy doesn't have a shield or he is in a state that allows to be stunned
+		if state == State.STUNNED:
+			## The enemy is already stunned, we'll prolong the stun (Stunned > Stunned is allowed), but change the knockback force to be bigger
+			data.set_knockback_force(2.5)
+		
+		## The enemy doesn't have a shield or he is in a state that allows to be stunned		
 		switch_state(State.STUNNED, data) ## Switch to the STUN state and pass the direction
 	else:
 		## The enemy has a shield or is in a state that cannot be stunned, so they block instead of be stunned
