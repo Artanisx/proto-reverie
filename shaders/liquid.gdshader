@@ -19,6 +19,9 @@ uniform sampler2D liquid_texture : filter_nearest, repeat_enable;
 // This is the speed of texture scrolling in X and Y
 uniform vec2 texture_scroll_speed = vec2(0.05, 0.03);
 
+// Transparency of the liquid
+uniform float liquid_tarnsparency = 0.8;
+
 // TIME is a property always available and starts at 0 when the game is launched
 // Each frame will add to 0,016 (60fps, 16ms each)
 // TIME 0, 0.016, 0.032,...
@@ -57,4 +60,6 @@ void fragment()
 	// Change how the light effect this vertex
 	METALLIC = 0.0;		// Not metallic
 	ROUGHNESS = 1.0;	// Max Rough
+	
+	ALPHA = liquid_tarnsparency;
 }
