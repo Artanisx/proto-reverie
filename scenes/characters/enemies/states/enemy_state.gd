@@ -30,3 +30,8 @@ func can_get_stunned() -> bool:
 ## Genericly is always false, but in states that allows to be hurt, this will be overridden as true
 func can_get_hurt() -> bool:
 	return false
+	
+## Calculate wheter the enemy can dye
+## Genericly is always true, but in states that disallows being killed, this will be overridden as false
+func can_die() -> bool:
+	return true

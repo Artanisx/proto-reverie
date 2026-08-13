@@ -26,3 +26,7 @@ func _physics_process(delta: float) -> void:
 func on_animation_finished(_animation_name: String) -> void:	
 	## Emit the signal and transition back to Moving
 	transition_state(Player.State.MOVING)	
+	
+## Override the can_get_hurt() function since in this state the player CANNOT be hurt	
+func can_get_hurt() -> bool:
+	return false

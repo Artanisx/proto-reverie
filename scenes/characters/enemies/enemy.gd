@@ -151,7 +151,11 @@ func try_receive_kick(source_player: Player) -> void:
 	
 	## If the enemy is in a state that allows to be stunned OR he doesn't have a shield
 	if state_node.can_get_stunned() or not equipment.has_shield():
-		## The enemy doesn't have a shield or he is in a state that allows to be stunned
+		if state == State.STUNNED:
+			## The enemy is already stunned, we'll prolong the stun (Stunned > Stunned is allowed), but change the knockback force to be bigger
+			data.set_knockback_force(2.5)
+		
+		## The enemy doesn't have a shield or he is in a state that allows to be stunned		
 		switch_state(State.STUNNED, data) ## Switch to the STUN state and pass the direction
 	else:
 		## The enemy has a shield or is in a state that cannot be stunned, so they block instead of be stunned
@@ -160,7 +164,10 @@ func try_receive_kick(source_player: Player) -> void:
 	## Emit screamed signal to warn other enemies
 	screamed.emit()
 	
-	
+## Check wheter the enemy will receive a stun
+func try_stun() -> void:
+	if state_node.can_get_stunned():
+		switch_state(State.STUNNED)
 	
 ## Take care of moving the Enemy
 func process_movement(delta: float) -> void:
@@ -191,3 +198,17 @@ func process_pushback(delta: float) -> void:
 func on_player_detected(body: Player) -> void:
 	## The player is in range, register it
 	player = body
+
+## Handles taking acid damage when in contact with the Acid Trap	
+func take_acid_damage() -> void:
+	## Acid is oneshot damage!
+	if state_node.can_die(): ## Only if not already dying or dead, basically only in states that doesn't specifically disallow dying
+		switch_state(State.DYING)
+		
+## To handle receiving damage from spikes trap
+## For enemy this is an instant kill
+func take_spike_damage(_spikes_trap: SpikesTrap) -> void:
+	## spikes is oneshot damage!
+	if state_node.can_die(): ## Only if not already dying or dead, basically only in states that doesn't specifically disallow dying
+		switch_state(State.DYING)
+	

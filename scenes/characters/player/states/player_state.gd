@@ -18,3 +18,8 @@ func _init(source_player: Player) -> void:
 ## This function emits the transition_state signal
 func transition_state(new_state: Player.State) -> void:
 	transition_requested.emit(new_state)
+	
+## Calculate wheter the player can be hurt
+## Genericly is always true, but in states that disallows to be hurt, this will be overridden as false
+func can_get_hurt() -> bool:
+	return true

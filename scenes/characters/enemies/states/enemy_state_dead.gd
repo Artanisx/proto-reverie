@@ -17,3 +17,7 @@ func _enter_tree() -> void:
 			var bone := child as PhysicalBone3D
 			var bone_rid := bone.get_rid() as RID
 			PhysicsServer3D.body_set_state(bone_rid, PhysicsServer3D.BODY_STATE_SLEEPING, true)
+
+## Since we're already Dead, we cannot die again!
+func can_die() -> bool:
+	return false

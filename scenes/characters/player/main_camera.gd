@@ -19,9 +19,9 @@ var current_intensity : GameEvents.ImpactIntensity
 
 ## Dictonary that stores the intensity of the Camera Shake effect (how much the camera will move)
 var intensity_map : Dictionary[GameEvents.ImpactIntensity, float] = {
-	GameEvents.ImpactIntensity.LOW: 0.1,
-	GameEvents.ImpactIntensity.MEDIUM: 0.15,
-	GameEvents.ImpactIntensity.HIGH: 0.2
+	GameEvents.ImpactIntensity.LOW: 0.05,
+	GameEvents.ImpactIntensity.MEDIUM: 0.1,
+	GameEvents.ImpactIntensity.HIGH: 0.15
 }
 
 ## Store the time and used for the timer

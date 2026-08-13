@@ -7,6 +7,7 @@ extends EnemyState
 ## It contains all processing, signals, etc required for this state
 ## Transitions:
 ## Stunned > Moving
+## Stunned > Stunned (prolong a stun)
 
 const GROUND_FRICTION: float = 10.0 ## How quickly the enemy stops moving after starting to be stunned
 const KNOCKBACK_FORCE: float = 2.0 ## The force of knockback suffered when hit
@@ -16,8 +17,13 @@ func  _enter_tree() -> void:
 	## Play the stun animation
 	enemy.animation_player.play("stunned")
 	
+	## Check if we have a knockback_force in the data, if so override and use that
+	var knockback_force :=  KNOCKBACK_FORCE
+	if state_data.knockback_force != 0:
+		knockback_force = state_data.knockback_force
+	
 	## Apply some pushback force from the direction of the impact (player)
-	enemy.pushback_force += state_data.impact_direction * KNOCKBACK_FORCE	
+	enemy.pushback_force += state_data.impact_direction * knockback_force	
 	
 	## Start the  stunned timer		
 	var timer := get_tree().create_timer(enemy.duration_stun)	## Create atimer of the set duration
@@ -36,4 +42,8 @@ func on_stun_finish() -> void:
 	
 ## Override this because enemy CAN be hurt in the stunned state
 func can_get_hurt() -> bool:
+	return true
+	
+## Override this because enemy CAN be stunned and stay in the stunned state (stun lock)
+func can_get_stunned() -> bool:
 	return true

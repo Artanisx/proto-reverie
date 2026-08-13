@@ -178,6 +178,25 @@ func check_for_selection() -> void:
 		if current_pickable_focused_item is PickableItem:
 			current_pickable_focused_item.highlight()	## Let's highlight it now
 
+## To handle receiving a hit for the player
+func try_receive_hit(source_enemy: Enemy, _damage: int) -> void:
+	## First we check if the player can get hit
+	if state_node.can_get_hurt():
+		## We dont' have a hurt state yet, so let's just display some vfx for now
+		GameEvents.player_hurt.emit(self)
+	elif state == State.BLOCKING:
+		## Player cannot be hurt, and they are blocking
+		## Let's stun the enemy
+		source_enemy.try_stun()
+		
+## To handle receiving damage from spikes trap
+func take_spike_damage(_spikes_trap: SpikesTrap) -> void:
+	print("Ouch! Spikes hurt!!")
+
 ## This returns true if there is an pickable item being looked at right now		
 func can_pickup_object() -> bool:			
 	return current_pickable_focused_item != null
+	
+## Handles taking acid damage when in contact with the Acid Trap	
+func take_acid_damage() -> void: 
+	print("ouch! player is in the acid trap!")
