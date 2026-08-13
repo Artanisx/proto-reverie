@@ -15,7 +15,7 @@ Time Index: 1:08:53
 
 What: after completing the spike trap
 
-WARNING: There's a bug. When enemies die they are launched into orbit!!! Error with skeleton?
+NOTE! Do not keep open goblin or player tscn scenes if you aren't touching them. Bogus changes might appear if they are open and those might break the skeleton and produce issues with ragdool or physics.
 
 Next Episode will be 14: https://www.youtube.com/watch?v=tEl8e0cRaRk
 
