@@ -26,4 +26,8 @@ surface_material_override/0 = SubResource("StandardMaterial3D_3h3hk")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.913152, -0.15046644)
 shape = SubResource("BoxShape3D_5w87n")
 
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="." unique_id=205545681]
+vertices = PackedVector3Array(-0.7928175, 0, -0.56931335, -0.36691153, 0, -1.004092, 0.45384395, 0, -0.9907823, 0.81320226, 0, -0.63142437, 0.87975013, 0, 0.30911732, 0.6268681, 0, 0.7660786, -0.4911343, 0, 0.7749517, -0.8016907, 0, 0.3357364)
+affect_navigation_mesh = true
+
 [editable path="spikes"]
