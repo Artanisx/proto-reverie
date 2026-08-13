@@ -9,14 +9,14 @@ Pixel Art done by me using [Aseprite](https://www.aseprite.org/) while following
 3D Art done by me using [Blender](https://www.blender.org/) while following along).
 
 ## Tutorial Progress
-Episode 13: https://www.youtube.com/watch?v=X-Sym6xo0KQ
+Episode 14: https://www.youtube.com/watch?v=tEl8e0cRaRk
 
-Time Index: 1:08:53
+Time Index: 0:00:00
 
-What: after completing the spike trap
+What: START
 
 NOTE! Do not keep open goblin or player tscn scenes if you aren't touching them. Bogus changes might appear if they are open and those might break the skeleton and produce issues with ragdool or physics.
 
-Next Episode will be 14: https://www.youtube.com/watch?v=tEl8e0cRaRk
+Next Episode will be 15: https://www.youtube.com/watch?v=9vzhChFClsQ
 
 Playlist: https://www.youtube.com/playlist?list=PLT26e2jOwbdg
