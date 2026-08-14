@@ -37,7 +37,9 @@ func _physics_process(delta: float) -> void:
 	enemy.process_movement(delta)	
 	
 ## This will transition back to the moving state[br]
-func on_stun_finish() -> void:	
+func on_stun_finish() -> void:
+	## scream after the stun is over to aggro the rest 
+	enemy.screamed.emit()	
 	transition_state(Enemy.State.MOVING)	
 	
 ## Override this because enemy CAN be hurt in the stunned state

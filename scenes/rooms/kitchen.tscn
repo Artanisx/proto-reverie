@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bx51fif0cdly2" path="res://scenes/rooms/base_room.tscn" id="1_3w07q"]
 [ext_resource type="PackedScene" uid="uid://b7ocgy8gc1rn5" path="res://scenes/characters/enemies/goblin.tscn" id="2_p7bu6"]
 [ext_resource type="PackedScene" uid="uid://c7t3d2rf4n4ts" path="res://scenes/traps/spikes_trap.tscn" id="3_sqdrw"]
+[ext_resource type="PackedScene" uid="uid://q7bs7y46fw7n" path="res://scenes/props/barrel/barrel.tscn" id="4_2812u"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_p7bu6"]
 vertices = PackedVector3Array(-2.25, 0.02, -2.5, -1.75, 0.02, -1.5, 4, 0.02, -1.5, 4.25, 0.02, -4.25, -4.5, 0.02, -1.25, -3.75, 0.02, -2.5, -10.25, 0.02, -4.25, -10.25, 0.02, 6.25, -4.5, 0.02, 6.25, 5.75, 0.02, -1.25, 11.5, 0.02, -4.25, 5.75, 0.02, 6.25, 11.5, 0.02, 6.25)
@@ -27,3 +28,6 @@ transform = Transform3D(-0.8473198, 0, -0.53108305, 0, 1, 0, 0.53108305, 0, -0.8
 
 [node name="Goblin2" parent="Enemies" parent_id_path=PackedInt32Array(1372677429) index="1" unique_id=1180842024 instance=ExtResource("2_p7bu6")]
 transform = Transform3D(-0.69017005, 0, 0.7236473, 0, 1, 0, -0.7236473, 0, -0.69017005, 9.667536, 0, -3.3013315)
+
+[node name="Barrel" parent="." index="4" unique_id=206750037 instance=ExtResource("4_2812u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 6)
