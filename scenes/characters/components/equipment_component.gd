@@ -197,6 +197,10 @@ func thrown_furniture(is_being_dropped: bool = false) -> void:
 		## Give a force to be thrown
 		#thrown_item.apply_impulse(Vector3.FORWARD * thrown_force, thrown_item.global_position)		
 
+## drop thefurntire
+func drop_furniture() -> void:
+	thrown_furniture(true)
+
 ## Drop thje weapon rather than trhow it
 func drop_weapon() -> void:
 	thrown_weapon(true)

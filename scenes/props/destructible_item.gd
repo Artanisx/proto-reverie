@@ -34,4 +34,7 @@ func explode() -> void:
 		for fragment: RigidBody3D in destructible_object.get_children():
 			## apply a immpulse to the global position fo the framgent of a vector legnth of postiion * force
 			fragment.apply_impulse(fragment.position * EXPLOSION_FORCE, global_position)
+			
+		## some impact effect
+		GameEvents.impact_felt.emit(GameEvents.ImpactIntensity.MEDIUM)
 		

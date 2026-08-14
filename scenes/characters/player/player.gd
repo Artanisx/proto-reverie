@@ -187,6 +187,13 @@ func try_receive_hit(source_enemy: Enemy, _damage: int) -> void:
 	if state_node.can_get_hurt():
 		## We dont' have a hurt state yet, so let's just display some vfx for now
 		GameEvents.player_hurt.emit(self)
+		
+		##check if the player is carrying funrtuire
+		if equipment.has_furniture():
+			## drop it
+			equipment.drop_furniture()
+			switch_state(State.MOVING) ## go back to moving state
+		
 	elif state == State.BLOCKING:
 		## Player cannot be hurt, and they are blocking
 		## Let's stun the enemy
