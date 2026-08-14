@@ -55,7 +55,7 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide() ## Apply movemenet			
 	check_for_selection() ## Check if a pickable item is being looked at (inside the select_raycast range)
 
-func process_movement(delta: float) -> void:
+func process_movement(delta: float, speed_multiplier: float = 1.0) -> void:
 	## HANDLE MOVEMENT (moving around)
 	## Move the player using its velocity vector
 	## We call this in _physics_process because we need to make sure all collision calculations (physics) are done before
@@ -73,6 +73,9 @@ func process_movement(delta: float) -> void:
 		target_speed = run_speed
 	else:
 		target_speed = walk_speed
+	
+	## Add the speed_multiplier if it was passed
+	target_speed *= speed_multiplier
 	
 	## Now that we have the direction vector we can apply it to the velocity
 	## transform.basis is basically the position of the player, it's local origin, that we need to multiply by the direction vector to get our velocity

@@ -74,24 +74,24 @@ func equip_furniture(data: FurnitureData, pickup_transform: Transform3D = Transf
 	## Since resources are shared between entities, we must make sure we create a copy of this.
 	## Failing to do so, would make all weapons share the same durability for instance; an enemy might get his shield damaged and player's one would be damaged as well.
 	## Since Godot handles resources per reference, we need to manually copy it instead.
-	shield_data = data.duplicate() ## Create a duplicate of the WeaponData passed as reference
+	furniture_data = data.duplicate() ## Create a duplicate of the data passed as reference
 	
 	## Instantiate the equipped item
-	var shield := EQUIPPED_ITEM_PREFAB.instantiate() as EquippedItem
+	var furniture := EQUIPPED_ITEM_PREFAB.instantiate() as EquippedItem
 	
-	## Setup the weapon data for this 
-	shield.shield_data = shield_data
+	## Setup the furniture data for this 
+	furniture.furniture_data = furniture_data
 	
-	## Setup wheter the weapon should be on front of the player camera (i.e. player is holding it)
-	shield.is_always_in_front = is_always_in_front
+	## Setup wheter the furniture should be on front of the player camera (i.e. player is holding it)
+	furniture.is_always_in_front = is_always_in_front
 	
-	## Add this instance as a child of the weapon placeholder
-	shield_placeholder.add_child(shield)
+	## Add this instance as a child of the furniture placeholder
+	furniture_placeholder.add_child(furniture)
 		
 	## Check if we passed a transform (so we want to do a tween)
 	if pickup_transform != Transform3D.IDENTITY:
-		shield.global_transform = pickup_transform		## Set the shield's transform to the object on the ground transform position
-		animate_to_hand(shield)
+		furniture.global_transform = pickup_transform		## Set the furniture's transform to the object on the ground transform position
+		animate_to_hand(furniture)
 
 ## Hides the shield, used when equipping a furniture
 func hide_shield() -> void:
@@ -100,6 +100,14 @@ func hide_shield() -> void:
 ## Hides the weapon, used when equipping a furniture
 func hide_weapon() -> void:
 	weapon_placeholder.visible = false
+	
+## Shows back the shield, used when throwing a furniture
+func show_shield() -> void:
+	shield_placeholder.visible = true
+
+## Shows back the weapon, used when throwing a furniture
+func show_weapon() -> void:
+	weapon_placeholder.visible = true
 
 ## Equips the correct weapon based upon the Weapon Resource
 ## Takes two arguments:
