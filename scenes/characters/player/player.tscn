@@ -112,6 +112,6 @@ current_life = 30
 
 [node name="FurniturePlaceholder" type="Node3D" parent="." unique_id=791181344]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.255)
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.5035483, 1.9695053, -0.6634989)
 
 [editable path="character"]
