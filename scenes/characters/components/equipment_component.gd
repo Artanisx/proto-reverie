@@ -169,6 +169,33 @@ func thrown_weapon(is_being_dropped: bool = false) -> void:
 				
 		## Give a force to be thrown
 		#thrown_item.apply_impulse(Vector3.FORWARD * thrown_force, thrown_item.global_position)		
+		
+## Thrown the currently equipped furniture	
+func thrown_furniture(is_being_dropped: bool = false) -> void:
+	if has_furniture():
+		## Instantiate the thrown item
+		var thrown_item := THROWN_ITEM_PREFAB.instantiate() as ThrownItem
+		thrown_item.furniture_data = furniture_data ## weapon data is the equipped weapon data of course
+		thrown_item.is_being_dropped = is_being_dropped ## Save the arugment, to see if the waepon should be dropped or it being thrown
+		
+		## Save the furniture_placeholder position (hands)
+		var spawn_transform := furniture_placeholder.global_transform		
+		
+		thrown_item.global_transform = spawn_transform	## Apply the transform depending on the above
+		
+		## Add this instance as a child of the current loaded level  (not the player or it would be attached to it)
+		GameState.current_level.add_child(thrown_item)	## the weapon will drop to the ground atm
+		
+		## Destroy the furniture in hand
+		furniture_data = null
+		furniture_placeholder.get_child(0).queue_free()		
+		
+		##Show again both eapon and shield
+		show_weapon()
+		show_shield()
+				
+		## Give a force to be thrown
+		#thrown_item.apply_impulse(Vector3.FORWARD * thrown_force, thrown_item.global_position)		
 
 ## Drop thje weapon rather than trhow it
 func drop_weapon() -> void:
@@ -223,3 +250,7 @@ func has_weapon() -> bool:
 	## If there's weapon data and there's an instance in the weapon placeholder...
 	return weapon_data != null and weapon_placeholder.get_child_count() > 0
 	
+## Check if there's a furniture equipped
+func has_furniture() -> bool:	
+	## If there's furniture data and there's an instance in the furniture placeholder...
+	return furniture_data != null and furniture_placeholder.get_child_count() > 0

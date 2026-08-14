@@ -9,4 +9,6 @@ script = ExtResource("1_qiq0a")
 name = "Barrel"
 glb_mesh = ExtResource("1_4fiae")
 glb_fragemnts_mesh = ExtResource("1_cb6wa")
+throw_rotation_speed = 5.0
+throw_movement_speed = 8.0
 metadata/_custom_type_script = "uid://by668xc6dwgdw"

@@ -7,8 +7,11 @@ extends PlayerState
 ## It contains all processing, signals, etc required for this state
 ## Transitions:
 ## Picking Up > Moving
+## Picking Up > Throing (Furniture only)
 
 const CARRY_SPEED_MULTIPLIER: float = 0.2
+
+var is_carrying := false
 
 ## Execute what needs to be done immediately when the node enters the tree, so when we switch to this state (basically kind of a _ready)	
 func  _enter_tree() -> void:
@@ -38,6 +41,7 @@ func  _enter_tree() -> void:
 		picakable_object.queue_free()	## destroys the picakable object since it is now equpped
 	elif picakable_object.furniture_data != null:
 		## It's a furniture!
+		is_carrying = true
 		## Play the lift animation (not connecting to the finish animation since we don't want to move to MOVING state)
 		player.animation_player.play("lift")
 		
@@ -47,7 +51,11 @@ func  _enter_tree() -> void:
 ## Allow movement, but pass a modifier to be slower
 func _physics_process(delta: float) -> void:
 	player.process_movement(delta, CARRY_SPEED_MULTIPLIER)
-		
+	
+func _process(_delta: float) -> void:
+	## You can throw only if you are carrying a furniture (LMB)
+	if Input.is_action_just_pressed("action") and is_carrying:
+		transition_state(Player.State.THROWING)	
 	
 func on_animation_finished(_animation_name: String) -> void:	
 	transition_state(Player.State.MOVING)	## Emit the signal and transition to Moving

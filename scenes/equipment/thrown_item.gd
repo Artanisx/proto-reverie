@@ -8,6 +8,7 @@ extends RigidBody3D
 
 const PICKABLE_ITEM_PREFAB := preload("res://scenes/equipment/pickable_item.tscn")	## The Pickable Item prefab, needed for transform it back to pickabel once trhwon
 
+@export var furniture_data: FurnitureData
 @export var shield_data: ShieldData
 @export var weapon_data: WeaponData
 @onready var collision_shape: CollisionShape3D = %CollisionShape
@@ -29,10 +30,20 @@ func _ready() -> void:
 	## Store the start rotation/transform
 	original_basis = global_transform.basis
 	
+	## Define thrown movement and ortation speed based upon the item
+	var thrown_movement_speed : float = 0.0
+	var thrown_rotation_speed : float = 0.0
+	
 	if weapon_data:
 		thrown_object = weapon_data.glb_mesh.instantiate()
+		thrown_movement_speed = weapon_data.throw_movement_speed
+		thrown_rotation_speed = weapon_data.throw_rotation_speed
 	elif shield_data:
 		thrown_object = shield_data.glb_mesh.instantiate()
+	elif furniture_data:
+		thrown_object = furniture_data.glb_mesh.instantiate()
+		thrown_movement_speed = furniture_data.throw_movement_speed
+		thrown_rotation_speed = furniture_data.throw_rotation_speed
 		
 	## Add it as a child and save the reference to the mesh node and finally create the collision shape	
 	if thrown_object != null:
@@ -45,10 +56,10 @@ func _ready() -> void:
 			gravity_scale = 0
 			
 			## Add to linear velocity, so it moves forward (z)
-			linear_velocity = -global_basis.z * weapon_data.throw_movement_speed
+			linear_velocity = -global_basis.z * thrown_movement_speed
 			
 			## Add to angular_velocity in order to have some rotation
-			angular_velocity = -global_basis.y * weapon_data.throw_rotation_speed
+			angular_velocity = -global_basis.y * thrown_rotation_speed
 		
 		## Listen to the body_entered signal and call on_body_entered, needed for checking for collision with enemy/ground
 		body_entered.connect(on_body_entered)	## This is to check wheter the weapon collides with an enemy
