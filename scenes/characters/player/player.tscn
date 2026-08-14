@@ -4,7 +4,9 @@
 [ext_resource type="Script" uid="uid://c83i3cwebxvgh" path="res://scenes/characters/player/main_camera.gd" id="2_qd3e3"]
 [ext_resource type="PackedScene" uid="uid://doq2ddny7lxxo" path="res://assets/meshes/characters/character.glb" id="2_t61fv"]
 [ext_resource type="PackedScene" uid="uid://brmub7fj1q2ux" path="res://scenes/characters/components/health_component.tscn" id="4_hss88"]
+[ext_resource type="Resource" uid="uid://dcs71rvm68or2" path="res://data/shields/buckler.tres" id="5_mk55u"]
 [ext_resource type="PackedScene" uid="uid://cdeki3jlgwcis" path="res://scenes/characters/components/equipment_component.tscn" id="6_6avc5"]
+[ext_resource type="Resource" uid="uid://bi7a1l4dgu480" path="res://data/weapons/axe.tres" id="6_xuses"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5w87n"]
 margin = 0.3
@@ -13,7 +15,7 @@ height = 1.7
 
 [node name="Player" type="CharacterBody3D" unique_id=1783328250]
 collision_layer = 2
-collision_mask = 37
+collision_mask = 101
 script = ExtResource("1_7uws0")
 acceleration = 30.0
 jump_force = 12.0
@@ -37,8 +39,6 @@ script = ExtResource("2_qd3e3")
 unique_name_in_owner = true
 target_position = Vector3(0, 0, -2)
 collision_mask = 8
-collide_with_areas = true
-collide_with_bodies = false
 
 [node name="KickRaycast" type="RayCast3D" parent="MainCamera" unique_id=1968807727]
 unique_name_in_owner = true
@@ -48,7 +48,7 @@ collision_mask = 36
 
 [node name="character" parent="." unique_id=902149486 instance=ExtResource("2_t61fv")]
 
-[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 149149046) index="0" unique_id=1581103571]
+[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 718118593) index="0" unique_id=1428418299]
 bones/0/position = Vector3(-1.776356e-15, 0.62109935, -0.08423395)
 bones/0/rotation = Quaternion(0.064159825, 1.1896365e-07, 7.64845e-09, 0.99793965)
 bones/1/rotation = Quaternion(-0.24423768, -1.1559904e-07, -2.9115395e-08, 0.9697154)
@@ -82,13 +82,16 @@ bone_idx = 5
 unique_name_in_owner = true
 transform = Transform3D(0.68933934, 0.718483, 0.09269987, -0.7222657, 0.6717186, 0.16469991, 0.056065768, -0.18048805, 0.98197794, 0, 0, 0)
 
-[node name="AnimationPlayer" parent="character" index="1" unique_id=643210974]
+[node name="AnimationPlayer" parent="character" index="1" unique_id=1579795916]
 autoplay = &"idle"
 
-[node name="EquipmentComponent" parent="." unique_id=535100031 node_paths=PackedStringArray("shield_placeholder", "weapon_placeholder", "weapon_spawn_position", "weapon_reach_raycast") instance=ExtResource("6_6avc5")]
+[node name="EquipmentComponent" parent="." unique_id=535100031 node_paths=PackedStringArray("furniture_placeholder", "shield_placeholder", "weapon_placeholder", "weapon_spawn_position", "weapon_reach_raycast") instance=ExtResource("6_6avc5")]
 unique_name_in_owner = true
 is_always_in_front = true
+furniture_placeholder = NodePath("../FurniturePlaceholder")
+shield_data = ExtResource("5_mk55u")
 shield_placeholder = NodePath("../character/Armature/Skeleton3D/ShieldBoneAttachment/ShieldPlaceholder")
+weapon_data = ExtResource("6_xuses")
 weapon_placeholder = NodePath("../character/Armature/Skeleton3D/WeaponBoneAttachment/WeaponPlaceholder")
 weapon_spawn_position = NodePath("../WeaponSpawnPosition")
 weapon_reach_raycast = NodePath("../WeaponReachRaycast")
@@ -106,5 +109,9 @@ collision_mask = 4
 unique_name_in_owner = true
 max_life = 30
 current_life = 30
+
+[node name="FurniturePlaceholder" type="Node3D" parent="." unique_id=791181344]
+unique_name_in_owner = true
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.5035483, 1.9695053, -0.6634989)
 
 [editable path="character"]

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bcdhc8si10gcx"]
+
+[ext_resource type="Script" uid="uid://ccf1uqcn67fkr" path="res://scenes/props/destructible_item.gd" id="1_fornf"]
+
+[node name="DestructibleItem" type="Node3D" unique_id=1608432050]
+script = ExtResource("1_fornf")

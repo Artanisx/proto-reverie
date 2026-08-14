@@ -1,5 +1,5 @@
 class_name PickableItem
-extends Area3D
+extends StaticBody3D
 
 ## Pickable Item
 ##
@@ -9,14 +9,14 @@ extends Area3D
 ## This holds a material with the Albedo set to yellow, used for the highlight when the player RayCast hits it to show the item is pickable.
 const HIGHLIGHT_MATERIAL := preload("res://materials/highlight_material.tres")
 
+@export var mesh_node: MeshInstance3D
+@export var furniture_data: FurnitureData
 @export var weapon_data: WeaponData
 @export var shield_data: ShieldData
 
 @onready var collision_shape: CollisionShape3D = %CollisionShape		## Reference to the collision shape, since we'll need to create it dynamically depending on the item
 
-
 var highlight_material : StandardMaterial3D
-var mesh_node : MeshInstance3D
 
 ## As soon as the node is spawned we must:
 ## - Creates a duplicate of the highlight material
@@ -39,7 +39,12 @@ func _ready() -> void:
 	if pickable_object != null:
 		add_child(pickable_object)
 		mesh_node = pickable_object.get_child(0) as MeshInstance3D
-		collision_shape.shape = mesh_node.mesh.create_convex_shape()
+	## If we assigned a mesh_node directly in the editor (for example, barrel) the above code won't be needed so it's fine that we don't have a weapon or shield data
+	
+	## However we do need to generate collision shape if the mesh_node is not null at this point	
+	if mesh_node != null:
+		collision_shape.shape = mesh_node.mesh.create_convex_shape()	
+	
 			
 ## Change the mesh material	with the highlight material
 func highlight() -> void:

@@ -6,8 +6,10 @@ extends RigidBody3D
 ## This contains the item that is currently flying after it has been thrown. Will instantiate the mesh of it.
 ## The difference with the Equipped Item or Picked Item is that, of course, it's on the air flying. It must react to physics so it's a RigidBody3D
 
+const DESTRUCTIBLE_ITEM_PREFAB := preload("res://scenes/props/destructible_item.tscn") ## THe destructible item prefab, needed if we are trhogin a destructible that needds to explode
 const PICKABLE_ITEM_PREFAB := preload("res://scenes/equipment/pickable_item.tscn")	## The Pickable Item prefab, needed for transform it back to pickabel once trhwon
 
+@export var furniture_data: FurnitureData
 @export var shield_data: ShieldData
 @export var weapon_data: WeaponData
 @onready var collision_shape: CollisionShape3D = %CollisionShape
@@ -29,10 +31,22 @@ func _ready() -> void:
 	## Store the start rotation/transform
 	original_basis = global_transform.basis
 	
+	## Define thrown movement and ortation speed based upon the item
+	var thrown_movement_speed : float = 0.0
+	var thrown_rotation_speed : float = 0.0
+	var gravity : float = 0.8
+	
 	if weapon_data:
 		thrown_object = weapon_data.glb_mesh.instantiate()
+		thrown_movement_speed = weapon_data.throw_movement_speed
+		thrown_rotation_speed = weapon_data.throw_rotation_speed
+		gravity = 0 ##weapons don't hjave gravity so they go straight until they hit something
 	elif shield_data:
 		thrown_object = shield_data.glb_mesh.instantiate()
+	elif furniture_data:
+		thrown_object = furniture_data.glb_mesh.instantiate()
+		thrown_movement_speed = furniture_data.throw_movement_speed
+		thrown_rotation_speed = furniture_data.throw_rotation_speed
 		
 	## Add it as a child and save the reference to the mesh node and finally create the collision shape	
 	if thrown_object != null:
@@ -42,13 +56,13 @@ func _ready() -> void:
 		
 		if not is_being_dropped:		
 			# Stop gravity so the object doesnt' fall to theground right away
-			gravity_scale = 0
+			gravity_scale = gravity
 			
 			## Add to linear velocity, so it moves forward (z)
-			linear_velocity = -global_basis.z * weapon_data.throw_movement_speed
+			linear_velocity = -global_basis.z * thrown_movement_speed
 			
 			## Add to angular_velocity in order to have some rotation
-			angular_velocity = -global_basis.y * weapon_data.throw_rotation_speed
+			angular_velocity = -global_basis.y * thrown_rotation_speed
 		
 		## Listen to the body_entered signal and call on_body_entered, needed for checking for collision with enemy/ground
 		body_entered.connect(on_body_entered)	## This is to check wheter the weapon collides with an enemy
@@ -57,18 +71,43 @@ func _ready() -> void:
 ## However, we need this to happen only once per collision!
 ## The ThrownItem should have SOLVER>CONTACT MONITOR > ON and SOLVER>MAX CONTACT REPORT: 1 on the rigidbody3d component
 func on_body_entered(body: Node) -> void:
-	if body is Enemy and not is_being_dropped:
-		## the weapon is hitting an enemy and the weapon itself is thrown (and not simply dropping)...
-		body.impale(self, original_basis)	## impale them!!!
-	else:
-		## The weapon is hitting the walls/ground etc...
-		# First, apply gravity as soon as the item hits something
-		gravity_scale = 1	
+	if weapon_data != null: ## only if we're throgin aweeapon		
+		if body is Enemy and not is_being_dropped:
+			## the weapon is hitting an enemy and the weapon itself is thrown (and not simply dropping)...			
+			var enemy := body as Enemy
+			enemy.impale(self, original_basis)	## impale them!!!
+		else:
+			## The weapon is hitting the walls/ground etc...
+			# First, apply gravity as soon as the item hits something
+			gravity_scale = 1	
+			
+			## The item just collided with something, fire the sleeping_state_changed
+			## This signal is fired when the item goes to sleep which happens after godot stops checking for collisions, which happens after the item stops moving for a bit		
+			if not sleeping_state_changed.is_connected(on_sleep): ## However, since the on_body_entered will be called a few times, we make sure we call the callback only once
+				sleeping_state_changed.connect(on_sleep)	## Create the connection only once
+	elif furniture_data != null: ## we're throgin af urntire instead		
+		## Try to cause the enemy to receive furniture impact
+		if body is Enemy and not is_being_dropped:
+			var enemy := body as Enemy
+			enemy.try_receive_furniture_impact(self)
+				
+		## first, we instantiat ethe destructible item
+		var destructible_item := DESTRUCTIBLE_ITEM_PREFAB.instantiate() as DestructibleItem
 		
-		## The item just collided with something, fire the sleeping_state_changed
-		## This signal is fired when the item goes to sleep which happens after godot stops checking for collisions, which happens after the item stops moving for a bit		
-		if not sleeping_state_changed.is_connected(on_sleep): ## However, since the on_body_entered will be called a few times, we make sure we call the callback only once
-			sleeping_state_changed.connect(on_sleep)	## Create the connection only once
+		## set it sposition to the gloabl transform of the descrutible item scene
+		destructible_item.global_transform = global_transform
+		
+		##Set the funrtire data
+		destructible_item.furniture_data = furniture_data
+		
+		## Add it as a child of the world
+		GameState.current_level.add_child(destructible_item)
+		
+		##Make it explode
+		destructible_item.explode()
+		
+		## destroy the destruyctile item scene
+		queue_free()
 
 ## This will be called after the weapon stopped moving after being thrown somewhere
 ## At this point we'll need to transform the weapon from the thrownitem (flying state) to the pickableitem (item that can be picked up state)

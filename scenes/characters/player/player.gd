@@ -55,7 +55,7 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide() ## Apply movemenet			
 	check_for_selection() ## Check if a pickable item is being looked at (inside the select_raycast range)
 
-func process_movement(delta: float) -> void:
+func process_movement(delta: float, speed_multiplier: float = 1.0) -> void:
 	## HANDLE MOVEMENT (moving around)
 	## Move the player using its velocity vector
 	## We call this in _physics_process because we need to make sure all collision calculations (physics) are done before
@@ -73,6 +73,9 @@ func process_movement(delta: float) -> void:
 		target_speed = run_speed
 	else:
 		target_speed = walk_speed
+	
+	## Add the speed_multiplier if it was passed
+	target_speed *= speed_multiplier
 	
 	## Now that we have the direction vector we can apply it to the velocity
 	## transform.basis is basically the position of the player, it's local origin, that we need to multiply by the direction vector to get our velocity
@@ -184,6 +187,13 @@ func try_receive_hit(source_enemy: Enemy, _damage: int) -> void:
 	if state_node.can_get_hurt():
 		## We dont' have a hurt state yet, so let's just display some vfx for now
 		GameEvents.player_hurt.emit(self)
+		
+		##check if the player is carrying funrtuire
+		if equipment.has_furniture():
+			## drop it
+			equipment.drop_furniture()
+			switch_state(State.MOVING) ## go back to moving state
+		
 	elif state == State.BLOCKING:
 		## Player cannot be hurt, and they are blocking
 		## Let's stun the enemy
