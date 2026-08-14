@@ -10,6 +10,8 @@ const THROWN_ITEM_PREFAB := preload("res://scenes/equipment/thrown_item.tscn")	#
 
 
 @export var is_always_in_front: bool	## If this is true, the equipped item will have its material replaced by the one with ZClip scale enabled to be drawn in front. Only set it true for the player.
+@export var furniture_data: FurnitureData	## Furniture data of this "equipment"
+@export var furniture_placeholder: Node3D	## The node reference where the furniture will be attached to (both hands)
 @export var shield_data: ShieldData		## Shield data of this equipment
 @export var shield_placeholder: Node3D	## The node reference where the Shield will be attached to (left hand basically)
 @export var weapon_data: WeaponData		## Weapon data of this equipment

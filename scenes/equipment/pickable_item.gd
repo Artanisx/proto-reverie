@@ -10,6 +10,7 @@ extends StaticBody3D
 const HIGHLIGHT_MATERIAL := preload("res://materials/highlight_material.tres")
 
 @export var mesh_node: MeshInstance3D
+@export var furniture_data: FurnitureData
 @export var weapon_data: WeaponData
 @export var shield_data: ShieldData
 
