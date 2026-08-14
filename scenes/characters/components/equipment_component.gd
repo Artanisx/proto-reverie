@@ -59,6 +59,48 @@ func equip_shield(data: ShieldData, pickup_transform: Transform3D = Transform3D.
 		shield.global_transform = pickup_transform		## Set the shield's transform to the object on the ground transform position
 		animate_to_hand(shield)
 
+## Equips the correct furniture based upon the furniture Resource
+## Takes two arguments:
+## data: the furnitureData of the item that should be instantiated in the equipped item scene
+## pickup_transform: the Transform of the pickup itself, to be used for tweening between ground and the player's hand
+func equip_furniture(data: FurnitureData, pickup_transform: Transform3D = Transform3D.IDENTITY) -> void:
+	## If the player has a shield and/or weapon, we don't want to drop them, but we want to hide them
+	if has_shield():
+		hide_shield()
+		
+	if has_weapon():
+		hide_weapon()
+	
+	## Since resources are shared between entities, we must make sure we create a copy of this.
+	## Failing to do so, would make all weapons share the same durability for instance; an enemy might get his shield damaged and player's one would be damaged as well.
+	## Since Godot handles resources per reference, we need to manually copy it instead.
+	shield_data = data.duplicate() ## Create a duplicate of the WeaponData passed as reference
+	
+	## Instantiate the equipped item
+	var shield := EQUIPPED_ITEM_PREFAB.instantiate() as EquippedItem
+	
+	## Setup the weapon data for this 
+	shield.shield_data = shield_data
+	
+	## Setup wheter the weapon should be on front of the player camera (i.e. player is holding it)
+	shield.is_always_in_front = is_always_in_front
+	
+	## Add this instance as a child of the weapon placeholder
+	shield_placeholder.add_child(shield)
+		
+	## Check if we passed a transform (so we want to do a tween)
+	if pickup_transform != Transform3D.IDENTITY:
+		shield.global_transform = pickup_transform		## Set the shield's transform to the object on the ground transform position
+		animate_to_hand(shield)
+
+## Hides the shield, used when equipping a furniture
+func hide_shield() -> void:
+	shield_placeholder.visible = false
+
+## Hides the weapon, used when equipping a furniture
+func hide_weapon() -> void:
+	weapon_placeholder.visible = false
+
 ## Equips the correct weapon based upon the Weapon Resource
 ## Takes two arguments:
 ## data: the weaponData of the item that should be instantiated in the equipped item scene
@@ -92,6 +134,8 @@ func equip_weapon(data: WeaponData, pickup_transform: Transform3D = Transform3D.
 	if pickup_transform != Transform3D.IDENTITY:
 		weapon.global_transform = pickup_transform		## Set the weapon's transform to the object on the ground transform position
 		animate_to_hand(weapon)
+
+
 
 ## Thrown the currently equipped weapon	
 func thrown_weapon(is_being_dropped: bool = false) -> void:
