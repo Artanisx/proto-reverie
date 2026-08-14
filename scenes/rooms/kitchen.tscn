@@ -20,7 +20,7 @@ data = {
 }
 
 [node name="SpikesTrap" parent="RoomNavigation" index="1" unique_id=1232335774 instance=ExtResource("3_sqdrw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0233374, 0, -1)
 
 [node name="Goblin" parent="Enemies" parent_id_path=PackedInt32Array(1372677429) index="0" unique_id=1741756622 instance=ExtResource("2_p7bu6")]
 transform = Transform3D(-0.8473198, 0, -0.53108305, 0, 1, 0, 0.53108305, 0, -0.8473198, -8.332464, 0, -3.3013315)
