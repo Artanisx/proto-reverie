@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://isrdinagrwpp"]
+
+[ext_resource type="PackedScene" uid="uid://c6t6spi38c8jt" path="res://assets/meshes/props/lighting/torch.glb" id="1_paw5d"]
+
+[node name="Torch" type="Node3D" unique_id=1646109275]
+
+[node name="torch" parent="." unique_id=1376491095 instance=ExtResource("1_paw5d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -0.31163397)
