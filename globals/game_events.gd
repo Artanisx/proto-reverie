@@ -16,7 +16,10 @@ signal impact_felt(intensity: ImpactIntensity)
 signal player_hurt(player: Player)
 
 ## SIGNAL for when the player dies
-signal player_dead()
+signal player_dead
 
 ## SIGNAL for when the level needs to be restarted (HINT: to be used to load a new floor in proto-reverie?)
-signal level_restarted()
+signal level_restarted
+
+## SIGNAL for when the player spawns in the game
+signal player_spawned(player: Player)

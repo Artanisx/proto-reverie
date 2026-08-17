@@ -44,6 +44,9 @@ func _ready() -> void:
 	
 	## Register the player reference to the GameState global
 	GameState.register_player(self)	
+	
+	## Emit the player_spawned event, used for example by the UI to refresh HP bar
+	GameEvents.player_spawned.emit(self)	
 		
 	# Call the switch_state function to set the starting state
 	switch_state(State.MOVING)

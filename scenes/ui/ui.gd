@@ -3,6 +3,8 @@ extends CanvasLayer
 
 @onready var hurt_vignette: Panel = %HurtVignette
 @onready var death_screen: ColorRect = %DeathScreen
+@onready var health_indicator: StatIndicator = %HealthIndicator
+
 
 
 const TIME_FOR_HURT_VIGNETTE_ANIMATION: float = 0.1 ## 100ms
@@ -18,8 +20,11 @@ func _ready() -> void:
 	## Connect the signal for restart (so we can hide the death screen)
 	GameEvents.level_restarted.connect(on_level_restarted)
 	
+	## Connec the signal for when the player spawns in the world
+	GameEvents.player_spawned.connect(on_player_spawned)	
+	
 ## Make the vignette appear and disappear briefly	
-func on_player_hurt(_player: Player) -> void:
+func on_player_hurt(player: Player) -> void:
 	## TWEEN
 	var tween := create_tween()
 	
@@ -27,6 +32,8 @@ func on_player_hurt(_player: Player) -> void:
 	tween.tween_property(hurt_vignette, "modulate:a", 1.0, TIME_FOR_HURT_VIGNETTE_ANIMATION)
 	## Then make it invisible again, setting alpha back to 0.0 (fully INvisible) in TIME_FOR_HURT_VIGNETTE_ANIMATION ms
 	tween.tween_property(hurt_vignette, "modulate:a", 0.0, TIME_FOR_HURT_VIGNETTE_ANIMATION)
+	## Finally, update the HP bar
+	health_indicator.refresh(player.health.current_life, player.health.max_life)	
 	
 ## Make the DeathScreen appear
 func on_player_dead() -> void:
@@ -43,4 +50,8 @@ func on_player_dead() -> void:
 func on_level_restarted() -> void:	
 	## Let's modulate this back to transparent instantly
 	death_screen.modulate = Color.TRANSPARENT
+	
+## Player just spawned, refresh HealthIndicator
+func on_player_spawned(player: Player) -> void:
+	health_indicator.refresh(player.health.current_life, player.health.max_life)
 		
