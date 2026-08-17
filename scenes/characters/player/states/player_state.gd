@@ -25,3 +25,8 @@ func transition_state(new_state: Player.State, source_data: PlayerStateData = Pl
 ## Genericly is always true, but in states that disallows to be hurt, this will be overridden as false
 func can_get_hurt() -> bool:
 	return true
+
+## Calculate wheter the player can die
+## Genericly is always true, but in states that disallows being killed, this will be overridden as false
+func can_die() -> bool:
+	return true

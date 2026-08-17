@@ -7,6 +7,7 @@ extends CharacterBody3D
 ## includes anything for the player.[br]
 ## This has two components:[br]1- looking around[br]2- moving around.
 
+const SPIKE_DAMAGE : int = 5				##how much damage spike cause to the player
 const MAX_ANGLE_LOOK_UP := deg_to_rad(70)	## Can't go more than 70° looking up
 const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking down
 const GROUND_FRICTION : float = 15.0			## Used to slow down after a pushback
@@ -147,7 +148,8 @@ func switch_state(new_state: State, data: PlayerStateData = PlayerStateData.new(
 		State.SLASHING: PlayerStateSlashing,
 		State.KICKING: PlayerStateKicking,
 		State.BLOCKING: PlayerStateBlocking,
-		State.HURT: PlayerStateHurt
+		State.HURT: PlayerStateHurt,
+		State.DYING: PlayerStateDying
 	}	
 	## 1 - Create the proper PlayerState node
 	state_node = state_map[new_state].new(self, data)
@@ -209,8 +211,12 @@ func try_receive_hit(source_enemy: Enemy, damage: int) -> void:
 		source_enemy.try_stun()
 		
 ## To handle receiving damage from spikes trap
-func take_spike_damage(_spikes_trap: SpikesTrap) -> void:
-	print("Ouch! Spikes hurt!!")
+func take_spike_damage(spikes_trap: SpikesTrap) -> void:
+	## Calc the hit direction from the enemy to the player
+	var hit_direction : Vector3 = spikes_trap.global_position.direction_to(global_position)
+	
+	var data: PlayerStateData = PlayerStateData.new().set_damage(SPIKE_DAMAGE).set_impact_direction(hit_direction)
+	switch_state(State.HURT, data) ## go to to hurt state, passing damage and hitdirection		
 
 ## This returns true if there is an pickable item being looked at right now		
 func can_pickup_object() -> bool:			
@@ -218,4 +224,5 @@ func can_pickup_object() -> bool:
 	
 ## Handles taking acid damage when in contact with the Acid Trap	
 func take_acid_damage() -> void: 
-	print("ouch! player is in the acid trap!")
+	if state_node.can_die():
+		switch_state(State.DYING)
