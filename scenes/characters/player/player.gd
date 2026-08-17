@@ -12,6 +12,11 @@ const MAX_ANGLE_LOOK_UP := deg_to_rad(70)	## Can't go more than 70° looking up
 const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking down
 const GROUND_FRICTION : float = 15.0			## Used to slow down after a pushback
 
+## UI STRINGS
+const UI_STRING_PICKUP : String = "[E] Pick Up"
+const UI_STRING_KICK_DOOR : String = "[F] Open"
+const UI_STRING_KICK_ENEMY : String = "[F] Kick"
+
 @export var acceleration : float ## Acceleration of the player movement, used to allow for friction to speed up / down rather than abrut movement. A good value is walk_speed * 10.[br]For example for a 3 walk_speed and 30 acceleration, it will take 0.1s (100 ms) to reach it
 @export var jump_force : float ## The jump intensity for the player
 @export var gravity : float ## The force of gravity, that applies to the player
@@ -36,6 +41,7 @@ var input_dir := Vector2.ZERO ## Store the direction of movement from player inp
 var pushback_force := Vector3.ZERO ## the pushback force sustained after a hit
 var state : State	## State the player is in
 var state_node : PlayerState ## The Node that holds the current state the player is in
+var current_possible_action: String = "" ## Stores the possible action (TEXT for the ActionLabel) for the player to take which might be PICKUP something or KICK the door
 
 func _ready() -> void:
 	if capture_mouse_enabled:
@@ -62,6 +68,7 @@ func _physics_process(delta: float) -> void:
 	process_pushback(delta) ## Apply pushback
 	move_and_slide() ## Apply movemenet	
 	check_for_selection() ## Check if a pickable item is being looked at (inside the select_raycast range)
+	check_for_possible_action() ## Check if a new action is possible, meaning, check if the ActionPanel needs to be updated
 
 func process_movement(delta: float, speed_multiplier: float = 1.0) -> void:
 	## HANDLE MOVEMENT (moving around)
@@ -172,6 +179,28 @@ func check_jump_input() -> void:
 func process_gravity() -> void:
 	if not is_on_floor():
 		velocity.y -= gravity # apply gravity downwards
+
+func check_for_possible_action() -> void:
+	var new_action := ""
+	
+	## Check if there's something that can be picked up
+	if select_raycast.is_colliding():
+		new_action = UI_STRING_PICKUP
+	## Check if there's instead a door ready to be kicked	
+	elif kick_raycast.is_colliding():
+		if kick_raycast.get_collider() is Door:
+			new_action = UI_STRING_KICK_DOOR
+		elif kick_raycast.get_collider() is Enemy:
+			new_action = UI_STRING_KICK_ENEMY
+		
+	if new_action != current_possible_action:
+		## The action changed (so we're not just, for example, looking at the same pickable item, but we changed our view to anotehr item or a door)
+		## So we emit the event in order for the UI text to be updated
+		## We only do this if it changed (to something new or to nothing, to make it disappear), to avoid a unneded "refresh"
+		GameEvents.possible_action_changed.emit(new_action)	
+	
+	## Set the current action accordingly	
+	current_possible_action = new_action	
 
 func check_for_selection() -> void:
 	## First, we check if the select_raycast is looking at anything

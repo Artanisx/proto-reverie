@@ -8,6 +8,9 @@ extends CanvasLayer
 @onready var weapon_icon: TextureRect = %WeaponIcon
 @onready var shield_icon: TextureRect = %ShieldIcon
 @onready var shield_indicator: StatIndicator = %ShieldIndicator
+@onready var action_panel: ColorRect = %ActionPanel
+@onready var action_label: Label = %ActionLabel
+
 
 
 const TIME_FOR_HURT_VIGNETTE_ANIMATION: float = 0.1 ## 100ms
@@ -31,6 +34,9 @@ func _ready() -> void:
 	
 	## Connec the signal for when the player equipped Shield has something aobut it changed (durability/being equipped/dropped/thrown...)
 	GameEvents.shield_changed.connect(on_shield_changed)	
+	
+	## Connec the signal for when the player can take a new action (selected a pickable item, a door in kick range...)
+	GameEvents.possible_action_changed.connect(on_possible_action_changed)	
 	
 ## Make the vignette appear and disappear briefly	
 func on_player_hurt(player: Player) -> void:
@@ -91,3 +97,9 @@ func on_shield_changed(data: ShieldData) -> void:
 			shield_indicator.set_visible(true) # Same with the indicator
 		## refresh the durability
 		shield_indicator.refresh(data.condition, data.max_condition)
+
+## Update the ActionPanel accordingly		
+func on_possible_action_changed(action: String) -> void:
+	## Toggle action panel visiblity to wheter the action is empty or not
+	action_panel.visible = not action.is_empty()
+	action_label.text = action	

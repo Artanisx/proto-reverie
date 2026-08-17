@@ -29,3 +29,6 @@ signal weapon_changed(weapon_data: WeaponData)
 
 ## SIGNAL for when a shield is changed (dropped/thrown/durability lost)
 signal shield_changed(shield_data: ShieldData)
+
+## SIGNAL for when action that the player can take changed (to update the ActionPanel UI)
+signal possible_action_changed(action: String)
