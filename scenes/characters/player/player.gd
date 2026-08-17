@@ -9,6 +9,7 @@ extends CharacterBody3D
 
 const MAX_ANGLE_LOOK_UP := deg_to_rad(70)	## Can't go more than 70° looking up
 const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking down
+const GROUND_FRICTION : float = 15.0			## Used to slow down after a pushback
 
 @export var acceleration : float ## Acceleration of the player movement, used to allow for friction to speed up / down rather than abrut movement. A good value is walk_speed * 10.[br]For example for a 3 walk_speed and 30 acceleration, it will take 0.1s (100 ms) to reach it
 @export var jump_force : float ## The jump intensity for the player
@@ -17,6 +18,7 @@ const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking
 @export var run_speed : float ## Speed of running movement, used for WASD + SHIFT for running. 
 @export var walk_speed : float ## Speed of regular movement, used for WASD. 
 @export var capture_mouse_enabled : bool = true ## If set to true, mouse will be captured so it can't go outside of the window.
+@export var duration_hurt : float			## Time in seconds for the duration of the hurt state
 
 @onready var animation_player: AnimationPlayer = $character/AnimationPlayer ## Reference to the AnimationPlayer to handle animations
 @onready var camera: Camera3D = %MainCamera ## Reference to the Camera3D node. 
@@ -26,10 +28,11 @@ const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking
 @onready var health: HealthComponent = %HealthComponent			## refenrec eto tehe health component
 @onready var weapon_reach_raycast: RayCast3D = %WeaponReachRaycast ## needed to check wheter the player can hit the Enemy
 
-enum State {MOVING, PICKING_UP, THROWING, SLASHING, KICKING, BLOCKING}
+enum State {MOVING, PICKING_UP, THROWING, SLASHING, KICKING, BLOCKING, HURT, DYING}
 
 var current_pickable_focused_item : PickableItem = null	## This will hold a PickableItem that is currently pickable (in range and hit by the select_raycast)
 var input_dir := Vector2.ZERO ## Store the direction of movement from player input. Represents the player hitting W-A-S-D
+var pushback_force := Vector3.ZERO ## the pushback force sustained after a hit
 var state : State	## State the player is in
 var state_node : PlayerState ## The Node that holds the current state the player is in
 
@@ -49,10 +52,11 @@ func _process(_delta: float) -> void:
 	## negative x motion (strafe left), positive x motion (stafe right), negative y motion (go backward), postive y motion (go forward)
 	input_dir = Input.get_vector("strafe_left","strafe_right","backward","forward")	
 	
-func _physics_process(_delta: float) -> void:	
+func _physics_process(delta: float) -> void:	
 	check_jump_input()	## handles player jump
 	process_gravity()	## process gravity so is_on_floor() works properly	
-	move_and_slide() ## Apply movemenet			
+	process_pushback(delta) ## Apply pushback
+	move_and_slide() ## Apply movemenet	
 	check_for_selection() ## Check if a pickable item is being looked at (inside the select_raycast range)
 
 func process_movement(delta: float, speed_multiplier: float = 1.0) -> void:
@@ -95,6 +99,13 @@ func process_movement(delta: float, speed_multiplier: float = 1.0) -> void:
 		velocity.x = move_toward(velocity.x, desired_velocity.x, acceleration * delta)
 		velocity.z = move_toward(velocity.z, desired_velocity.z, acceleration * delta)
 
+## Handle the pushback decaying towards 0 (full stop)
+func process_pushback(delta: float) -> void:
+	## Move the pushbackforce to 0 (to decay it)
+	pushback_force = pushback_force.move_toward(Vector3.ZERO, delta * GROUND_FRICTION)
+	## Apply it to the velocity
+	velocity += pushback_force
+
 func _input(event: InputEvent) -> void:
 	## HANDLE MOUSE LOOK (looking around)
 	if event is InputEventMouseMotion:
@@ -123,7 +134,8 @@ func _input(event: InputEvent) -> void:
 
 ## Switch to the passed State
 ## The function will add a Node that will contain the behaviour for the passed state
-func switch_state(new_state: State) -> void:
+## Takes the new state and optionally the PlayerStateData for arguments
+func switch_state(new_state: State, data: PlayerStateData = PlayerStateData.new()) -> void:
 	## INIT: Remove the previous PlayerState node if it exists
 	if state_node != null:
 		state_node.queue_free()
@@ -134,10 +146,11 @@ func switch_state(new_state: State) -> void:
 		State.THROWING: PlayerStateThrowing,
 		State.SLASHING: PlayerStateSlashing,
 		State.KICKING: PlayerStateKicking,
-		State.BLOCKING: PlayerStateBlocking
+		State.BLOCKING: PlayerStateBlocking,
+		State.HURT: PlayerStateHurt
 	}	
 	## 1 - Create the proper PlayerState node
-	state_node = state_map[new_state].new(self)
+	state_node = state_map[new_state].new(self, data)
 	## 1.5 - Listen to the transition_state signal and connect to this function
 	state_node.transition_requested.connect(switch_state)	
 	## 1.6 - Add a name to the node so it is clear in the tree
@@ -182,18 +195,14 @@ func check_for_selection() -> void:
 			current_pickable_focused_item.highlight()	## Let's highlight it now
 
 ## To handle receiving a hit for the player
-func try_receive_hit(source_enemy: Enemy, _damage: int) -> void:
+func try_receive_hit(source_enemy: Enemy, damage: int) -> void:
 	## First we check if the player can get hit
 	if state_node.can_get_hurt():
-		## We dont' have a hurt state yet, so let's just display some vfx for now
-		GameEvents.player_hurt.emit(self)
+		## Calc the hit direction from the enemy to the player
+		var hit_direction : Vector3 = source_enemy.global_position.direction_to(global_position)
 		
-		##check if the player is carrying funrtuire
-		if equipment.has_furniture():
-			## drop it
-			equipment.drop_furniture()
-			switch_state(State.MOVING) ## go back to moving state
-		
+		var data: PlayerStateData = PlayerStateData.new().set_damage(damage).set_impact_direction(hit_direction)
+		switch_state(State.HURT, data) ## go to to hurt state, passing damage and hitdirection		
 	elif state == State.BLOCKING:
 		## Player cannot be hurt, and they are blocking
 		## Let's stun the enemy
