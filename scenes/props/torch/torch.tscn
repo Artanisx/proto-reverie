@@ -2,7 +2,66 @@
 
 [ext_resource type="PackedScene" uid="uid://c6t6spi38c8jt" path="res://assets/meshes/props/lighting/torch.glb" id="1_paw5d"]
 
+[sub_resource type="Curve" id="Curve_pnlsr"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_paw5d"]
+curve = SubResource("Curve_pnlsr")
+
+[sub_resource type="Gradient" id="Gradient_paw5d"]
+offsets = PackedFloat32Array(0.0043196543, 0.99568033)
+colors = PackedColorArray(0.7529412, 0.6862745, 0, 1, 0.9137255, 0.27058825, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_paw5d"]
+gradient = SubResource("Gradient_paw5d")
+
+[sub_resource type="Curve" id="Curve_paw5d"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_pnlsr"]
+curve = SubResource("Curve_paw5d")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_paw5d"]
+lifetime_randomness = 0.25
+emission_shape = 1
+emission_sphere_radius = 0.05
+gravity = Vector3(0, 1, 0)
+scale_curve = SubResource("CurveTexture_pnlsr")
+color_ramp = SubResource("GradientTexture1D_paw5d")
+alpha_curve = SubResource("CurveTexture_paw5d")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_paw5d"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.5647059, 0.03137255, 1)
+billboard_mode = 1
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_paw5d"]
+material = SubResource("StandardMaterial3D_paw5d")
+size = Vector2(0.15, 0.15)
+
 [node name="Torch" type="Node3D" unique_id=1646109275]
 
 [node name="torch" parent="." unique_id=1376491095 instance=ExtResource("1_paw5d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -0.31163397)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=352405303]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7233524, -0.29114497)
+light_color = Color(1, 0.6156863, 0.23137255, 1)
+light_energy = 2.0
+light_size = 0.1
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=324070995]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5975138, -0.2951217)
+amount = 20
+lifetime = 1.3
+explosiveness = 0.1
+randomness = 0.5
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_paw5d")
+draw_pass_1 = SubResource("QuadMesh_paw5d")
