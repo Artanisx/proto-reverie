@@ -9,16 +9,15 @@ Pixel Art done by me using [Aseprite](https://www.aseprite.org/) while following
 3D Art done by me using [Blender](https://www.blender.org/) while following along).
 
 ## Tutorial Progress
-Episode 16: https://www.youtube.com/watch?v=E4HnUlT7kCQ
+Episode 17: https://www.youtube.com/watch?v=1zNxrErgwgI
 
-Time Index: 0:28:28
+Time Index: 0:00:00
 
-What: After setting world lighting and torches to the kitchen
+What: START
 
 NOTE! Do not keep open goblin or player tscn scenes if you aren't touching them. Bogus changes might appear if they are open and those might break the skeleton and produce issues with ragdool or physics.
 
-Next Episode will be 17: https://www.youtube.com/watch?v=1zNxrErgwgI
-Episode 18/18 will be: https://www.youtube.com/watch?v=XSto9EZXP_w
+Next Episode will be 18 will be: https://www.youtube.com/watch?v=XSto9EZXP_w
 
 Playlist: https://www.youtube.com/playlist?list=PLT26e2jOwbdg
 
