@@ -18,7 +18,7 @@ extends ColorRect
 ## current_value: The value of the property (hp for example)
 ## max_value: The max value of the property
 ## The arguments are used to properly calculate the percentage of the bar that  should be filled
-func refresh(current_value: int, max_value: int) -> void:
+func refresh(current_value: int, max_value: int) -> void:	
 	## any value <= 0 means the size is 0, Empty bar
 	if current_value <= 0:
 		progress_bar.size.x = 0

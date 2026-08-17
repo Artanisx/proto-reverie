@@ -13,9 +13,6 @@ const PUSHBACK_FORCE: float = 2.0 ## The force of knockback suffered when hit
 
 ## Execute what needs to be done immediately when the node enters the tree, so when we switch to this state (basically kind of a _ready)	
 func  _enter_tree() -> void:
-	## We dont' have a hurt state yet, so let's just display some vfx for now
-	GameEvents.player_hurt.emit(player)
-	
 	##check if the player is carrying funrtuire
 	if player.equipment.has_furniture():
 		## drop it
@@ -29,6 +26,9 @@ func  _enter_tree() -> void:
 	
 	## Apply the Hit Stop juice and camera (anything that subscribe to impact_felt) for highlighting the action - This will briefly pause the game
 	GameEvents.impact_felt.emit(GameEvents.ImpactIntensity.MEDIUM)
+	
+	## Emit player_hurt now that all is said and done
+	GameEvents.player_hurt.emit(player)
 	
 	## Check wheter the enemy is still alive
 	if player.health.is_dead():				
