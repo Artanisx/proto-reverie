@@ -70,22 +70,9 @@ func _ready() -> void:
 ## This will be called each time the weapon collides with something
 ## However, we need this to happen only once per collision!
 ## The ThrownItem should have SOLVER>CONTACT MONITOR > ON and SOLVER>MAX CONTACT REPORT: 1 on the rigidbody3d component
-func on_body_entered(body: Node) -> void:
-	if weapon_data != null: ## only if we're throgin aweeapon		
-		if body is Enemy and not is_being_dropped:
-			## the weapon is hitting an enemy and the weapon itself is thrown (and not simply dropping)...			
-			var enemy := body as Enemy
-			enemy.impale(self, original_basis)	## impale them!!!
-		else:
-			## The weapon is hitting the walls/ground etc...
-			# First, apply gravity as soon as the item hits something
-			gravity_scale = 1	
-			
-			## The item just collided with something, fire the sleeping_state_changed
-			## This signal is fired when the item goes to sleep which happens after godot stops checking for collisions, which happens after the item stops moving for a bit		
-			if not sleeping_state_changed.is_connected(on_sleep): ## However, since the on_body_entered will be called a few times, we make sure we call the callback only once
-				sleeping_state_changed.connect(on_sleep)	## Create the connection only once
-	elif furniture_data != null: ## we're throgin af urntire instead		
+func on_body_entered(body: Node) -> void:	
+	## CHeck if we're trying to thrown furniture - so the item we trhwo nis furntirue
+	if furniture_data != null: ## we're throgin af urntire instead		
 		## Try to cause the enemy to receive furniture impact
 		if body is Enemy and not is_being_dropped:
 			var enemy := body as Enemy
@@ -108,6 +95,22 @@ func on_body_entered(body: Node) -> void:
 		
 		## destroy the destruyctile item scene
 		queue_free()
+	else:	
+		## We haven't thruonw a furnitre, so it might be aweapon thorwn or a shield dropped		
+		
+		if weapon_data != null and body is Enemy and not is_being_dropped:
+			## the weapon is hitting an enemy and the weapon itself is thrown (and not simply dropping)...			
+			var enemy := body as Enemy
+			enemy.impale(self, original_basis)	## impale them!!!
+		else:
+			## The weapon is hitting the walls/ground etc... OR we have a shield that's been dropped to the floor
+			# First, apply gravity as soon as the item hits something
+			gravity_scale = 1	
+			
+			## The item (could be eithre the weapon OR a shield) just collided with something, fire the sleeping_state_changed
+			## This signal is fired when the item goes to sleep which happens after godot stops checking for collisions, which happens after the item stops moving for a bit		
+			if not sleeping_state_changed.is_connected(on_sleep): ## However, since the on_body_entered will be called a few times, we make sure we call the callback only once
+				sleeping_state_changed.connect(on_sleep)	## Create the connection only once
 
 ## This will be called after the weapon stopped moving after being thrown somewhere
 ## At this point we'll need to transform the weapon from the thrownitem (flying state) to the pickableitem (item that can be picked up state)
