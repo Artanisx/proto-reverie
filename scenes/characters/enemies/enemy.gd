@@ -28,6 +28,8 @@ const AIR_FRICTION: float = 20.0
 @onready var player_detection_area: Area3D = %PlayerDetectionArea
 @onready var weapon_reach_raycast: RayCast3D = %WeaponReachRaycast	## needed to check wheter the player is in range facing the enemy
 
+@onready var presence_light: OmniLight3D = %PresenceLight
+
 ## TO be used for navigation
 @onready var nav_agent: NavigationAgent3D = %NavigationAgent3D
 

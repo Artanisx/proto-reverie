@@ -23,6 +23,9 @@ func _enter_tree() -> void:
 	## 0.5 - Drop the shield
 	enemy.equipment.drop_shield()
 	
+	## 0.6 - Turn of the Presence Light
+	enemy.presence_light.visible = false	
+	
 	## 1- Disable collision shape since we are no longer handling phsyics with it
 	enemy.collision_shape.disabled = true
 	## 2- Enable the skeleton simulator
