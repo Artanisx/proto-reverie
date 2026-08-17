@@ -2,15 +2,44 @@ class_name UI
 extends CanvasLayer
 
 @onready var hurt_vignette: Panel = %HurtVignette
+@onready var death_screen: ColorRect = %DeathScreen
+@onready var health_indicator: StatIndicator = %HealthIndicator
+@onready var weapon_indicator: StatIndicator = %WeaponIndicator
+@onready var weapon_icon: TextureRect = %WeaponIcon
+@onready var shield_icon: TextureRect = %ShieldIcon
+@onready var shield_indicator: StatIndicator = %ShieldIndicator
+@onready var action_panel: ColorRect = %ActionPanel
+@onready var action_label: Label = %ActionLabel
+
+
 
 const TIME_FOR_HURT_VIGNETTE_ANIMATION: float = 0.1 ## 100ms
+const TIME_FOR_DEATH_SCREEN_ANIMATION: float = 0.3 ## 100ms
 
 func _ready() -> void:
 	## Connect the player_hurt signal
 	GameEvents.player_hurt.connect(on_player_hurt)
 	
+	## Connect the player_dead signal
+	GameEvents.player_dead.connect(on_player_dead)
+	
+	## Connect the signal for restart (so we can hide the death screen)
+	GameEvents.level_restarted.connect(on_level_restarted)
+	
+	## Connec the signal for when the player spawns in the world
+	GameEvents.player_spawned.connect(on_player_spawned)	
+	
+	## Connec the signal for when the player equipped Weapon has something aobut it changed (durability/being equipped/dropped/thrown...)
+	GameEvents.weapon_changed.connect(on_weapon_changed)	
+	
+	## Connec the signal for when the player equipped Shield has something aobut it changed (durability/being equipped/dropped/thrown...)
+	GameEvents.shield_changed.connect(on_shield_changed)	
+	
+	## Connec the signal for when the player can take a new action (selected a pickable item, a door in kick range...)
+	GameEvents.possible_action_changed.connect(on_possible_action_changed)	
+	
 ## Make the vignette appear and disappear briefly	
-func on_player_hurt(_player: Player) -> void:
+func on_player_hurt(player: Player) -> void:
 	## TWEEN
 	var tween := create_tween()
 	
@@ -18,3 +47,59 @@ func on_player_hurt(_player: Player) -> void:
 	tween.tween_property(hurt_vignette, "modulate:a", 1.0, TIME_FOR_HURT_VIGNETTE_ANIMATION)
 	## Then make it invisible again, setting alpha back to 0.0 (fully INvisible) in TIME_FOR_HURT_VIGNETTE_ANIMATION ms
 	tween.tween_property(hurt_vignette, "modulate:a", 0.0, TIME_FOR_HURT_VIGNETTE_ANIMATION)
+	## Finally, update the HP bar
+	health_indicator.refresh(player.health.current_life, player.health.max_life)	
+	
+## Make the DeathScreen appear
+func on_player_dead() -> void:
+	## TWEEN
+	var tween := create_tween()
+	
+	## Let's modulate everything back to white (this basically just move the alpha 1.0 (fully visible), keeping the rgs back as white)
+	#  in TIME_FOR_DEATH_SCREEN_ANIMATION ms, with a set transition and ease
+	tween.tween_property(death_screen, "modulate", Color.WHITE, TIME_FOR_DEATH_SCREEN_ANIMATION)\
+		.set_trans(Tween.TRANS_QUAD)\
+		.set_ease(Tween.EASE_OUT)
+		
+## Make the DeathScreen disappear
+func on_level_restarted() -> void:	
+	## Let's modulate this back to transparent instantly
+	death_screen.modulate = Color.TRANSPARENT
+	
+## Player just spawned, refresh HealthIndicator
+func on_player_spawned(player: Player) -> void:
+	health_indicator.refresh(player.health.current_life, player.health.max_life)
+
+## Something about the players' weapon changed and we need to update the ui
+func on_weapon_changed(data: WeaponData) -> void:
+	if data == null:
+		## Weapon was thrown/dropped and otherwise lost
+		weapon_icon.visible = false
+		weapon_indicator.set_visible(false)
+	else:
+		## Weapon had its durability changed or was just equipped
+		if weapon_icon.visible == false or weapon_indicator.visible == false:
+			weapon_icon.visible = true # Make sure the weapon_icon is now visible
+			weapon_indicator.set_visible(true) # Same with the indicator
+		## refresh the durability
+		weapon_indicator.refresh(data.condition, data.max_condition)
+
+## Something about the players' shield changed and we need to update the ui
+func on_shield_changed(data: ShieldData) -> void:
+	if data == null:
+		## Shield was thrown/dropped and otherwise lost
+		shield_icon.visible = false
+		shield_indicator.set_visible(false)
+	else:
+		## shield had its durability changed or was just equipped
+		if shield_icon.visible == false or shield_indicator.visible == false:
+			shield_icon.visible = true # Make sure the weapon_icon is now visible
+			shield_indicator.set_visible(true) # Same with the indicator
+		## refresh the durability
+		shield_indicator.refresh(data.condition, data.max_condition)
+
+## Update the ActionPanel accordingly		
+func on_possible_action_changed(action: String) -> void:
+	## Toggle action panel visiblity to wheter the action is empty or not
+	action_panel.visible = not action.is_empty()
+	action_label.text = action	

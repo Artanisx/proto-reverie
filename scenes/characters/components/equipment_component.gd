@@ -9,6 +9,7 @@ const EQUIPPED_ITEM_PREFAB := preload("res://scenes/equipment/equipped_item.tscn
 const THROWN_ITEM_PREFAB := preload("res://scenes/equipment/thrown_item.tscn")	## The Thrown Item prefab
 
 
+@export var is_linked_to_ui: bool		## Is this Equipment component linked to the ui (so, does this belongs to the player?)
 @export var is_always_in_front: bool	## If this is true, the equipped item will have its material replaced by the one with ZClip scale enabled to be drawn in front. Only set it true for the player.
 @export var furniture_data: FurnitureData	## Furniture data of this "equipment"
 @export var furniture_placeholder: Node3D	## The node reference where the furniture will be attached to (both hands)
@@ -53,6 +54,11 @@ func equip_shield(data: ShieldData, pickup_transform: Transform3D = Transform3D.
 	
 	## Add this instance as a child of the weapon placeholder
 	shield_placeholder.add_child(shield)
+	
+	## Only if this is done by the player, basically
+	if is_linked_to_ui:
+		## Since we just equipped the shield, let's emit this event because the player now has a shield that didn't have previously
+		GameEvents.shield_changed.emit(shield_data)
 		
 	## Check if we passed a transform (so we want to do a tween)
 	if pickup_transform != Transform3D.IDENTITY:
@@ -138,6 +144,11 @@ func equip_weapon(data: WeaponData, pickup_transform: Transform3D = Transform3D.
 	## Update the lenght of the raycast to the weapon's reach (square root just for performance)
 	weapon_reach_raycast.target_position.z = -sqrt(weapon_data.reach)
 	
+	## If this equipment is the player's equippemnt (linked to ui)
+	if is_linked_to_ui:	
+		## Since we just equipped the weapon, let's emit this event because the player now has a weapon that didn't have previously
+		GameEvents.weapon_changed.emit(weapon_data)
+	
 	## Check if we passed a transform (so we want to do a tween)
 	if pickup_transform != Transform3D.IDENTITY:
 		weapon.global_transform = pickup_transform		## Set the weapon's transform to the object on the ground transform position
@@ -166,9 +177,11 @@ func thrown_weapon(is_being_dropped: bool = false) -> void:
 		## Destroy the weapon in hand
 		weapon_data = null
 		weapon_placeholder.get_child(0).queue_free()		
-				
-		## Give a force to be thrown
-		#thrown_item.apply_impulse(Vector3.FORWARD * thrown_force, thrown_item.global_position)		
+		
+		## If this equipment is the player's equippemnt (linked to ui)
+		if is_linked_to_ui:		
+			## Since we just thrown the weapon, let's emit this event because the player doens't have the weapon anymore	
+			GameEvents.weapon_changed.emit(weapon_data)
 		
 ## Thrown the currently equipped furniture	
 func thrown_furniture(is_being_dropped: bool = false) -> void:
@@ -221,6 +234,11 @@ func drop_shield() -> void:
 		## Add this instance as a child of the current loaded level  (not the player or it would be attached to it)
 		GameState.current_level.add_child(dropped_item)	## the weapon will drop to the ground atm
 		
+		## If this equipment is the player's equippemnt (linked to ui)
+		if is_linked_to_ui:	
+			## Since we just lost the shield, let's emit this event because the player has lost a shield tha rhe had previosuly
+			GameEvents.shield_changed.emit(shield_data)
+		
 		## Destroy the shield in hand
 		shield_data = null
 		shield_placeholder.get_child(0).queue_free()		
@@ -258,3 +276,29 @@ func has_weapon() -> bool:
 func has_furniture() -> bool:	
 	## If there's furniture data and there's an instance in the furniture placeholder...
 	return furniture_data != null and furniture_placeholder.get_child_count() > 0
+
+## Reduce durability of the equipped weapon
+func apply_weapon_damage(amount: int) -> void:
+	if has_weapon():
+		## Decrease the condition
+		weapon_data.decrease_condition(amount)
+		
+		## If the weapon is destroyed by this...
+		if weapon_data.condition <= 0:
+			drop_weapon()	##drop it
+		
+		## Since we just changed the durability of the weapon, let's emit this event	
+		GameEvents.weapon_changed.emit(weapon_data)
+		
+## Reduce durability of the equipped shield
+func apply_shield_damage(amount: int) -> void:
+	if has_shield():
+		## Decrease the condition
+		shield_data.decrease_condition(amount)
+		
+		## If the weapon is destroyed by this...
+		if shield_data.condition <= 0:
+			drop_shield()	##drop it
+		
+		## Since we just changed the durability of the shield, let's emit this event	
+		GameEvents.shield_changed.emit(shield_data)

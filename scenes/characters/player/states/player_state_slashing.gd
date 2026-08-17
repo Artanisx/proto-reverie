@@ -9,6 +9,7 @@ extends PlayerState
 ## Slashing > Moving
 
 const TIME_EMIT_DAMAGE: int = 200 # How many milliseconds after the player slash animation is started, the damage should be emitted. This is to avoid the enemy getting damage when the player is charging the slash.
+const WEAPON_DURABILITY_DAMAGE: int = 2 # how much the weapon is damanged by a slash hitting an enemy
 
 var has_emitted_damage: bool = false # To emit damage only once per slash
 var time_start_slash: int = Time.get_ticks_msec()	# Var to store the time since start slashing, used with the TIME_EMIT_DAMAGE constant to time the damage mission
@@ -35,7 +36,10 @@ func _process(_delta: float) -> void:
 			var enemy := player.weapon_reach_raycast.get_collider() as Enemy
 			if enemy != null:
 				var damage := player.equipment.weapon_data.get_damage_dealt()
+				## Damage the weapon itself
+				player.equipment.apply_weapon_damage(WEAPON_DURABILITY_DAMAGE)
 				enemy.try_receive_hit(player, damage)	 ## try to hit the enemy that collided with the raycast, passing the player (for position) and damage	
+				
 		
 ## Since we want to be able to move while slashing, we call player.process() super
 func _physics_process(delta: float) -> void:
