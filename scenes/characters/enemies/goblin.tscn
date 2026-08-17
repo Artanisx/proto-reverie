@@ -13,6 +13,8 @@ height = 1.7
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jcgx1"]
 albedo_texture = ExtResource("2_ik1ic")
+backlight_enabled = true
+backlight = Color(0, 0.8156863, 0, 1)
 texture_filter = 0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ewb0t"]
@@ -89,7 +91,8 @@ bones/12/scale = Vector3(1.000002, 1.0000001, 1.0000026)
 bones/13/rotation = Quaternion(0.5580959, -0.0014156959, -0.0657751, 0.8271642)
 bones/13/scale = Vector3(0.99999994, 1.0000002, 1.0000002)
 
-[node name="Character" parent="character/Armature/Skeleton3D" index="0" unique_id=267537697]
+[node name="Character" parent="character/Armature/Skeleton3D" index="0" unique_id=1920330619]
+layers = 2
 surface_material_override/0 = SubResource("StandardMaterial3D_jcgx1")
 
 [node name="WeaponBoneAttachment" type="BoneAttachment3D" parent="character/Armature/Skeleton3D" index="1" unique_id=54954367]
@@ -331,5 +334,15 @@ current_life = 8
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1241318674]
 unique_name_in_owner = true
+
+[node name="PresenceLight" type="OmniLight3D" parent="." unique_id=1894855415]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4028247, 0)
+light_color = Color(0.2901961, 0.84705883, 0.4862745, 1)
+light_energy = 0.6
+light_size = 0.1
+light_cull_mask = 4294967293
+omni_range = 2.0
+omni_attenuation = 2.0
 
 [editable path="character"]
