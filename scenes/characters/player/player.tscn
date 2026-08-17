@@ -88,6 +88,7 @@ autoplay = &"idle"
 
 [node name="EquipmentComponent" parent="." unique_id=535100031 node_paths=PackedStringArray("furniture_placeholder", "shield_placeholder", "weapon_placeholder", "weapon_spawn_position", "weapon_reach_raycast") instance=ExtResource("6_6avc5")]
 unique_name_in_owner = true
+is_linked_to_ui = true
 is_always_in_front = true
 furniture_placeholder = NodePath("../FurniturePlaceholder")
 shield_data = ExtResource("5_mk55u")
