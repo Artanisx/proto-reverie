@@ -40,13 +40,7 @@ func on_player_dead() -> void:
 		.set_ease(Tween.EASE_OUT)
 		
 ## Make the DeathScreen disappear
-func on_level_restarted() -> void:
-	## TWEEN
-	var tween := create_tween()
-	
-	## Let's modulate alpha back to invisibile 0.0 (fully visible)
-	#  in TIME_FOR_DEATH_SCREEN_ANIMATION ms, with a set transition and ease
-	tween.tween_property(death_screen, "modulate:a", 0.0, TIME_FOR_DEATH_SCREEN_ANIMATION)\
-		.set_trans(Tween.TRANS_QUAD)\
-		.set_ease(Tween.EASE_IN)
+func on_level_restarted() -> void:	
+	## Let's modulate this back to transparent instantly
+	death_screen.modulate = Color.TRANSPARENT
 		
