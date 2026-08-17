@@ -11,7 +11,7 @@ Pixel Art done by me using [Aseprite](https://www.aseprite.org/) while following
 ## Tutorial Progress
 Episode 15: https://www.youtube.com/watch?v=9vzhChFClsQ
 
-Time Index: 0:22:00
+Time Index: 0:44:40
 
 What: After improting the font
 
