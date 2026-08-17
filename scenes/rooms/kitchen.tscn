@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://b7ocgy8gc1rn5" path="res://scenes/characters/enemies/goblin.tscn" id="2_p7bu6"]
 [ext_resource type="PackedScene" uid="uid://c7t3d2rf4n4ts" path="res://scenes/traps/spikes_trap.tscn" id="3_sqdrw"]
 [ext_resource type="PackedScene" uid="uid://q7bs7y46fw7n" path="res://scenes/props/barrel/barrel.tscn" id="4_2812u"]
+[ext_resource type="PackedScene" uid="uid://isrdinagrwpp" path="res://scenes/props/torch/torch.tscn" id="5_jtubd"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_p7bu6"]
 vertices = PackedVector3Array(-2.25, 0.02, -2.5, -1.75, 0.02, -1.5, 4, 0.02, -1.5, 4.25, 0.02, -4.25, -4.5, 0.02, -1.25, -3.75, 0.02, -2.5, -10.25, 0.02, -4.25, -10.25, 0.02, 6.25, -4.5, 0.02, 6.25, 5.75, 0.02, -1.25, 11.5, 0.02, -4.25, 5.75, 0.02, 6.25, 11.5, 0.02, 6.25)
@@ -31,3 +32,15 @@ transform = Transform3D(-0.69017005, 0, 0.7236473, 0, 1, 0, -0.7236473, 0, -0.69
 
 [node name="Barrel" parent="." index="4" unique_id=206750037 instance=ExtResource("4_2812u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 6)
+
+[node name="Torch" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="0" unique_id=1646109275 instance=ExtResource("5_jtubd")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12, 0, 0)
+
+[node name="Torch2" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="1" unique_id=506675706 instance=ExtResource("5_jtubd")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -11, 0, 0)
+
+[node name="Torch3" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="2" unique_id=2073791337 instance=ExtResource("5_jtubd")]
+transform = Transform3D(-1, 0, 8.940697e-08, 0, 1, 0, -8.940697e-08, 0, -1, 6, 0, -5)
+
+[node name="Torch4" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="3" unique_id=1153954078 instance=ExtResource("5_jtubd")]
+transform = Transform3D(-1, 0, 8.940697e-08, 0, 1, 0, -8.940697e-08, 0, -1, -5, 0, -5)
