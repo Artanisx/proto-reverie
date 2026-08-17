@@ -53,6 +53,9 @@ func equip_shield(data: ShieldData, pickup_transform: Transform3D = Transform3D.
 	
 	## Add this instance as a child of the weapon placeholder
 	shield_placeholder.add_child(shield)
+	
+	## Since we just equipped the shield, let's emit this event because the player now has a shield that didn't have previously
+	GameEvents.shield_changed.emit(shield_data)
 		
 	## Check if we passed a transform (so we want to do a tween)
 	if pickup_transform != Transform3D.IDENTITY:
@@ -224,6 +227,9 @@ func drop_shield() -> void:
 		## Add this instance as a child of the current loaded level  (not the player or it would be attached to it)
 		GameState.current_level.add_child(dropped_item)	## the weapon will drop to the ground atm
 		
+		## Since we just lost the shield, let's emit this event because the player has lost a shield tha rhe had previosuly
+		GameEvents.shield_changed.emit(shield_data)
+		
 		## Destroy the shield in hand
 		shield_data = null
 		shield_placeholder.get_child(0).queue_free()		
@@ -274,3 +280,16 @@ func apply_weapon_damage(amount: int) -> void:
 		
 		## Since we just changed the durability of the weapon, let's emit this event	
 		GameEvents.weapon_changed.emit(weapon_data)
+		
+## Reduce durability of the equipped shield
+func apply_shield_damage(amount: int) -> void:
+	if has_shield():
+		## Decrease the condition
+		shield_data.decrease_condition(amount)
+		
+		## If the weapon is destroyed by this...
+		if shield_data.condition <= 0:
+			drop_shield()	##drop it
+		
+		## Since we just changed the durability of the shield, let's emit this event	
+		GameEvents.shield_changed.emit(shield_data)

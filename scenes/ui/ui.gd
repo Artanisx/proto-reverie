@@ -6,6 +6,8 @@ extends CanvasLayer
 @onready var health_indicator: StatIndicator = %HealthIndicator
 @onready var weapon_indicator: StatIndicator = %WeaponIndicator
 @onready var weapon_icon: TextureRect = %WeaponIcon
+@onready var shield_icon: TextureRect = %ShieldIcon
+@onready var shield_indicator: StatIndicator = %ShieldIndicator
 
 
 const TIME_FOR_HURT_VIGNETTE_ANIMATION: float = 0.1 ## 100ms
@@ -26,6 +28,9 @@ func _ready() -> void:
 	
 	## Connec the signal for when the player equipped Weapon has something aobut it changed (durability/being equipped/dropped/thrown...)
 	GameEvents.weapon_changed.connect(on_weapon_changed)	
+	
+	## Connec the signal for when the player equipped Shield has something aobut it changed (durability/being equipped/dropped/thrown...)
+	GameEvents.shield_changed.connect(on_shield_changed)	
 	
 ## Make the vignette appear and disappear briefly	
 func on_player_hurt(player: Player) -> void:
@@ -72,3 +77,17 @@ func on_weapon_changed(data: WeaponData) -> void:
 			weapon_indicator.set_visible(true) # Same with the indicator
 		## refresh the durability
 		weapon_indicator.refresh(data.condition, data.max_condition)
+
+## Something about the players' shield changed and we need to update the ui
+func on_shield_changed(data: ShieldData) -> void:
+	if data == null:
+		## Shield was thrown/dropped and otherwise lost
+		shield_icon.visible = false
+		shield_indicator.set_visible(false)
+	else:
+		## shield had its durability changed or was just equipped
+		if shield_icon.visible == false or shield_indicator.visible == false:
+			shield_icon.visible = true # Make sure the weapon_icon is now visible
+			shield_indicator.set_visible(true) # Same with the indicator
+		## refresh the durability
+		shield_indicator.refresh(data.condition, data.max_condition)

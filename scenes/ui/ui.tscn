@@ -5,6 +5,7 @@
 [ext_resource type="FontFile" uid="uid://dq8w1p5b8hk86" path="res://assets/fonts/my 3x5 tiny mono pixel font.ttf" id="3_aac20"]
 [ext_resource type="Texture2D" uid="uid://bn44milaj4qo8" path="res://assets/textures/icons/icon-hearth.png" id="4_g5kmx"]
 [ext_resource type="PackedScene" uid="uid://b56gyn0psj0ju" path="res://scenes/ui/stat_indicator.tscn" id="5_0dwhk"]
+[ext_resource type="Texture2D" uid="uid://bo0o7ydbf2qba" path="res://assets/textures/icons/icon-shield.png" id="6_7vp6q"]
 [ext_resource type="Texture2D" uid="uid://bdcvha6wdnlrj" path="res://assets/textures/icons/icon-weapon.png" id="6_pfayw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5w87n"]
@@ -65,9 +66,9 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 16.0
-offset_top = -48.0
+offset_top = -112.0
 offset_right = 48.0
-offset_bottom = -16.0
+offset_bottom = -80.0
 grow_vertical = 0
 texture = ExtResource("6_pfayw")
 
@@ -77,9 +78,32 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 60.0
-offset_top = -38.0
+offset_top = -102.0
 offset_right = 168.0
-offset_bottom = -22.0
+offset_bottom = -86.0
+grow_vertical = 0
+
+[node name="ShieldIcon" type="TextureRect" parent="." unique_id=362580892]
+unique_name_in_owner = true
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -56.0
+offset_right = 48.0
+offset_bottom = -24.0
+grow_vertical = 0
+texture = ExtResource("6_7vp6q")
+
+[node name="ShieldIndicator" parent="." unique_id=177832638 instance=ExtResource("5_0dwhk")]
+unique_name_in_owner = true
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = -46.0
+offset_right = 168.0
+offset_bottom = -30.0
 grow_vertical = 0
 
 [node name="DeathScreen" type="ColorRect" parent="." unique_id=253786456]

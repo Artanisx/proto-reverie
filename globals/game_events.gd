@@ -26,3 +26,6 @@ signal player_spawned(player: Player)
 
 ## SIGNAL for when a weapon is changed (dropped/thrown/durability lost)
 signal weapon_changed(weapon_data: WeaponData)
+
+## SIGNAL for when a shield is changed (dropped/thrown/durability lost)
+signal shield_changed(shield_data: ShieldData)

@@ -11,6 +11,7 @@ const SPIKE_DAMAGE : int = 5				##how much damage spike cause to the player
 const MAX_ANGLE_LOOK_UP := deg_to_rad(70)	## Can't go more than 70° looking up
 const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking down
 const GROUND_FRICTION : float = 15.0			## Used to slow down after a pushback
+const SHIELD_DURABILITY_DAMAGE: int = 2 # how much the weapon is damanged by a blocking an enemy slash
 
 @export var acceleration : float ## Acceleration of the player movement, used to allow for friction to speed up / down rather than abrut movement. A good value is walk_speed * 10.[br]For example for a 3 walk_speed and 30 acceleration, it will take 0.1s (100 ms) to reach it
 @export var jump_force : float ## The jump intensity for the player
@@ -208,8 +209,12 @@ func try_receive_hit(source_enemy: Enemy, damage: int) -> void:
 		
 		var data: PlayerStateData = PlayerStateData.new().set_damage(damage).set_impact_direction(hit_direction)
 		switch_state(State.HURT, data) ## go to to hurt state, passing damage and hitdirection		
-	elif state == State.BLOCKING:
+	elif state == State.BLOCKING:		
 		## Player cannot be hurt, and they are blocking
+		
+		## Damage the player shield itself if the player was 
+		equipment.apply_shield_damage(SHIELD_DURABILITY_DAMAGE)
+		
 		## Let's stun the enemy
 		source_enemy.try_stun()
 		
