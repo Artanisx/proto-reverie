@@ -4,7 +4,8 @@ extends CanvasLayer
 @onready var hurt_vignette: Panel = %HurtVignette
 @onready var death_screen: ColorRect = %DeathScreen
 @onready var health_indicator: StatIndicator = %HealthIndicator
-
+@onready var weapon_indicator: StatIndicator = %WeaponIndicator
+@onready var weapon_icon: TextureRect = %WeaponIcon
 
 
 const TIME_FOR_HURT_VIGNETTE_ANIMATION: float = 0.1 ## 100ms
@@ -22,6 +23,9 @@ func _ready() -> void:
 	
 	## Connec the signal for when the player spawns in the world
 	GameEvents.player_spawned.connect(on_player_spawned)	
+	
+	## Connec the signal for when the player equipped Weapon has something aobut it changed (durability/being equipped/dropped/thrown...)
+	GameEvents.weapon_changed.connect(on_weapon_changed)	
 	
 ## Make the vignette appear and disappear briefly	
 func on_player_hurt(player: Player) -> void:
@@ -54,4 +58,17 @@ func on_level_restarted() -> void:
 ## Player just spawned, refresh HealthIndicator
 func on_player_spawned(player: Player) -> void:
 	health_indicator.refresh(player.health.current_life, player.health.max_life)
-		
+
+## Something about the players' weapon changed and we need to update the ui
+func on_weapon_changed(data: WeaponData) -> void:
+	if data == null:
+		## Weapon was thrown/dropped and otherwise lost
+		weapon_icon.visible = false
+		weapon_indicator.set_visible(false)
+	else:
+		## Weapon had its durability changed or was just equipped
+		if weapon_icon.visible == false or weapon_indicator.visible == false:
+			weapon_icon.visible = true # Make sure the weapon_icon is now visible
+			weapon_indicator.set_visible(true) # Same with the indicator
+		## refresh the durability
+		weapon_indicator.refresh(data.condition, data.max_condition)

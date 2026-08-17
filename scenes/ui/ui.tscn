@@ -5,6 +5,7 @@
 [ext_resource type="FontFile" uid="uid://dq8w1p5b8hk86" path="res://assets/fonts/my 3x5 tiny mono pixel font.ttf" id="3_aac20"]
 [ext_resource type="Texture2D" uid="uid://bn44milaj4qo8" path="res://assets/textures/icons/icon-hearth.png" id="4_g5kmx"]
 [ext_resource type="PackedScene" uid="uid://b56gyn0psj0ju" path="res://scenes/ui/stat_indicator.tscn" id="5_0dwhk"]
+[ext_resource type="Texture2D" uid="uid://bdcvha6wdnlrj" path="res://assets/textures/icons/icon-weapon.png" id="6_pfayw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5w87n"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -42,8 +43,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5w87n")
+metadata/_edit_lock_ = true
 
-[node name="HeartIcon" type="TextureRect" parent="." unique_id=334253599]
+[node name="HealthIcon" type="TextureRect" parent="." unique_id=334253599]
 offset_left = 16.0
 offset_top = 16.0
 offset_right = 48.0
@@ -57,6 +59,29 @@ offset_top = 24.0
 offset_right = 168.0
 offset_bottom = 40.0
 
+[node name="WeaponIcon" type="TextureRect" parent="." unique_id=1708482828]
+unique_name_in_owner = true
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -48.0
+offset_right = 48.0
+offset_bottom = -16.0
+grow_vertical = 0
+texture = ExtResource("6_pfayw")
+
+[node name="WeaponIndicator" parent="." unique_id=2044214318 instance=ExtResource("5_0dwhk")]
+unique_name_in_owner = true
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = -38.0
+offset_right = 168.0
+offset_bottom = -22.0
+grow_vertical = 0
+
 [node name="DeathScreen" type="ColorRect" parent="." unique_id=253786456]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
@@ -66,6 +91,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.4745098, 0, 0.003921569, 1)
+metadata/_edit_lock_ = true
 
 [node name="Label" type="Label" parent="DeathScreen" unique_id=1743110416]
 layout_mode = 1
@@ -81,3 +107,4 @@ text = "YOU DIED!
 PRESS \"R\" TO RESTART"
 horizontal_alignment = 1
 vertical_alignment = 1
+metadata/_edit_lock_ = true

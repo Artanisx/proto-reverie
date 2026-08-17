@@ -138,6 +138,9 @@ func equip_weapon(data: WeaponData, pickup_transform: Transform3D = Transform3D.
 	## Update the lenght of the raycast to the weapon's reach (square root just for performance)
 	weapon_reach_raycast.target_position.z = -sqrt(weapon_data.reach)
 	
+	## Since we just equipped the weapon, let's emit this event because the player now has a weapon that didn't have previously
+	GameEvents.weapon_changed.emit(weapon_data)
+	
 	## Check if we passed a transform (so we want to do a tween)
 	if pickup_transform != Transform3D.IDENTITY:
 		weapon.global_transform = pickup_transform		## Set the weapon's transform to the object on the ground transform position
@@ -167,8 +170,8 @@ func thrown_weapon(is_being_dropped: bool = false) -> void:
 		weapon_data = null
 		weapon_placeholder.get_child(0).queue_free()		
 				
-		## Give a force to be thrown
-		#thrown_item.apply_impulse(Vector3.FORWARD * thrown_force, thrown_item.global_position)		
+		## Since we just thrown the weapon, let's emit this event because the player doens't have the weapon anymore	
+		GameEvents.weapon_changed.emit(weapon_data)
 		
 ## Thrown the currently equipped furniture	
 func thrown_furniture(is_being_dropped: bool = false) -> void:
@@ -258,3 +261,16 @@ func has_weapon() -> bool:
 func has_furniture() -> bool:	
 	## If there's furniture data and there's an instance in the furniture placeholder...
 	return furniture_data != null and furniture_placeholder.get_child_count() > 0
+
+## Reduce durability of the equipped weapon
+func apply_weapon_damage(amount: int) -> void:
+	if has_weapon():
+		## Decrease the condition
+		weapon_data.decrease_condition(amount)
+		
+		## If the weapon is destroyed by this...
+		if weapon_data.condition <= 0:
+			drop_weapon()	##drop it
+		
+		## Since we just changed the durability of the weapon, let's emit this event	
+		GameEvents.weapon_changed.emit(weapon_data)

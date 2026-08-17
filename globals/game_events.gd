@@ -23,3 +23,6 @@ signal level_restarted
 
 ## SIGNAL for when the player spawns in the game
 signal player_spawned(player: Player)
+
+## SIGNAL for when a weapon is changed (dropped/thrown/durability lost)
+signal weapon_changed(weapon_data: WeaponData)
