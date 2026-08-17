@@ -53,7 +53,7 @@ func _ready() -> void:
 	if mesh_node != null:
 		collision_shape.shape = mesh_node.mesh.create_convex_shape()	
 		if weapon_data or shield_data: ## if this pickable item is a weapon or shield
-			presence_light.visible = false ## Remove the light
+			presence_light.visible = false ## Remove the light for weapons/shield (only furniture should have it)
 			mesh_node.material_override = glow_material ## Set the glow material for it (so basically weapon/shields will glow brightly as themsevles
 	
 			

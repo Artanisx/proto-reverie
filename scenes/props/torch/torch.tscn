@@ -50,11 +50,15 @@ size = Vector2(0.15, 0.15)
 [node name="torch" parent="." unique_id=1376491095 instance=ExtResource("1_paw5d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -0.31163397)
 
+[node name="Torch" parent="torch" index="0" unique_id=910433938]
+cast_shadow = 0
+
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=352405303]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7233524, -0.29114497)
 light_color = Color(1, 0.6156863, 0.23137255, 1)
 light_energy = 2.0
 light_size = 0.1
+light_specular = 0.0
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=324070995]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5975138, -0.2951217)
@@ -65,3 +69,5 @@ randomness = 0.5
 fixed_fps = 60
 process_material = SubResource("ParticleProcessMaterial_paw5d")
 draw_pass_1 = SubResource("QuadMesh_paw5d")
+
+[editable path="torch"]
