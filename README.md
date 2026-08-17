@@ -20,3 +20,7 @@ NOTE! Do not keep open goblin or player tscn scenes if you aren't touching them.
 Next Episode will be 16: https://www.youtube.com/watch?v=E4HnUlT7kCQ
 
 Playlist: https://www.youtube.com/playlist?list=PLT26e2jOwbdg
+
+
+Font added: https://alasseearfalas.itch.io/another-tiny-pixel-font-mono-3x5 
+In case I use it in my game, let's keep the attribution credits.

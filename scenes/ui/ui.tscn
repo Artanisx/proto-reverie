@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dwvlbb7ibsw1i" path="res://scenes/ui/ui.gd" id="1_f5cxw"]
 [ext_resource type="Texture2D" uid="uid://c17ompnse3807" path="res://assets/textures/cursor.png" id="1_u7n8c"]
+[ext_resource type="FontFile" uid="uid://dq8w1p5b8hk86" path="res://assets/fonts/my 3x5 tiny mono pixel font.ttf" id="3_aac20"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5w87n"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -39,3 +40,28 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5w87n")
+
+[node name="DeathScreen" type="ColorRect" parent="." unique_id=253786456]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.4745098, 0, 0.003921569, 1)
+
+[node name="Label" type="Label" parent="DeathScreen" unique_id=1743110416]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_aac20")
+theme_override_font_sizes/font_size = 36
+text = "YOU DIED!
+
+PRESS \"R\" TO RESTART"
+horizontal_alignment = 1
+vertical_alignment = 1

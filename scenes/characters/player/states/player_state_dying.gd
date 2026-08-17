@@ -6,7 +6,7 @@ extends PlayerState
 ## This handles the behaviour for the Player state: State.Dying
 ## It contains all processing, signals, etc required for this state
 ## Transitions:
-## Dying > Dead NYI
+## Dying > Restart the game (R)
 
 func _enter_tree() -> void:	
 	## 0.1 - Apply the Hit Stop juice for highlighting the action - This will pause the game for a bit.
@@ -24,9 +24,13 @@ func _enter_tree() -> void:
 	## 0.5 - Drop the shield
 	player.equipment.drop_shield()
 	
-	print("dead!!!!")
-
-
+	## Emit player_dead signal (used for UI for example)
+	GameEvents.player_dead.emit()
+	
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("restart"):
+		GameEvents.level_restarted.emit()	## emit thelevel_restereted event so the world can act on it and restart
+	
 ## Since we're already Dying, we cannot get hurt again (i.e. acid trap)
 func can_get_hurt() -> bool:
 	return false

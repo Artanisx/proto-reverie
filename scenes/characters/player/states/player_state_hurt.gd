@@ -22,8 +22,7 @@ func  _enter_tree() -> void:
 		player.equipment.drop_furniture()
 		
 	## Take damage
-	player.health.take_damage(state_data.damage)
-	print("player health: " + str(player.health.current_life))
+	player.health.take_damage(state_data.damage)	
 	
 	## Apply some pushback force from the direction of the impact (player)
 	player.pushback_force += state_data.impact_direction * PUSHBACK_FORCE	
