@@ -11,11 +11,18 @@ Pixel Art done by me using [Aseprite](https://www.aseprite.org/) while following
 ## Tutorial Progress
 Episode 17: https://www.youtube.com/watch?v=XSto9EZXP_w
 
-Time Index: 0:50:56
+Time Index: 1:03:51
 
 What: Working on keys
 
 NOTE! Do not keep open goblin or player tscn scenes if you aren't touching them. Bogus changes might appear if they are open and those might break the skeleton and produce issues with ragdool or physics.
+
+NEXT: The tutorial is over, however tutorials for shooting are required:
+https://gameidea.org/2025/09/07/building-an-fps-from-scratch-in-godot-fps-series/
+
+https://www.youtube.com/watch?v=6bbPHsB9TtI&list=PLQZiuyZoMHcgqP-ERsVE4x4JSFojLdcBZ&index=4
+
+https://www.youtube.com/watch?v=A3HLeyaBCq4
 
 
 Font added: https://alasseearfalas.itch.io/another-tiny-pixel-font-mono-3x5 
