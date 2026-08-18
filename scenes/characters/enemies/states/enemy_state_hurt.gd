@@ -16,6 +16,9 @@ func  _enter_tree() -> void:
 	## Take damage
 	enemy.health.take_damage(state_data.damage)
 	
+	## Refresh HP UI
+	enemy.health_indicator.refresh(enemy.health.current_life, enemy.health.max_life)
+	
 	## Apply some pushback force from the direction of the impact (player)
 	enemy.pushback_force += state_data.impact_direction * KNOCKBACK_FORCE	
 	

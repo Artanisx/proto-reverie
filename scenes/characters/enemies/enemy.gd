@@ -33,8 +33,13 @@ const AIR_FRICTION: float = 20.0
 ## TO be used for navigation
 @onready var nav_agent: NavigationAgent3D = %NavigationAgent3D
 
+## FOR AUDIO
 @onready var action_audio_stream_player: AudioStreamPlayer3D = %ActionAudioStreamPlayer
 @onready var vocal_audio_stream_player: AudioStreamPlayer3D = %VocalAudioStreamPlayer
+
+## FOR UI
+@onready var healthbar: Sprite3D = %Healthbar
+@onready var health_indicator: StatIndicator = %HealthIndicator
 
 @export var duration_stun : float			## Time in seconds for the duration of the stunned state
 @export var duration_between_attacks : int 	## How often the enemy attacks, in ms
@@ -52,6 +57,9 @@ var time_since_last_attack: int  ## Needed for timing the attacks, in ms
 func _ready() -> void:
 	## Connets the body_entered signal of the player detection area
 	player_detection_area.body_entered.connect(on_player_detected)
+	
+	## Refresh HP UI
+	health_indicator.refresh(health.current_life, health.max_life)
 	
 	# Call the switch_state function to set the starting state
 	switch_state(State.MOVING)

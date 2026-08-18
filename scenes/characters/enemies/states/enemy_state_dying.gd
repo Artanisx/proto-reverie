@@ -23,6 +23,9 @@ func _enter_tree() -> void:
 	## 0.4 - Emit the dying sound effect
 	AudioManager.play("orc-die", enemy.vocal_audio_stream_player) ## Play SFX
 	
+	## 0.45 - Hide HP Bar
+	enemy.healthbar.visible = false
+	
 	## 0.5 - Drop the shield
 	enemy.equipment.drop_shield()
 	
