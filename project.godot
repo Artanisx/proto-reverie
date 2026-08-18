@@ -15,12 +15,17 @@ run/main_scene="uid://bjpcxgpmpe8b8"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="uid://dj3se2xy7jqh2"
+
 [autoload]
 
 GameState="*uid://cknn42ilnxg3l"
 GameEvents="*uid://euuhoj2mbqw4"
 HitStopServer="*uid://bams2y4gij6ew"
 FxHelper="*uid://cvixnqxf8qme2"
+AudioManager="*uid://bvpv7cm4gexge"
 
 [debug]
 
