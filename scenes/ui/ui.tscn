@@ -138,17 +138,15 @@ vertical_alignment = 1
 
 [node name="KeyContainer" type="HBoxContainer" parent="." unique_id=109537989]
 unique_name_in_owner = true
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -270.0
-offset_top = -80.0
-offset_right = -46.0
-offset_bottom = -8.0
-grow_horizontal = 0
+offset_left = 20.0
+offset_top = -82.0
+offset_right = 244.0
+offset_bottom = -10.0
 grow_vertical = 0
+layout_direction = 3
 
 [node name="DeathScreen" type="ColorRect" parent="." unique_id=253786456]
 unique_name_in_owner = true

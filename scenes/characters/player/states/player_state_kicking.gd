@@ -21,9 +21,22 @@ func  _enter_tree() -> void:
 		
 		## Is it a door?
 		if collider is Door:		
-			var door := collider as Door			
-			AudioManager.play("door-kick", player.action_audio_stream_player) ## Play SFX
-			door.open(player.global_transform)	## open it
+			var door := collider as Door
+			## Check if this door is a colored door
+			if door.door_color != Door.KeyColor.None:
+				## This door is a colore ddoor, so it can only be opened by having the right key
+				if GameState.has_key(door.door_color):
+					## PLayuer has the right key!
+					AudioManager.play("door-open", player.action_audio_stream_player) ## Play SFX
+					door.open(player.global_transform)	## open it
+					GameState.use_key(door.door_color) ##expend the key
+				else:
+					## the player doesn't have the right key!
+					AudioManager.play("door-locked", player.action_audio_stream_player) ## Play SFX
+			else:
+				## It's a simple door, so go ahead and open it
+				AudioManager.play("door-kick", player.action_audio_stream_player) ## Play SFX
+				door.open(player.global_transform)	## open it
 		## Is it an enemy?
 		elif collider is Enemy:
 			var enemy := collider as Enemy

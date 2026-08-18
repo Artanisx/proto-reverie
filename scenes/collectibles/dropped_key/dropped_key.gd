@@ -16,20 +16,23 @@ const EMISSION_ENERGY : float = 2.5 ## The energy multiplier for the emission ma
 
 
 func _ready() -> void:
-	## First we need to set the color of the material so it matches the KeyColor
-	var material := mesh.get_active_material(0) as StandardMaterial3D
-	material.albedo_color = Door.COLOR_MAP[color] ## Using the DOOR.COLOR_MAP we "translate" from Door.KeyColor to actual color
-	material.emission_enabled = true
-	material.emission = Door.COLOR_MAP[color]	## We also want this color to be emissive
-	material.emission_energy_multiplier = EMISSION_ENERGY
-	
-	omni_light.light_color = Door.COLOR_MAP[color] ##Also set the light color
-	
-	## Apply an angular velocity on the X axis so this key rotates
-	angular_velocity = Vector3.UP * ROTATION_SPEED
-	
-	## Connect the collision signal
-	player_detection_area.body_entered.connect(on_player_entered)
+	if color != Door.KeyColor.None:	
+		## First we need to set the color of the material so it matches the KeyColor
+		var material := mesh.get_active_material(0).duplicate() as StandardMaterial3D ##we need to duplicat ethis or else all keyts will be the same color
+		material.albedo_color = Door.COLOR_MAP[color] ## Using the DOOR.COLOR_MAP we "translate" from Door.KeyColor to actual color
+		material.emission_enabled = true
+		material.emission = Door.COLOR_MAP[color]	## We also want this color to be emissive
+		material.emission_energy_multiplier = EMISSION_ENERGY
+		
+		mesh.set_surface_override_material(0, material) ## apply the material to the surface material override
+		
+		omni_light.light_color = Door.COLOR_MAP[color] ##Also set the light color
+		
+		## Apply an angular velocity on the X axis so this key rotates
+		angular_velocity = Vector3.UP * ROTATION_SPEED
+		
+		## Connect the collision signal
+		player_detection_area.body_entered.connect(on_player_entered)
 	
 ## PLayer pick up function	
 func on_player_entered(_body: Player) -> void:
