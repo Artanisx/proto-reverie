@@ -234,6 +234,9 @@ func try_receive_hit(source_enemy: Enemy, damage: int) -> void:
 		var hit_direction : Vector3 = source_enemy.global_position.direction_to(global_position)
 		
 		var data: PlayerStateData = PlayerStateData.new().set_damage(damage).set_impact_direction(hit_direction)
+		
+		AudioManager.play("slash-hit", action_audio_stream_player) ## PLay the SFX
+		
 		switch_state(State.HURT, data) ## go to to hurt state, passing damage and hitdirection		
 	elif state == State.BLOCKING:
 		## Player cannot be hurt, and they are blocking

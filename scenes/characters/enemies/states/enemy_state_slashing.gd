@@ -35,9 +35,11 @@ func _process(_delta: float) -> void:
 		if enemy.weapon_reach_raycast.is_colliding():
 			var player := enemy.weapon_reach_raycast.get_collider() as Player
 			if player != null:
-				var damage := enemy.equipment.weapon_data.get_damage_dealt()
+				var damage := enemy.equipment.weapon_data.get_damage_dealt()				
 				player.try_receive_hit(enemy, damage)	 ## try to hit the player that collided with the raycast, passing the enemy (for position) and damage	
-		
+		else:
+			## Enemy didn't hit anything (swish!!)
+			AudioManager.play("slash", enemy.action_audio_stream_player) ## PLay the SFX	
 	
 func on_animation_finished(_animation_name: String) -> void:	
 	transition_state(Enemy.State.MOVING)	## Emit the signal and transition to Moving
