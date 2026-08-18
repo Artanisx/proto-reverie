@@ -33,6 +33,8 @@ const AIR_FRICTION: float = 20.0
 ## TO be used for navigation
 @onready var nav_agent: NavigationAgent3D = %NavigationAgent3D
 
+@onready var action_audio_stream_player: AudioStreamPlayer3D = %ActionAudioStreamPlayer
+@onready var vocal_audio_stream_player: AudioStreamPlayer3D = %VocalAudioStreamPlayer
 
 @export var duration_stun : float			## Time in seconds for the duration of the stunned state
 @export var duration_between_attacks : int 	## How often the enemy attacks, in ms
@@ -228,5 +230,6 @@ func take_acid_damage() -> void:
 func take_spike_damage(_spikes_trap: SpikesTrap) -> void:
 	## spikes is oneshot damage!
 	if state_node.can_die(): ## Only if not already dying or dead, basically only in states that doesn't specifically disallow dying
+		AudioManager.play("spikes", action_audio_stream_player) ## Play the SFX
 		switch_state(State.DYING)
 	

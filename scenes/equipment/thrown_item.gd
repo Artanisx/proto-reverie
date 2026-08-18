@@ -13,12 +13,17 @@ const PICKABLE_ITEM_PREFAB := preload("res://scenes/equipment/pickable_item.tscn
 @export var shield_data: ShieldData
 @export var weapon_data: WeaponData
 @onready var collision_shape: CollisionShape3D = %CollisionShape
+@onready var audio_stream_player: AudioStreamPlayer3D = %AudioStreamPlayer3D
+
 
 ## Store if the weapon is not thrown, but dropped (for example by a dead enemy)
 var is_being_dropped: bool 
 
 ## Store the original rotation of this thrown item so that it can be reapplied once it's impaled (using the same direction/rotation for proper impalement)
 var original_basis: Basis
+
+## Store wheter this thrown item has hit the world (for use in play sound)
+var has_hit_world : bool = false
 
 ## As soon as the node is spawned we must:
 ## - Create the mesh for the thrown item
@@ -62,7 +67,10 @@ func _ready() -> void:
 			linear_velocity = -global_basis.z * thrown_movement_speed
 			
 			## Add to angular_velocity in order to have some rotation
-			angular_velocity = -global_basis.y * thrown_rotation_speed
+			angular_velocity = -global_basis.y * thrown_rotation_speed	
+			
+			if weapon_data != null:
+				AudioManager.play("sword-fly", audio_stream_player) ## Plays the SFX only if it's a weapon that is thrown
 		
 		## Listen to the body_entered signal and call on_body_entered, needed for checking for collision with enemy/ground
 		body_entered.connect(on_body_entered)	## This is to check wheter the weapon collides with an enemy
@@ -103,14 +111,21 @@ func on_body_entered(body: Node) -> void:
 			var enemy := body as Enemy
 			enemy.impale(self, original_basis)	## impale them!!!
 		else:
-			## The weapon is hitting the walls/ground etc... OR we have a shield that's been dropped to the floor
+			## The weapon is hitting the walls/ground etc... OR we have a shield that's been dropped to the floor		
+			
 			# First, apply gravity as soon as the item hits something
 			gravity_scale = 1	
 			
-			## The item (could be eithre the weapon OR a shield) just collided with something, fire the sleeping_state_changed
-			## This signal is fired when the item goes to sleep which happens after godot stops checking for collisions, which happens after the item stops moving for a bit		
-			if not sleeping_state_changed.is_connected(on_sleep): ## However, since the on_body_entered will be called a few times, we make sure we call the callback only once
-				sleeping_state_changed.connect(on_sleep)	## Create the connection only once
+			if not has_hit_world:
+				# Set  the variable to true since we hit the wall/world and didn't hit it already
+				has_hit_world = true
+				## The item (could be eithre the weapon OR a shield) just collided with something, fire the sleeping_state_changed
+				## This signal is fired when the item goes to sleep which happens after godot stops checking for collisions, which happens after the item stops moving for a bit		
+				sleeping_state_changed.connect(on_sleep)	## Create the connection only once (since it's in the not has_hit_world we're sure this is done only once)
+				
+				if weapon_data and not is_being_dropped:
+					AudioManager.play("sword-hit-wall", audio_stream_player) ## Plays the SFX only if it's the weapon hitting the wall, and play it only once
+				
 
 ## This will be called after the weapon stopped moving after being thrown somewhere
 ## At this point we'll need to transform the weapon from the thrownitem (flying state) to the pickableitem (item that can be picked up state)

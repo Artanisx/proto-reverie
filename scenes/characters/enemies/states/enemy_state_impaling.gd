@@ -15,6 +15,8 @@ func _enter_tree() -> void:
 	## Apply the Hit Stop juice for highlighting the action - This will pause the game for a bit.
 	GameEvents.impact_felt.emit(GameEvents.ImpactIntensity.MEDIUM)
 	
+	AudioManager.play("impale", enemy.action_audio_stream_player) ## Play the SFX
+	
 	var impaled_item := EQUIPPED_ITEM_PREFAB.instantiate() as EquippedItem
 	impaled_item.weapon_data = state_data.thrown_item.weapon_data		## The thrown item data should be passed to the equipped (impaled) item! If it's ana xe, an axe should be passed etc	
 	enemy.physical_bone_torso.add_child(impaled_item) 			## Then, add this instance to the torso, for proper impalation!

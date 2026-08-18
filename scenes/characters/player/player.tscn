@@ -116,4 +116,16 @@ current_life = 30
 unique_name_in_owner = true
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.5035483, 1.9695053, -0.6634989)
 
+[node name="ActionAudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=450540410]
+unique_name_in_owner = true
+bus = &"SFX"
+
+[node name="FootstepAudioStreamPlayer" type="AudioStreamPlayer3D" parent="." unique_id=1181428824]
+unique_name_in_owner = true
+bus = &"SFX"
+
+[node name="VocalAudioStreamPlayer" type="AudioStreamPlayer3D" parent="." unique_id=445411782]
+unique_name_in_owner = true
+bus = &"SFX"
+
 [editable path="character"]

@@ -21,12 +21,17 @@ func  _enter_tree() -> void:
 		
 		## Is it a door?
 		if collider is Door:		
-			var door := collider as Door
+			var door := collider as Door			
+			AudioManager.play("door-kick", player.action_audio_stream_player) ## Play SFX
 			door.open(player.global_transform)	## open it
 		## Is it an enemy?
 		elif collider is Enemy:
 			var enemy := collider as Enemy
+			AudioManager.play("kick", player.action_audio_stream_player) ## Play SFX
 			enemy.try_receive_kick(player)	## issue the kick to the enemy
+	else:
+		## Player kicks nothing!
+		AudioManager.play("kick-swoosh", player.action_audio_stream_player) ## Play SFX
 				
 	## Hookup to the finish signal
 	player.animation_player.animation_finished.connect(on_animation_finished)
