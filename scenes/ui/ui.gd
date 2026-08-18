@@ -69,6 +69,10 @@ func on_level_restarted() -> void:
 ## Player just spawned, refresh HealthIndicator
 func on_player_spawned(player: Player) -> void:
 	health_indicator.refresh(player.health.current_life, player.health.max_life)
+	## we update the weapon bar UI (so if the player doesn't start with the weapon the Ui is correct)
+	on_weapon_changed(player.equipment.weapon_data)
+	## we update the shield bar UI (so if the player doesn't start with the shield the Ui is correct)
+	on_shield_changed(player.equipment.shield_data)
 
 ## Something about the players' weapon changed and we need to update the ui
 func on_weapon_changed(data: WeaponData) -> void:
