@@ -1,6 +1,17 @@
 class_name Door
 extends StaticBody3D
 
+## Enum for KeyColors, each door can have one of these 4 keys
+enum KeyColor {Blue, Red, Yellow, Purple}
+
+## Static Variable so it is accessible from everywhere; it's a Map that links a KeyColor to an actual Color
+static var COLOR_MAP : Dictionary [KeyColor, Color] = {
+	KeyColor.Blue: Color.DARK_BLUE,	
+	KeyColor.Red: Color.DARK_RED,	
+	KeyColor.Yellow: Color.DARK_GOLDENROD,	
+	KeyColor.Purple: Color.DARK_MAGENTA
+}
+
 @onready var animation_player: AnimationPlayer = %AnimationPlayer
 @onready var collision_shape_3d: CollisionShape3D = %CollisionShape3D
 

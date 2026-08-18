@@ -32,3 +32,6 @@ signal shield_changed(shield_data: ShieldData)
 
 ## SIGNAL for when action that the player can take changed (to update the ActionPanel UI)
 signal possible_action_changed(action: String)
+
+## SIGNAL for when the player picks up a key
+signal key_picked_up(color: Door.KeyColor)

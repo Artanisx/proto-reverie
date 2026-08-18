@@ -56,6 +56,9 @@ func _ready() -> void:
 	
 	## Emit the player_spawned event, used for example by the UI to refresh HP bar
 	GameEvents.player_spawned.emit(self)
+	
+	## Register to the key_picked_up event
+	GameEvents.key_picked_up.connect(on_key_picked_up)
 		
 	# Call the switch_state function to set the starting state
 	switch_state(State.MOVING)
@@ -266,3 +269,7 @@ func can_pickup_object() -> bool:
 func take_acid_damage() -> void: 
 	if state_node.can_die():
 		switch_state(State.DYING)
+
+## THe player just picked up a key
+func on_key_picked_up(_color: Door.KeyColor) -> void:
+	AudioManager.play("key-pickup", vocal_audio_stream_player) ## Play the SFX

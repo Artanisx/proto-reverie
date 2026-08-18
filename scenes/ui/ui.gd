@@ -38,6 +38,9 @@ func _ready() -> void:
 	## Connec the signal for when the player can take a new action (selected a pickable item, a door in kick range...)
 	GameEvents.possible_action_changed.connect(on_possible_action_changed)	
 	
+	## Connec to the key_picked_up event signal for when the player picks up the key
+	##GameEvents.key_picked_up.connect(on_key_picked_up)
+	
 ## Make the vignette appear and disappear briefly	
 func on_player_hurt(player: Player) -> void:
 	## TWEEN
