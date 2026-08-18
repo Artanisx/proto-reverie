@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://q7bs7y46fw7n" path="res://scenes/props/barrel/barrel.tscn" id="4_2812u"]
 [ext_resource type="PackedScene" uid="uid://caevkp60a3qvm" path="res://scenes/characters/enemies/kobold.tscn" id="4_njvo0"]
 [ext_resource type="PackedScene" uid="uid://isrdinagrwpp" path="res://scenes/props/torch/torch.tscn" id="5_jtubd"]
+[ext_resource type="PackedScene" uid="uid://bvweb8wrxj0nf" path="res://scenes/equipment/pickable_axe.tscn" id="7_581re"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_p7bu6"]
 vertices = PackedVector3Array(-2.25, 0.02, -2.5, -1.75, 0.02, -1.5, 4, 0.02, -1.5, 4.25, 0.02, -4.25, -4.5, 0.02, -1.25, -3.75, 0.02, -2.5, -10.25, 0.02, -4.25, -10.25, 0.02, 6.25, -4.5, 0.02, 6.25, 5.75, 0.02, -1.25, 11.5, 0.02, -4.25, 5.75, 0.02, 6.25, 11.5, 0.02, 6.25)
@@ -45,3 +46,6 @@ transform = Transform3D(-1, 0, 8.940697e-08, 0, 1, 0, -8.940697e-08, 0, -1, 6, 0
 
 [node name="Torch4" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="3" unique_id=1153954078 instance=ExtResource("5_jtubd")]
 transform = Transform3D(-1, 0, 8.940697e-08, 0, 1, 0, -8.940697e-08, 0, -1, -5, 0, -5)
+
+[node name="PickableAxe" parent="Pickables" parent_id_path=PackedInt32Array(978293746) index="0" unique_id=442956752 instance=ExtResource("7_581re")]
+transform = Transform3D(0.9812921, -0.18596488, 0.049829148, 0, -0.25881904, -0.9659259, 0.19252506, 0.9478553, -0.25397706, -10.384436, 0.32909352, 6.4680834)
