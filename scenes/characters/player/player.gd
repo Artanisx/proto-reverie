@@ -189,7 +189,7 @@ func check_for_possible_action() -> void:
 		if kick_raycast.get_collider() is Door:
 			new_action = UI_STRING_KICK_DOOR
 		elif kick_raycast.get_collider() is Enemy:
-			new_action = UI_STRING_KICK_ENEMY
+			new_action = UI_STRING_KICK_ENEMY ## We might not want to show this to the player
 		
 	if new_action != current_possible_action:
 		## The action changed (so we're not just, for example, looking at the same pickable item, but we changed our view to anotehr item or a door)

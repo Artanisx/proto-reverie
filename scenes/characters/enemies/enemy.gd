@@ -88,17 +88,21 @@ func impale(thrown_item: ThrownItem, item_basis: Basis) -> void:
 ## thrown_item is the item that should be attached/rendered
 ## basis is the  transform (rotation etc) we want the impaled item to be
 func try_receive_furniture_impact(thrown_item: ThrownItem) -> void:
-	## the enemy will drop his shield
-	equipment.drop_shield()
-	
-	##calculate the hit direction (where is thefunrtire coming from)
-	var hit_direction : Vector3 = thrown_item.global_position.direction_to(global_position)
-	
-	## Create an EnemyStateData class and fill it with the arguments needed for the impaling state	
-	var state_data: EnemyStateData = EnemyStateData.new().set_impact_direction(hit_direction).set_knockback_force(2.5)
-	
-	## Switch to stunned state
-	switch_state(State.STUNNED, state_data)
+	if equipment.has_shield():	
+		## the enemy will drop his shield
+		equipment.drop_shield()
+		
+		##calculate the hit direction (where is thefunrtire coming from)
+		var hit_direction : Vector3 = thrown_item.global_position.direction_to(global_position)
+		
+		## Create an EnemyStateData class and fill it with the arguments needed for the impaling state	
+		var state_data: EnemyStateData = EnemyStateData.new().set_impact_direction(hit_direction).set_knockback_force(2.5)
+		
+		## Switch to stunned state
+		switch_state(State.STUNNED, state_data)
+	else:
+		## the enemy is vulnerable to be instantly killed by the furniture
+		switch_state(State.DYING)
 
 ## Check if enemy knows the player exists (and it's still valid instance, so not dead/queued free)
 func has_registered_player() -> bool:
