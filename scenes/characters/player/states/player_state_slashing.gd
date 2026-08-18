@@ -39,6 +39,9 @@ func _process(_delta: float) -> void:
 				## Damage the weapon itself
 				player.equipment.apply_weapon_damage(WEAPON_DURABILITY_DAMAGE)
 				enemy.try_receive_hit(player, damage)	 ## try to hit the enemy that collided with the raycast, passing the player (for position) and damage	
+		else:
+			##the player doesn't hit anything
+			AudioManager.play("slash", player.action_audio_stream_player) ## Play the SFX
 				
 		
 ## Since we want to be able to move while slashing, we call player.process() super

@@ -24,6 +24,9 @@ func _enter_tree() -> void:
 	## 0.5 - Drop the shield
 	player.equipment.drop_shield()
 	
+	## 0.6 - Play the sfx
+	AudioManager.play("player-death", player.vocal_audio_stream_player) ## Play SFX
+	
 	## Emit player_dead signal (used for UI for example)
 	GameEvents.player_dead.emit()
 	

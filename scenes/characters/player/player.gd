@@ -25,6 +25,9 @@ const UI_STRING_KICK_ENEMY : String = "[F] Kick"
 @export var walk_speed : float ## Speed of regular movement, used for WASD. 
 @export var capture_mouse_enabled : bool = true ## If set to true, mouse will be captured so it can't go outside of the window.
 @export var duration_hurt : float			## Time in seconds for the duration of the hurt state
+@onready var action_audio_stream_player: AudioStreamPlayer3D = %ActionAudioStreamPlayer3D
+@onready var footstep_audio_stream_player: AudioStreamPlayer3D = %FootstepAudioStreamPlayer
+@onready var vocal_audio_stream_player: AudioStreamPlayer3D = %VocalAudioStreamPlayer
 
 @onready var animation_player: AnimationPlayer = $character/AnimationPlayer ## Reference to the AnimationPlayer to handle animations
 @onready var camera: Camera3D = %MainCamera ## Reference to the Camera3D node. 
@@ -62,8 +65,7 @@ func _process(_delta: float) -> void:
 	## negative x motion (strafe left), positive x motion (stafe right), negative y motion (go backward), postive y motion (go forward)
 	input_dir = Input.get_vector("strafe_left","strafe_right","backward","forward")	
 	
-func _physics_process(delta: float) -> void:	
-	check_jump_input()	## handles player jump
+func _physics_process(delta: float) -> void:
 	process_gravity()	## process gravity so is_on_floor() works properly	
 	process_pushback(delta) ## Apply pushback
 	move_and_slide() ## Apply movemenet	
@@ -172,10 +174,6 @@ func switch_state(new_state: State, data: PlayerStateData = PlayerStateData.new(
 	## 2 - Add it to the player scene	
 	add_child(state_node)
 
-func check_jump_input() -> void:
-	if is_on_floor() and Input.is_action_just_pressed("jump"):
-		velocity.y = jump_force # apply a upward motion		
-
 func process_gravity() -> void:
 	if not is_on_floor():
 		velocity.y -= gravity # apply gravity downwards
@@ -237,8 +235,11 @@ func try_receive_hit(source_enemy: Enemy, damage: int) -> void:
 		
 		var data: PlayerStateData = PlayerStateData.new().set_damage(damage).set_impact_direction(hit_direction)
 		switch_state(State.HURT, data) ## go to to hurt state, passing damage and hitdirection		
-	elif state == State.BLOCKING:		
+	elif state == State.BLOCKING:
 		## Player cannot be hurt, and they are blocking
+		
+		## Play SFX
+		AudioManager.play("block", action_audio_stream_player)
 		
 		## Damage the player shield itself if the player was blocking. Damange is the damage of the weapon (so the shield gets the dmaage intended to player)
 		equipment.apply_shield_damage(damage)

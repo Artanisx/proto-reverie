@@ -9,6 +9,8 @@ extends Node3D
 const EXPLOSION_FORCE : float = 5.0
 
 @export var furniture_data: FurnitureData
+@onready var audio_stream_player_3d: AudioStreamPlayer3D = %AudioStreamPlayer3D
+
 
 var destructible_object: Node3D = null
 
@@ -30,6 +32,9 @@ func _ready() -> void:
 ##Exploide this destructible object!!!!			
 func explode() -> void:	
 	if destructible_object != null:
+		## Play SFX
+		AudioManager.play("barrel-destroy", audio_stream_player_3d)
+		
 		## for each framgent we will apply as mall force to move them outward
 		for fragment: RigidBody3D in destructible_object.get_children():
 			## apply a immpulse to the global position fo the framgent of a vector legnth of postiion * force

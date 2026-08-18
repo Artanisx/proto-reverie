@@ -34,6 +34,8 @@ func  _enter_tree() -> void:
 	if player.health.is_dead():				
 		transition_state(Player.State.DYING)	## Emit the signal and transition to Dying
 	else:
+		AudioManager.play("hurt", player.vocal_audio_stream_player) ## Play the SFX
+		
 		## Start the hurt timer		
 		var timer := get_tree().create_timer(player.duration_hurt)	## Create atimer of the set duration
 		timer.timeout.connect(on_hurt_finish)						## Set its callback rto the timeout signal

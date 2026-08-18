@@ -22,6 +22,9 @@ func  _enter_tree() -> void:
 	## Also instantiate metal sparks from the shield
 	FxHelper.create_metal_spark_fx(enemy.equipment.shield_placeholder.global_position)
 	
+	## Play SFX
+	AudioManager.play("block", enemy.action_audio_stream_player)
+	
 	## Apply some pushback force from the direction of the impact (player)
 	enemy.pushback_force += state_data.impact_direction * KNOCKBACK_FORCE	
 	

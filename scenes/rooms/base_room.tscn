@@ -28,3 +28,5 @@ unique_name_in_owner = true
 [node name="AcidTraps" type="Node3D" parent="." unique_id=1903326100]
 
 [node name="Lights" type="Node3D" parent="." unique_id=1275491181]
+
+[node name="Decor" type="Node3D" parent="." unique_id=1087828784]

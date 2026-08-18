@@ -29,6 +29,7 @@ func  _enter_tree() -> void:
 		player.animation_player.animation_finished.connect(on_animation_finished)
 			
 		player.equipment.equip_weapon(picakable_object.weapon_data, picakable_object.global_transform) ## pick it up (set the equpment component to the weapon data of the piackable object, also pass its position - the transform - for a little tween animation)
+		AudioManager.play("sword-pickup", player.vocal_audio_stream_player) ## Play SFX
 		picakable_object.queue_free()	## destroys the picakable object since it is now equpped
 	elif picakable_object.shield_data != null: 		
 		## Play the pickup animation
@@ -38,9 +39,13 @@ func  _enter_tree() -> void:
 		player.animation_player.animation_finished.connect(on_animation_finished)
 		
 		player.equipment.equip_shield(picakable_object.shield_data, picakable_object.global_transform) ## pick it up (set the equpment component to the shield data of the piackable object, also pass its position - the transform - for a little tween animation)
+		
+		AudioManager.play("pick-up", player.vocal_audio_stream_player) ## Play SFX
+		
 		picakable_object.queue_free()	## destroys the picakable object since it is now equpped
 	elif picakable_object.furniture_data != null:
 		## It's a furniture!
+		AudioManager.play("lift", player.vocal_audio_stream_player) ## Play SFX
 		is_carrying = true
 		## Play the lift animation (not connecting to the finish animation since we don't want to move to MOVING state)
 		player.animation_player.play("lift")
