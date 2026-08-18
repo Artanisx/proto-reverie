@@ -97,6 +97,7 @@ bones/13/scale = Vector3(0.99999994, 1.0000002, 1.0000002)
 
 [node name="Character" parent="character/Armature/Skeleton3D" index="0" unique_id=1920330619]
 layers = 2
+extra_cull_margin = 2.0
 surface_material_override/0 = SubResource("StandardMaterial3D_jcgx1")
 
 [node name="WeaponBoneAttachment" type="BoneAttachment3D" parent="character/Armature/Skeleton3D" index="1" unique_id=54954367]
