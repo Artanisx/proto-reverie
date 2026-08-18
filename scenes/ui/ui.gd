@@ -10,8 +10,7 @@ extends CanvasLayer
 @onready var shield_indicator: StatIndicator = %ShieldIndicator
 @onready var action_panel: ColorRect = %ActionPanel
 @onready var action_label: Label = %ActionLabel
-
-
+@onready var key_container: HBoxContainer = %KeyContainer
 
 const TIME_FOR_HURT_VIGNETTE_ANIMATION: float = 0.1 ## 100ms
 const TIME_FOR_DEATH_SCREEN_ANIMATION: float = 0.3 ## 100ms

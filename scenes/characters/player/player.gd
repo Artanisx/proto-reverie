@@ -57,8 +57,8 @@ func _ready() -> void:
 	## Emit the player_spawned event, used for example by the UI to refresh HP bar
 	GameEvents.player_spawned.emit(self)
 	
-	## Register to the key_picked_up event
-	GameEvents.key_picked_up.connect(on_key_picked_up)
+	## Register to the current_keys_changed event
+	GameEvents.current_keys_changed.connect(on_current_keys_changed)
 		
 	# Call the switch_state function to set the starting state
 	switch_state(State.MOVING)
@@ -271,5 +271,8 @@ func take_acid_damage() -> void:
 		switch_state(State.DYING)
 
 ## THe player just picked up a key
-func on_key_picked_up(_color: Door.KeyColor) -> void:
-	AudioManager.play("key-pickup", vocal_audio_stream_player) ## Play the SFX
+func on_current_keys_changed(color: Door.KeyColor) -> void:
+	if GameState.has_key(color):
+		AudioManager.play("key-pickup", vocal_audio_stream_player) ## Play the SFX for when the player picks the key up	
+	else:
+		AudioManager.play("door-locked", vocal_audio_stream_player) ## Play the SFX for when the player USES the key (so he doesn has_key anymore 'cause he just used it up)

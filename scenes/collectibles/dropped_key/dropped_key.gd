@@ -33,7 +33,8 @@ func _ready() -> void:
 	
 ## PLayer pick up function	
 func on_player_entered(_body: Player) -> void:
-	## Emit the event the player picked up the key so a sound can be played and the key is registered by the player.gd and ui
-	GameEvents.key_picked_up.emit(color)
+	## Use the GameState event to obtain this key (add it to the inventory)
+	GameState.obtain_key(color)
+	
 	## Destroy the key as it was picked up
 	queue_free()
