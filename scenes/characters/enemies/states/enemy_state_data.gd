@@ -9,7 +9,7 @@ var impact_direction: Vector3
 var impulse: Vector3
 var thrown_item: ThrownItem
 var thrown_item_basis: Basis
-
+var knockback_force: float
 
 ## The below setters are special because returns itself and allows for chaining sets in one line
 ## Pattern called Fluent Interfaces, and this is "Method chaining"
@@ -33,4 +33,8 @@ func set_damage(dmg: int) -> EnemyStateData:
 	
 func set_impact_direction(direction: Vector3) -> EnemyStateData:
 	impact_direction = direction
+	return self	
+	
+func set_knockback_force(force: float) -> EnemyStateData:
+	knockback_force = force
 	return self	

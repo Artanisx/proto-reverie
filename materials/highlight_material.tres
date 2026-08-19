@@ -3,6 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://d08bac15cxci6" path="res://assets/textures/dungeon-texture.png" id="1_lmkya"]
 
 [resource]
-albedo_color = Color(0.7137255, 0.7019608, 0, 1)
 albedo_texture = ExtResource("1_lmkya")
+emission_enabled = true
+emission = Color(0.87058824, 0.78431374, 0.23529412, 1)
+emission_energy_multiplier = 0.3
 texture_filter = 0

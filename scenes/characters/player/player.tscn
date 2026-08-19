@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b4s2e7o5n4kpe"]
 
 [ext_resource type="Script" uid="uid://1qnwebdshlgr" path="res://scenes/characters/player/player.gd" id="1_7uws0"]
+[ext_resource type="Script" uid="uid://c83i3cwebxvgh" path="res://scenes/characters/player/main_camera.gd" id="2_qd3e3"]
 [ext_resource type="PackedScene" uid="uid://doq2ddny7lxxo" path="res://assets/meshes/characters/character.glb" id="2_t61fv"]
 [ext_resource type="Texture2D" uid="uid://c7yd40jiqkhtf" path="res://assets/textures/cone_of_vision_minimap.png" id="3_686vu"]
 [ext_resource type="PackedScene" uid="uid://brmub7fj1q2ux" path="res://scenes/characters/components/health_component.tscn" id="4_hss88"]
@@ -8,10 +9,12 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5w87n"]
 margin = 0.3
+radius = 0.55
 height = 1.7
 
 [node name="Player" type="CharacterBody3D" unique_id=1783328250]
 collision_layer = 2
+collision_mask = 101
 script = ExtResource("1_7uws0")
 acceleration = 30.0
 jump_force = 12.0
@@ -19,17 +22,19 @@ gravity = 0.98
 mouse_sensitivity = 0.002
 run_speed = 5.0
 walk_speed = 3.0
+duration_hurt = 0.2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1102748645]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
 shape = SubResource("CapsuleShape3D_5w87n")
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1598329383]
+[node name="MainCamera" type="Camera3D" parent="." unique_id=1598329383]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.4297889)
 cull_mask = 1048573
 current = true
 near = 0.001
+script = ExtResource("2_qd3e3")
 
 [node name="PlayerPosition_Minimap" type="Sprite3D" parent="." unique_id=1303755525]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 5, 0)
@@ -51,45 +56,64 @@ texture = ExtResource("3_686vu")
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 100, 0)
 projection = 1
 
-[node name="SelectRaycast" type="RayCast3D" parent="Camera3D" unique_id=825255394]
+[node name="SelectRaycast" type="RayCast3D" parent="MainCamera" unique_id=825255394] ; WARNING: Other par tof proto reveire refers to this as [node name="SelectRaycast" type="RayCast3D" parent="Camera3D" unique_id=825255394]
+
 unique_name_in_owner = true
 target_position = Vector3(0, 0, -2)
 collision_mask = 8
-collide_with_areas = true
-collide_with_bodies = false
+
+[node name="KickRaycast" type="RayCast3D" parent="MainCamera" unique_id=1968807727]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+target_position = Vector3(0, 0, -1.5)
+collision_mask = 36
 
 [node name="character" parent="." unique_id=902149486 instance=ExtResource("2_t61fv")]
 
-[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 990515998) index="0" unique_id=854047827]
+[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 685784994) index="0" unique_id=85887089]
 bones/0/position = Vector3(-1.776356e-15, 0.62109935, -0.08423395)
-bones/0/rotation = Quaternion(0.06415983, 1.1896365e-07, 7.648451e-09, 0.99793965)
+bones/0/rotation = Quaternion(0.064159825, 1.1896365e-07, 7.64845e-09, 0.99793965)
 bones/1/rotation = Quaternion(-0.24423768, -1.1559904e-07, -2.9115395e-08, 0.9697154)
 bones/3/rotation = Quaternion(-0.2513728, -0.34018144, 0.77154964, 0.47518358)
 bones/4/rotation = Quaternion(-0.5391095, -0.1774649, 0.03091945, 0.8227461)
 bones/6/rotation = Quaternion(0.28121728, -0.08643704, 0.81589663, -0.49775317)
 bones/7/rotation = Quaternion(-0.5840134, -0.16368856, 0.013311086, 0.79495746)
 bones/7/scale = Vector3(1, 1.0000001, 1.0000001)
-bones/9/rotation = Quaternion(0.02117573, -0.11775691, 0.98521113, 0.12265455)
+bones/9/rotation = Quaternion(0.021175727, -0.1177569, 0.9852111, 0.12265454)
 bones/10/rotation = Quaternion(0.38341573, 0.0015788153, 0.045187976, 0.9224685)
 bones/12/rotation = Quaternion(-0.021175804, -0.11775666, 0.9852111, -0.12265462)
+bones/12/scale = Vector3(1.000002, 1, 1.000002)
 bones/13/rotation = Quaternion(0.3834156, -0.0015788155, -0.045187946, 0.9224685)
+bones/13/scale = Vector3(0.99999994, 0.99999994, 0.99999994)
 
-[node name="BoneAttachment3D" type="BoneAttachment3D" parent="character/Armature/Skeleton3D" index="1" unique_id=1334627026]
-transform = Transform3D(-0.009950966, -0.9985972, 0.05200185, 0.36564374, 0.044769235, 0.92967707, -0.9307015, 0.028265268, 0.36468557, 0.4578342, 0.9251892, -0.30380818)
+[node name="WeaponBoneAttachment" type="BoneAttachment3D" parent="character/Armature/Skeleton3D" index="1" unique_id=1334627026]
+transform = Transform3D(-0.009950966, -0.9985972, 0.05200185, 0.36564374, 0.044769257, 0.92967707, -0.93070155, 0.028265268, 0.36468545, 0.4578342, 0.9251892, -0.3038082)
 bone_name = "LowerArm.R_leaf"
 bone_idx = 8
 
-[node name="WeaponPlaceholder" type="Node3D" parent="character/Armature/Skeleton3D/BoneAttachment3D" unique_id=1888966459]
+[node name="WeaponPlaceholder" type="Node3D" parent="character/Armature/Skeleton3D/WeaponBoneAttachment" unique_id=1888966459]
 unique_name_in_owner = true
 transform = Transform3D(0.22814482, 0.2324464, -0.94547284, -0.08349022, -0.9628353, -0.25686145, -0.970041, 0.13753916, -0.20025888, -0.02997258, -2.910383e-11, 0.07420103)
 
-[node name="AnimationPlayer" parent="character" index="1" unique_id=1460951389]
+[node name="ShieldBoneAttachment" type="BoneAttachment3D" parent="character/Armature/Skeleton3D" index="2" unique_id=2074636165]
+transform = Transform3D(0.35908586, 0.68137074, -0.6378019, -0.5968514, 0.693024, 0.4043345, 0.71751344, 0.23548207, 0.6555323, -0.37728417, 1.1453462, -0.41934544)
+bone_name = "LowerArm.L_leaf"
+bone_idx = 5
+
+[node name="ShieldPlaceholder" type="Node3D" parent="character/Armature/Skeleton3D/ShieldBoneAttachment" unique_id=768558897]
+unique_name_in_owner = true
+transform = Transform3D(0.68933934, 0.718483, 0.09269987, -0.7222657, 0.6717186, 0.16469991, 0.056065768, -0.18048805, 0.98197794, 0, 0, 0)
+
+[node name="AnimationPlayer" parent="character" index="1" unique_id=321544520]
 autoplay = &"idle"
 
-[node name="EquipmentComponent" parent="." unique_id=535100031 node_paths=PackedStringArray("weapon_placeholder", "weapon_spawn_position", "weapon_reach_raycast") instance=ExtResource("6_6avc5")]
+[node name="EquipmentComponent" parent="." unique_id=535100031 node_paths=PackedStringArray("furniture_placeholder", "shield_placeholder", "weapon_placeholder", "weapon_spawn_position", "weapon_reach_raycast") instance=ExtResource("6_6avc5")]
 unique_name_in_owner = true
+is_linked_to_ui = true
 is_always_in_front = true
-weapon_placeholder = NodePath("../character/Armature/Skeleton3D/BoneAttachment3D/WeaponPlaceholder")
+furniture_placeholder = NodePath("../FurniturePlaceholder")
+shield_placeholder = NodePath("../character/Armature/Skeleton3D/ShieldBoneAttachment/ShieldPlaceholder")
+weapon_placeholder = NodePath("../character/Armature/Skeleton3D/WeaponBoneAttachment/WeaponPlaceholder")
 weapon_spawn_position = NodePath("../WeaponSpawnPosition")
 weapon_reach_raycast = NodePath("../WeaponReachRaycast")
 
@@ -106,5 +130,21 @@ collision_mask = 4
 unique_name_in_owner = true
 max_life = 30
 current_life = 30
+
+[node name="FurniturePlaceholder" type="Node3D" parent="." unique_id=791181344]
+unique_name_in_owner = true
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.5035483, 1.9695053, -0.6634989)
+
+[node name="ActionAudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=450540410]
+unique_name_in_owner = true
+bus = &"SFX"
+
+[node name="FootstepAudioStreamPlayer" type="AudioStreamPlayer3D" parent="." unique_id=1181428824]
+unique_name_in_owner = true
+bus = &"SFX"
+
+[node name="VocalAudioStreamPlayer" type="AudioStreamPlayer3D" parent="." unique_id=445411782]
+unique_name_in_owner = true
+bus = &"SFX"
 
 [editable path="character"]

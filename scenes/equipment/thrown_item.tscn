@@ -4,7 +4,7 @@
 
 [node name="ThrownItem" type="RigidBody3D" unique_id=1651969111]
 collision_layer = 16
-collision_mask = 5
+collision_mask = 101
 continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 1
@@ -12,3 +12,7 @@ script = ExtResource("1_ttrru")
 
 [node name="CollisionShape" type="CollisionShape3D" parent="." unique_id=1589875884]
 unique_name_in_owner = true
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1252788734]
+unique_name_in_owner = true
+bus = &"SFX"

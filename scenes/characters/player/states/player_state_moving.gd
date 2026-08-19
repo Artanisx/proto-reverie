@@ -9,6 +9,13 @@ extends PlayerState
 ## Moving > Picking Up
 ## Moving > Throwing
 ## Moving > Slashing
+## Moving > Kicking
+## Moving > Blocking
+
+const DURATION_BETWEEN_FOOTSTEPS_WALK : int = 500 ## ms of wait between footsteps sfx while walking
+const DURATION_BETWEEN_FOOTSTEPS_RUN : int = 300 ## ms of wait between footsteps sfx while running
+
+var time_since_last_footstep : = Time.get_ticks_msec() ## Variable to store the time between steps
 
 ## All input code needs to stay in _process
 func _process(_delta: float) -> void:
@@ -17,12 +24,25 @@ func _process(_delta: float) -> void:
 		transition_state(Player.State.PICKING_UP)	## Emit the signal with the state to transition to
 		
 	## Setup for the thrown button (R) to thrown an object and if he can thrown an object...
-	if Input.is_action_just_pressed("throw") and player.equipment.has_weapon():	
+	elif Input.is_action_just_pressed("throw") and player.equipment.has_weapon():	
 		transition_state(Player.State.THROWING)	## Emit the signal with the state to transition to		
 		
 	## Setup for the thrown button (LMB) to slash with the melee weapon that player should have equipped...
-	if Input.is_action_just_pressed("action") and player.equipment.has_weapon():	
+	elif Input.is_action_just_pressed("action") and player.equipment.has_weapon():	
 		transition_state(Player.State.SLASHING)	## Emit the signal with the state to transition to		
+		
+	## Setup for the thrown button (F) to kick
+	elif Input.is_action_just_pressed("kick"):	
+		transition_state(Player.State.KICKING)	## Emit the signal with the state to transition to		
+	
+	## Setup for the block button (RMB) to block
+	elif Input.is_action_just_pressed("block") and player.equipment.has_shield():	
+		transition_state(Player.State.BLOCKING)	## Emit the signal with the state to transition to	
+	
+	## Setup for the jump button (SPACE) to jump
+	elif player.is_on_floor() and Input.is_action_just_pressed("jump"):
+		AudioManager.play("jump", player.vocal_audio_stream_player) ## Play the SFX
+		player.velocity.y = player.jump_force # apply a upward motion		
 
 ## All movement/animation code needs to be processed at physic_process 
 func _physics_process(delta: float) -> void:
@@ -35,5 +55,16 @@ func _physics_process(delta: float) -> void:
 	## Calculate the velocity and set either the run or idle animation accordingly
 	if horizontal_velocity.length_squared() > 0.1 and player.is_on_floor():
 		player.animation_player.play("run")
+		
+		## Start the appropriate steps timer		
+		var duration : int = DURATION_BETWEEN_FOOTSTEPS_WALK ## By default use the WALK steps duration
+		
+		if Input.is_action_pressed("run"):
+			duration = DURATION_BETWEEN_FOOTSTEPS_RUN ## While running we use the run steps duration
+		
+		## Check the time	
+		if Time.get_ticks_msec() - time_since_last_footstep > duration:
+			AudioManager.play("footstep", player.footstep_audio_stream_player) ## Play the steps sound
+			time_since_last_footstep = Time.get_ticks_msec()	## Reset the timer	
 	else:
-		player.animation_player.play("idle")
+		player.animation_player.play("idle")	

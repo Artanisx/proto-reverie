@@ -10,9 +10,33 @@ extends EnemyState
 
 const DURATION_RAGDOLL_SIMULATION : float = 3.0
 
-func _enter_tree() -> void:
-	## 0 - Drop the weapon
-	enemy.equipment.thrown_weapon(true)
+func _enter_tree() -> void:	
+	## 0.0 - Just make sure the enemy's health is set to zero when dying	
+	enemy.health.current_life = 0
+	
+	## 0.1 - Apply the Hit Stop juice for highlighting the action - This will pause the game for a bit.
+	GameEvents.impact_felt.emit(GameEvents.ImpactIntensity.MEDIUM)
+		
+	## 0.2 - Instnatiate the blododpusrt node from the head
+	FxHelper.create_blood_fx(enemy.physical_bone_head.global_transform)
+	
+	## 0.3 - Drop the weapon
+	enemy.equipment.drop_weapon()
+	
+	## 0.4 - Emit the dying sound effect
+	AudioManager.play("orc-die", enemy.vocal_audio_stream_player) ## Play SFX
+	
+	## 0.45 - Hide HP Bar
+	enemy.healthbar.visible = false
+	
+	## 0.5 - Drop the shield
+	enemy.equipment.drop_shield()
+	
+	## 0.6 - Turn of the Presence Light
+	enemy.presence_light.visible = false	
+	
+	## 0.7 - Emit dead signal (used for calculations and keydrop)
+	enemy.dead.emit(enemy.global_transform)
 	
 	## 1- Disable collision shape since we are no longer handling phsyics with it
 	enemy.collision_shape.disabled = true
@@ -26,6 +50,11 @@ func _enter_tree() -> void:
 	var timer := get_tree().create_timer(DURATION_RAGDOLL_SIMULATION)	## Create atimer of the set duration
 	timer.timeout.connect(freeze_ragdoll)								## Set its callback rto the timeout signal
 
-## This will transition to the DEAD state (that will freeze the ragdoll simulation)
+## This will transition to the DEAD state[br]
+## This will [code]freeze[/code] the ragdoll simulation
 func freeze_ragdoll() -> void:
 	transition_state(Enemy.State.DEAD)
+	
+## Since we're already Dying, we cannot die again!
+func can_die() -> bool:
+	return false

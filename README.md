@@ -38,5 +38,9 @@ Open ProtoWorld scene and launch it with "Run current Scene (F6)". This will fix
 # Credits
 Pixel Art done by me using [Aseprite](https://www.aseprite.org/). This being a prototype I'm using art I created following along this [tutorial repository](https://github.com/Artanisx/goblins-den) <br>
 3D Art done by me using [Blender](https://www.blender.org/). This being a prototype I'm using art I created following along this [tutorial repository](https://github.com/Artanisx/goblins-den).
+Font [Another Tiny Pixel Font](https://alasseearfalas.itch.io/another-tiny-pixel-font-mono-3x5). Font from the tutorial, pixel art.
 
 The actual project, if this prototype will be successfull will be created with art entirely done by me without following step by step tutorials.
+
+NOTE! Do not keep open goblin or player tscn scenes if you aren't touching them. Bogus changes might appear if they are open and those might break the skeleton and produce issues with ragdool or physics.
+

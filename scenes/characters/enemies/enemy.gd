@@ -8,6 +8,9 @@ extends CharacterBody3D
 ## This signal is emitted when a enemy is hit by the player to warn the others
 signal screamed
 
+## This signal is emitted when a enemy dies
+signal dead(death_transform: Transform3D)
+
 const GRAVITY: float = 20.0
 const AIR_FRICTION: float = 20.0
 
@@ -17,6 +20,8 @@ const AIR_FRICTION: float = 20.0
 
 ## To be used to "stick" the player thrown weapon into
 @onready var physical_bone_torso: PhysicalBone3D = %"Physical Bone Torso"
+## Refernece of the bone head to be used as a start point for the blood spurt particle effect
+@onready var physical_bone_head: PhysicalBone3D = %"Physical Bone Head"
 
 ## To be used for ragdoll physics
 @onready var skeleton_simulator: PhysicalBoneSimulator3D = %PhysicalBoneSimulator3D
@@ -26,16 +31,26 @@ const AIR_FRICTION: float = 20.0
 @onready var player_detection_area: Area3D = %PlayerDetectionArea
 @onready var weapon_reach_raycast: RayCast3D = %WeaponReachRaycast	## needed to check wheter the player is in range facing the enemy
 
+@onready var presence_light: OmniLight3D = %PresenceLight
+
 ## TO be used for navigation
 @onready var nav_agent: NavigationAgent3D = %NavigationAgent3D
 
+## FOR AUDIO
+@onready var action_audio_stream_player: AudioStreamPlayer3D = %ActionAudioStreamPlayer
+@onready var vocal_audio_stream_player: AudioStreamPlayer3D = %VocalAudioStreamPlayer
 
+## FOR UI
+@onready var healthbar: Sprite3D = %Healthbar
+@onready var health_indicator: StatIndicator = %HealthIndicator
+
+@export var duration_stun : float			## Time in seconds for the duration of the stunned state
 @export var duration_between_attacks : int 	## How often the enemy attacks, in ms
 @export var player : Player					## Player reference
 @export var speed: float					## Enemy movement speed
 
 
-enum State {MOVING, IMPALING, DYING, DEAD, SLASHING, HURT}
+enum State {MOVING, IMPALING, DYING, DEAD, SLASHING, HURT, BLOCKING, STUNNED}
 
 var pushback_force: Vector3 = Vector3.ZERO ## If set, it will cause this enemy to be pushed from this force (Vector3)
 var state : State	## State the enemy is in
@@ -46,6 +61,9 @@ func _ready() -> void:
 	## Connets the body_entered signal of the player detection area
 	player_detection_area.body_entered.connect(on_player_detected)
 	
+	## Refresh HP UI
+	health_indicator.refresh(health.current_life, health.max_life)
+	
 	# Call the switch_state function to set the starting state
 	switch_state(State.MOVING)
 
@@ -54,13 +72,44 @@ func _ready() -> void:
 ## basis is the  transform (rotation etc) we want the impaled item to be
 func impale(thrown_item: ThrownItem, item_basis: Basis) -> void:
 	## Create an EnemyStateData class and fill it with the arguments needed for the impaling state	
-	var state_data: EnemyStateData = EnemyStateData.new().set_thrown_item(thrown_item).set_thrown_item_basis(item_basis)	
+	var state_data: EnemyStateData = EnemyStateData.new().set_thrown_item(thrown_item).set_thrown_item_basis(item_basis)
 	
+	## Check if the enemy is NOT aware of the player, does NOT have a shield or CAN get hurt
+	if player == null or not equipment.has_shield() or state_node.can_get_hurt():
+		## Switch state to the IMPALING state, passing the state_data
+		switch_state(State.IMPALING, state_data)		
+	else:
+		## Switch state to the BLOCKING state, passing the state_data
+		var hit_direction : Vector3 = thrown_item.global_position.direction_to(global_position)
+		state_data.set_impact_direction(hit_direction)
+		switch_state(State.BLOCKING, state_data)
+		
 	## Emit screamed signal to warn other enemies
 	screamed.emit()
 	
-	## Switch state to the IMPALING state, passing the state_data
-	switch_state(State.IMPALING, state_data)
+## This function will allow the enemy to be hit by a forntuire throw nby the player's
+## thrown_item is the item that should be attached/rendered
+## basis is the  transform (rotation etc) we want the impaled item to be
+func try_receive_furniture_impact(thrown_item: ThrownItem) -> void:
+	if equipment.has_shield():	
+		## the enemy will drop his shield
+		equipment.drop_shield()
+		
+		##calculate the hit direction (where is thefunrtire coming from)
+		var hit_direction : Vector3 = thrown_item.global_position.direction_to(global_position)
+		
+		## Create an EnemyStateData class and fill it with the arguments needed for the impaling state	
+		var state_data: EnemyStateData = EnemyStateData.new().set_impact_direction(hit_direction).set_knockback_force(2.5)
+		
+		## Switch to stunned state
+		switch_state(State.STUNNED, state_data)
+	else:
+		## the enemy is vulnerable to be instantly killed by the furniture
+		
+		## Let's make sure the enemy's health is set to zero just to make sure isdead is properly set
+		health.current_life = 0
+		
+		switch_state(State.DYING)
 
 ## Check if enemy knows the player exists (and it's still valid instance, so not dead/queued free)
 func has_registered_player() -> bool:
@@ -86,7 +135,9 @@ func switch_state(new_state: State, data: EnemyStateData = EnemyStateData.new())
 		State.DYING: EnemyStateDying,
 		State.DEAD: EnemyStateDead,
 		State.SLASHING: EnemyStateSlashing,
-		State.HURT: EnemyStateHurt
+		State.HURT: EnemyStateHurt,
+		State.BLOCKING: EnemyStateBlocking,
+		State.STUNNED: EnemyStateStunned
 	}	
 	## 1 - Create the proper EnemyState node
 	state_node = state_map[new_state].new(self, data)
@@ -107,13 +158,56 @@ func try_receive_hit(source_player: Player, damage: int) -> void:
 	## Register the player since they just hit the enemy
 	player = source_player
 	
+	## Calc the hit direction from the player to this enemy
+	var hit_direction : Vector3 = source_player.global_position.direction_to(global_position)
+	
+	## Calculate data to pass to switch_state
+	var data := EnemyStateData.new().set_damage(damage).set_impact_direction(hit_direction)
+	
+	## If the enemy doesn't have a shield or if the enemy hasn't noticed the player yet (so it hasn't registered it) or if he can be hurt
+	if player == null or not equipment.has_shield() or state_node.can_get_hurt():
+		## THe enemy doesn't have a shield or hasn't seen the player, so they will take direct damage instead		
+		switch_state(State.HURT, data) ## Switch to the HURT state and pass damage and direction
+	else:
+		## The enemy has a shield and has noticed the player, so they block instead of taking damage	
+		switch_state(State.BLOCKING, data)  ## Switch to the BLOCKING state and pass direction  (well also damage, but won't be used)				
+
+	## Emit screamed signal to warn other enemies
+	screamed.emit()
+
+## Check wheter the enemy will receive a kick
+## This takes into account the enemy having a shield
+## 1- source_player: the player causing the damage, used for position calculation for the knockback
+func try_receive_kick(source_player: Player) -> void:
+	## Register the player since they just kciked the enemy
+	player = source_player
+	
+	## Calc the hit direction from the player to this enemy
+	var hit_direction : Vector3 = source_player.global_position.direction_to(global_position)
+	
+	## Calculate data to pass to switch_state
+	var data := EnemyStateData.new().set_impact_direction(hit_direction)
+	
+	## If the enemy is in a state that allows to be stunned OR he doesn't have a shield
+	if state_node.can_get_stunned() or not equipment.has_shield():
+		if state == State.STUNNED:
+			## The enemy is already stunned, we'll prolong the stun (Stunned > Stunned is allowed), but change the knockback force to be bigger
+			data.set_knockback_force(2.5)
+		
+		## The enemy doesn't have a shield or he is in a state that allows to be stunned		
+		switch_state(State.STUNNED, data) ## Switch to the STUN state and pass the direction
+	else:
+		## The enemy has a shield or is in a state that cannot be stunned, so they block instead of be stunned
+		switch_state(State.BLOCKING, data)  ## Switch to the BLOCKING state and pass direction  (well also damage, but won't be used)				
+
 	## Emit screamed signal to warn other enemies
 	screamed.emit()
 	
-	## Calc the hit direction from the player to this enemy
-	var hit_direction : Vector3 = source_player.global_position.direction_to(global_position).normalized() 
-	switch_state(State.HURT, EnemyStateData.new().set_damage(damage).set_impact_direction(hit_direction)) ## Switch to the HURT state and pass damage and direction
-
+## Check wheter the enemy will receive a stun
+func try_stun() -> void:
+	if state_node.can_get_stunned():
+		switch_state(State.STUNNED)
+	
 ## Take care of moving the Enemy
 func process_movement(delta: float) -> void:
 	## Apply Gravity
@@ -143,3 +237,26 @@ func process_pushback(delta: float) -> void:
 func on_player_detected(body: Player) -> void:
 	## The player is in range, register it
 	player = body
+
+## Handles taking acid damage when in contact with the Acid Trap	
+func take_acid_damage() -> void:
+	## Acid is oneshot damage!
+	
+	## Let's make sure the enemy's health is set to zero just to make sure isdead is properly set
+	health.current_life = 0
+	
+	if state_node.can_die(): ## Only if not already dying or dead, basically only in states that doesn't specifically disallow dying
+		switch_state(State.DYING)
+		
+## To handle receiving damage from spikes trap
+## For enemy this is an instant kill
+func take_spike_damage(_spikes_trap: SpikesTrap) -> void:
+	## spikes is oneshot damage!
+	
+	## Let's make sure the enemy's health is set to zero just to make sure isdead is properly set
+	health.current_life = 0
+	
+	if state_node.can_die(): ## Only if not already dying or dead, basically only in states that doesn't specifically disallow dying
+		AudioManager.play("spikes", action_audio_stream_player) ## Play the SFX
+		switch_state(State.DYING)
+	

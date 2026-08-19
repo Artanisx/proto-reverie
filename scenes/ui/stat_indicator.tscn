@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://b56gyn0psj0ju"]
+
+[ext_resource type="Texture2D" uid="uid://7aah44bgd8i0" path="res://assets/textures/tick.png" id="1_mjk7n"]
+[ext_resource type="Script" uid="uid://bk8nvfxrenbop" path="res://scenes/ui/stat_indicator.gd" id="1_rdlsc"]
+
+[node name="StatIndicator" type="ColorRect" unique_id=2040463990]
+offset_right = 108.0
+offset_bottom = 16.0
+color = Color(0.09411765, 0.078431375, 0.14509805, 1)
+script = ExtResource("1_rdlsc")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1844200989]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 104.0
+offset_bottom = 12.0
+color = Color(0.14901961, 0.16862746, 0.26666668, 1)
+
+[node name="ProgressBar" type="TextureRect" parent="." unique_id=145040446]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 8.0
+offset_bottom = 12.0
+texture = ExtResource("1_mjk7n")
