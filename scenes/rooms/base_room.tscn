@@ -42,7 +42,8 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 3.5, 0)
 
-[node name="Key" parent="EditorKeyIndicator" index="0" unique_id=832775655]
+[node name="Key" parent="EditorKeyIndicator" index="0" unique_id=1615772369]
+visible = false
 surface_material_override/0 = SubResource("StandardMaterial3D_u6ncq")
 
 [editable path="EditorKeyIndicator"]

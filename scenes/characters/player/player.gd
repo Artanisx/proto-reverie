@@ -31,7 +31,7 @@ const UI_STRING_KICK_ENEMY : String = "[F] Kick"
 @onready var vocal_audio_stream_player: AudioStreamPlayer3D = %VocalAudioStreamPlayer
 
 @onready var animation_player: AnimationPlayer = $character/AnimationPlayer ## Reference to the AnimationPlayer to handle animations
-@onready var camera: Camera3D = %MainCamera ## Reference to the Camera3D node. # Other proto-reveier code might want this: @onready var camera: Camera3D = %Camera3D ## Reference to the Camera3D node. Has to befixed
+@onready var camera: Camera3D = %MainCamera ## Reference to the Camera3D node.
 @onready var mapcamera: Camera3D = $MAPCAMERA
 
 
