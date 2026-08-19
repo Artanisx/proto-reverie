@@ -55,7 +55,10 @@ func _ready() -> void:
 	GameState.register_player(self)	
 	
 	## Emit the player_spawned event, used for example by the UI to refresh HP bar
-	GameEvents.player_spawned.emit(self)	
+	GameEvents.player_spawned.emit(self)
+	
+	## Register to the current_keys_changed event
+	GameEvents.current_keys_changed.connect(on_current_keys_changed)
 		
 	# Call the switch_state function to set the starting state
 	switch_state(State.MOVING)
@@ -189,7 +192,7 @@ func check_for_possible_action() -> void:
 		if kick_raycast.get_collider() is Door:
 			new_action = UI_STRING_KICK_DOOR
 		elif kick_raycast.get_collider() is Enemy:
-			new_action = UI_STRING_KICK_ENEMY
+			new_action = UI_STRING_KICK_ENEMY ## We might not want to show this to the player
 		
 	if new_action != current_possible_action:
 		## The action changed (so we're not just, for example, looking at the same pickable item, but we changed our view to anotehr item or a door)
@@ -234,6 +237,9 @@ func try_receive_hit(source_enemy: Enemy, damage: int) -> void:
 		var hit_direction : Vector3 = source_enemy.global_position.direction_to(global_position)
 		
 		var data: PlayerStateData = PlayerStateData.new().set_damage(damage).set_impact_direction(hit_direction)
+		
+		AudioManager.play("slash-hit", action_audio_stream_player) ## PLay the SFX
+		
 		switch_state(State.HURT, data) ## go to to hurt state, passing damage and hitdirection		
 	elif state == State.BLOCKING:
 		## Player cannot be hurt, and they are blocking
@@ -263,3 +269,10 @@ func can_pickup_object() -> bool:
 func take_acid_damage() -> void: 
 	if state_node.can_die():
 		switch_state(State.DYING)
+
+## THe player just picked up a key
+func on_current_keys_changed(color: Door.KeyColor) -> void:
+	if GameState.has_key(color):
+		AudioManager.play("key-pickup", vocal_audio_stream_player) ## Play the SFX for when the player picks the key up	
+	else:
+		AudioManager.play("door-locked", vocal_audio_stream_player) ## Play the SFX for when the player USES the key (so he doesn has_key anymore 'cause he just used it up)

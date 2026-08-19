@@ -9,14 +9,18 @@ Pixel Art done by me using [Aseprite](https://www.aseprite.org/) while following
 3D Art done by me using [Blender](https://www.blender.org/) while following along).
 
 ## Tutorial Progress
-Episode 17: https://www.youtube.com/watch?v=XSto9EZXP_w
+NEXT: The tutorial is over, however tutorials for shooting are required:
+https://gameidea.org/2025/09/07/building-an-fps-from-scratch-in-godot-fps-series/
+
+https://www.youtube.com/watch?v=6bbPHsB9TtI&list=PLQZiuyZoMHcgqP-ERsVE4x4JSFojLdcBZ&index=4
+
+https://www.youtube.com/watch?v=A3HLeyaBCq4
 
 Time Index: 0:00:00
 
-What: START
+What: Start
 
 NOTE! Do not keep open goblin or player tscn scenes if you aren't touching them. Bogus changes might appear if they are open and those might break the skeleton and produce issues with ragdool or physics.
-
 
 Font added: https://alasseearfalas.itch.io/another-tiny-pixel-font-mono-3x5 
 In case I use it in my game, let's keep the attribution credits.

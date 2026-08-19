@@ -8,6 +8,9 @@ extends CharacterBody3D
 ## This signal is emitted when a enemy is hit by the player to warn the others
 signal screamed
 
+## This signal is emitted when a enemy dies
+signal dead(death_transform: Transform3D)
+
 const GRAVITY: float = 20.0
 const AIR_FRICTION: float = 20.0
 
@@ -88,17 +91,25 @@ func impale(thrown_item: ThrownItem, item_basis: Basis) -> void:
 ## thrown_item is the item that should be attached/rendered
 ## basis is the  transform (rotation etc) we want the impaled item to be
 func try_receive_furniture_impact(thrown_item: ThrownItem) -> void:
-	## the enemy will drop his shield
-	equipment.drop_shield()
-	
-	##calculate the hit direction (where is thefunrtire coming from)
-	var hit_direction : Vector3 = thrown_item.global_position.direction_to(global_position)
-	
-	## Create an EnemyStateData class and fill it with the arguments needed for the impaling state	
-	var state_data: EnemyStateData = EnemyStateData.new().set_impact_direction(hit_direction).set_knockback_force(2.5)
-	
-	## Switch to stunned state
-	switch_state(State.STUNNED, state_data)
+	if equipment.has_shield():	
+		## the enemy will drop his shield
+		equipment.drop_shield()
+		
+		##calculate the hit direction (where is thefunrtire coming from)
+		var hit_direction : Vector3 = thrown_item.global_position.direction_to(global_position)
+		
+		## Create an EnemyStateData class and fill it with the arguments needed for the impaling state	
+		var state_data: EnemyStateData = EnemyStateData.new().set_impact_direction(hit_direction).set_knockback_force(2.5)
+		
+		## Switch to stunned state
+		switch_state(State.STUNNED, state_data)
+	else:
+		## the enemy is vulnerable to be instantly killed by the furniture
+		
+		## Let's make sure the enemy's health is set to zero just to make sure isdead is properly set
+		health.current_life = 0
+		
+		switch_state(State.DYING)
 
 ## Check if enemy knows the player exists (and it's still valid instance, so not dead/queued free)
 func has_registered_player() -> bool:
@@ -230,6 +241,10 @@ func on_player_detected(body: Player) -> void:
 ## Handles taking acid damage when in contact with the Acid Trap	
 func take_acid_damage() -> void:
 	## Acid is oneshot damage!
+	
+	## Let's make sure the enemy's health is set to zero just to make sure isdead is properly set
+	health.current_life = 0
+	
 	if state_node.can_die(): ## Only if not already dying or dead, basically only in states that doesn't specifically disallow dying
 		switch_state(State.DYING)
 		
@@ -237,6 +252,10 @@ func take_acid_damage() -> void:
 ## For enemy this is an instant kill
 func take_spike_damage(_spikes_trap: SpikesTrap) -> void:
 	## spikes is oneshot damage!
+	
+	## Let's make sure the enemy's health is set to zero just to make sure isdead is properly set
+	health.current_life = 0
+	
 	if state_node.can_die(): ## Only if not already dying or dead, basically only in states that doesn't specifically disallow dying
 		AudioManager.play("spikes", action_audio_stream_player) ## Play the SFX
 		switch_state(State.DYING)

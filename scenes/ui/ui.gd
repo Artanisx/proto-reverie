@@ -10,11 +10,12 @@ extends CanvasLayer
 @onready var shield_indicator: StatIndicator = %ShieldIndicator
 @onready var action_panel: ColorRect = %ActionPanel
 @onready var action_label: Label = %ActionLabel
-
+@onready var key_container: HBoxContainer = %KeyContainer
 
 
 const TIME_FOR_HURT_VIGNETTE_ANIMATION: float = 0.1 ## 100ms
 const TIME_FOR_DEATH_SCREEN_ANIMATION: float = 0.3 ## 100ms
+const KEY_TEXTURE_PREFAB := preload("res://scenes/ui/key_texture.tscn")
 
 func _ready() -> void:
 	## Connect the player_hurt signal
@@ -37,6 +38,9 @@ func _ready() -> void:
 	
 	## Connec the signal for when the player can take a new action (selected a pickable item, a door in kick range...)
 	GameEvents.possible_action_changed.connect(on_possible_action_changed)	
+	
+	## Connec to the key_picked_up event signal for when the player picks up the key
+	GameEvents.current_keys_changed.connect(on_current_keys_changed)
 	
 ## Make the vignette appear and disappear briefly	
 func on_player_hurt(player: Player) -> void:
@@ -69,6 +73,10 @@ func on_level_restarted() -> void:
 ## Player just spawned, refresh HealthIndicator
 func on_player_spawned(player: Player) -> void:
 	health_indicator.refresh(player.health.current_life, player.health.max_life)
+	## we update the weapon bar UI (so if the player doesn't start with the weapon the Ui is correct)
+	on_weapon_changed(player.equipment.weapon_data)
+	## we update the shield bar UI (so if the player doesn't start with the shield the Ui is correct)
+	on_shield_changed(player.equipment.shield_data)
 
 ## Something about the players' weapon changed and we need to update the ui
 func on_weapon_changed(data: WeaponData) -> void:
@@ -103,3 +111,18 @@ func on_possible_action_changed(action: String) -> void:
 	## Toggle action panel visiblity to wheter the action is empty or not
 	action_panel.visible = not action.is_empty()
 	action_label.text = action	
+	
+## Update the KeyContainer accordingly each time there's a key change in the inventory	
+func on_current_keys_changed(_color: Door.KeyColor) -> void:
+	## Clear all key containers 
+	if key_container.get_child_count() > 0:
+		for keytexture in key_container.get_children():
+			keytexture.queue_free()	
+	
+	## Loop through all the values of the Door.KeyColor enum
+	for key_color: Door.KeyColor in Door.KeyColor.values():
+		## check if the player has this keycolor key
+		if GameState.has_key(key_color):
+			var key_texture: TextureRect = KEY_TEXTURE_PREFAB.instantiate() as TextureRect
+			key_texture.modulate = Door.COLOR_MAP[key_color]
+			key_container.add_child(key_texture)

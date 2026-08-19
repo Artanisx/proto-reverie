@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://q7bs7y46fw7n" path="res://scenes/props/barrel/barrel.tscn" id="2_qnli8"]
 [ext_resource type="PackedScene" uid="uid://isrdinagrwpp" path="res://scenes/props/torch/torch.tscn" id="3_3ov6t"]
 [ext_resource type="PackedScene" uid="uid://cbtp1l04q1b01" path="res://scenes/props/decor/spiderweb.tscn" id="4_ksxkj"]
+[ext_resource type="PackedScene" uid="uid://dv5k4pmqaxew" path="res://scenes/equipment/pickable_sword.tscn" id="5_deksg"]
 
 [node name="Entrance" unique_id=1003464471 instance=ExtResource("1_he615")]
 
@@ -20,3 +21,6 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, 
 
 [node name="Spiderweb" parent="Decor" parent_id_path=PackedInt32Array(1087828784) index="0" unique_id=580835794 instance=ExtResource("4_ksxkj")]
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -1, 0, 2)
+
+[node name="PickableSword" parent="Pickables" parent_id_path=PackedInt32Array(978293746) index="0" unique_id=1293022244 instance=ExtResource("5_deksg")]
+transform = Transform3D(-4.2832035e-08, -0.9798827, -0.19957422, 8.723668e-09, 0.19957422, -0.9798827, 1, -4.371139e-08, 1.9106855e-15, 1.686497, 0.19353405, 1)

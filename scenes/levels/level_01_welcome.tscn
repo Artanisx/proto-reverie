@@ -4,12 +4,14 @@
 [ext_resource type="PackedScene" uid="uid://csm8qril8g0dl" path="res://scenes/rooms/entrance.tscn" id="2_iemd2"]
 [ext_resource type="PackedScene" uid="uid://wyhhenbq2q5u" path="res://scenes/rooms/foyer.tscn" id="3_xicp7"]
 [ext_resource type="PackedScene" uid="uid://b1lbjtxcq5hci" path="res://scenes/rooms/kitchen.tscn" id="4_td8hj"]
+[ext_resource type="PackedScene" uid="uid://jkagf34sm14o" path="res://scenes/collectibles/dropped_key/dropped_key.tscn" id="6_h8tnv"]
 [ext_resource type="PackedScene" uid="uid://c7qmxvi7s6nvn" path="res://scenes/doors/door.tscn" id="8_3sqe8"]
 
 [node name="Level-01-Welcome" unique_id=433839496 instance=ExtResource("1_0mf82")]
 
 [node name="Entrance" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="0" unique_id=1003464471 instance=ExtResource("2_iemd2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+key_color = 2
 
 [node name="Foyer" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="1" unique_id=285906244 instance=ExtResource("3_xicp7")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14, 0, 4)
@@ -27,6 +29,12 @@ data = {
 
 [node name="Door" parent="Doors" parent_id_path=PackedInt32Array(1880995432) index="0" unique_id=1307811451 instance=ExtResource("8_3sqe8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -4.5)
+door_color = 2
 
 [node name="Door2" parent="Doors" parent_id_path=PackedInt32Array(1880995432) index="1" unique_id=226007757 instance=ExtResource("8_3sqe8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, -4.5)
+door_color = 1
+
+[node name="DroppedKey" parent="." index="4" unique_id=437850055 instance=ExtResource("6_h8tnv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -3)
+color = 2
