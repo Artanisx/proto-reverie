@@ -54,7 +54,7 @@ environment = SubResource("Environment_hyncs")
 [node name="WorldLight" type="DirectionalLight3D" parent="." unique_id=209904411]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 light_color = Color(0.60784316, 1, 0.6509804, 1)
-light_energy = 5.0
+light_energy = 0.2
 light_angular_distance = 0.5
 shadow_enabled = true
 

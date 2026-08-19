@@ -520,7 +520,7 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 	if kind == BaseRoom.RoomKind.END:
 		var light : OmniLight3D = OmniLight3D.new()
 		light.light_color = Color(0.0, 0.0, 1.0)
-		light.light_energy = 5.0
+		light.light_energy = 0.01
 		light.light_size = 1.0
 		light.position = Vector3.ZERO
 		room.add_child(light)
@@ -540,7 +540,7 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 	if kind == BaseRoom.RoomKind.START:
 		var light : OmniLight3D = OmniLight3D.new()
 		light.light_color = Color(0.0, 1.0, 0.0)
-		light.light_energy = 5.0
+		light.light_energy = 0.01
 		light.light_size = 1.0
 		light.position = Vector3.ZERO
 		room.add_child(light)
@@ -573,7 +573,7 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 	if kind == BaseRoom.RoomKind.BRANCHPATHEND:
 		var light : OmniLight3D = OmniLight3D.new()
 		light.light_color = Color(1.0, 0.0, 0.0)
-		light.light_energy = 5.0
+		light.light_energy = 0.01
 		light.light_size = 1.0
 		light.position = Vector3.ZERO
 		room.add_child(light)
