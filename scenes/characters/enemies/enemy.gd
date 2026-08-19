@@ -8,6 +8,9 @@ extends CharacterBody3D
 ## This signal is emitted when a enemy is hit by the player to warn the others
 signal screamed
 
+## This signal is emitted when a enemy dies
+signal dead(death_transform: Transform3D)
+
 const GRAVITY: float = 20.0
 const AIR_FRICTION: float = 20.0
 
@@ -102,6 +105,10 @@ func try_receive_furniture_impact(thrown_item: ThrownItem) -> void:
 		switch_state(State.STUNNED, state_data)
 	else:
 		## the enemy is vulnerable to be instantly killed by the furniture
+		
+		## Let's make sure the enemy's health is set to zero just to make sure isdead is properly set
+		health.current_life = 0
+		
 		switch_state(State.DYING)
 
 ## Check if enemy knows the player exists (and it's still valid instance, so not dead/queued free)

@@ -32,6 +32,9 @@ func _enter_tree() -> void:
 	## 0.6 - Turn of the Presence Light
 	enemy.presence_light.visible = false	
 	
+	## 0.7 - Emit dead signal (used for calculations and keydrop)
+	enemy.dead.emit(enemy.global_transform)
+	
 	## 1- Disable collision shape since we are no longer handling phsyics with it
 	enemy.collision_shape.disabled = true
 	## 2- Enable the skeleton simulator

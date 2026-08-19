@@ -9,6 +9,10 @@ extends Node3D
 ## Whenever a tile in the FLOORS tile is NOT a WALL-OUTER [3], or WALL-CORNER [2] or WALL-SIDE [1], we know these do NOT have a ceiling; so
 ## For those tiles we put a Ceiling tile mesh.
 
+const DROPPED_KEY_PREFAB := preload("res://scenes/collectibles/dropped_key/dropped_key.tscn")
+
+@export var key_color: Door.KeyColor = Door.KeyColor.None	## This sets wheter the room contains a key (which color) or not (None)
+
 @onready var ceilings: GridMap = %Ceilings
 @onready var floors: GridMap = %Floors
 @onready var enemies: Node3D = %Enemies
@@ -44,6 +48,8 @@ func fill_ceilings() -> void:
 func prep_enemies() -> void:
 	for enemy: Enemy in enemies.get_children():
 		enemy.screamed.connect(on_scream_heard)
+		## connect to the enemy.dead signal
+		enemy.dead.connect(on_enemy_death)
 
 ## Each enemy will be warned (aggro)
 ## Basically if one enemy emits the screamed signal, this will be heard and all enemies will aggro the player
@@ -51,3 +57,26 @@ func on_scream_heard() -> void:
 	for enemy: Enemy in enemies.get_children():
 		## This enemy should register the player so he's aware of them
 		enemy.player = GameState.current_player
+		
+## When an enemy dies, check if it's the last one in order to drop a key if this is a room key
+func on_enemy_death(enemy_transform: Transform3D) -> void:
+	for enemy: Enemy in enemies.get_children():
+		if not enemy.health.is_dead():
+			return	## There's at least one enemy alive in this room, so no key drop
+	
+	## If we're here and haven't returned, all enemies in the room are dead
+	drop_key(enemy_transform)	## Drop the related key in the last enemy transform position that emitted this signal
+
+## Drop the correct key in the passed position [br]
+## Takes the Transform3D position for the key to spawn.
+func drop_key(key_transform: Transform3D) -> void:
+	var key : DroppedKey = DROPPED_KEY_PREFAB.instantiate() as DroppedKey
+	key.color = key_color
+	key.global_transform = key_transform
+	GameState.current_level.add_child(key)
+	
+	## make the key pop up with an effect
+	var rand_angle := randf_range(0, PI)	## pick a random angle 0-360°
+	var launch_velocity : Vector3 = Vector3(cos(rand_angle) * 2.0, 5.0, sin(rand_angle) * 2.0) ## set a random velocity x, y=5.0, z
+	key.apply_central_impulse(launch_velocity) ## Apply the calculated impulse
+	

@@ -14,6 +14,7 @@ polygons = [PackedInt32Array(1, 0, 2), PackedInt32Array(2, 0, 3), PackedInt32Arr
 cell_height = 0.01
 
 [node name="Kitchen" unique_id=1003464471 instance=ExtResource("1_3w07q")]
+key_color = 1
 
 [node name="RoomNavigation" parent="." index="1" unique_id=1602827462]
 navigation_mesh = SubResource("NavigationMesh_p7bu6")

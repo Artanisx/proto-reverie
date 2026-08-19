@@ -17,6 +17,9 @@ func _enter_tree() -> void:
 	
 	AudioManager.play("impale", enemy.action_audio_stream_player) ## Play the SFX
 	
+	## Let's make sure the enemy's health is set to zero just to make sure isdead is properly set
+	enemy.health.current_life = 0
+	
 	var impaled_item := EQUIPPED_ITEM_PREFAB.instantiate() as EquippedItem
 	impaled_item.weapon_data = state_data.thrown_item.weapon_data		## The thrown item data should be passed to the equipped (impaled) item! If it's ana xe, an axe should be passed etc	
 	enemy.physical_bone_torso.add_child(impaled_item) 			## Then, add this instance to the torso, for proper impalation!

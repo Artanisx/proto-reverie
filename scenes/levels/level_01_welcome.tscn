@@ -32,12 +32,8 @@ door_color = 2
 
 [node name="Door2" parent="Doors" parent_id_path=PackedInt32Array(1880995432) index="1" unique_id=226007757 instance=ExtResource("8_3sqe8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, -4.5)
-door_color = 2
+door_color = 1
 
 [node name="DroppedKey" parent="." index="4" unique_id=437850055 instance=ExtResource("6_h8tnv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -3)
 color = 2
-
-[node name="DroppedKey2" parent="." index="5" unique_id=78938898 instance=ExtResource("6_h8tnv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
-color = 3
