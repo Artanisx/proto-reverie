@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://c3eq53t77bbpa" path="res://scenes/world/world.gd" id="1_hhpbp"]
 [ext_resource type="PackedScene" uid="uid://dlcqvtj4w04oc" path="res://scenes/ui/ui.tscn" id="2_hyncs"]
-[ext_resource type="PackedScene" uid="uid://f6wr1jdq7npo" path="res://scenes/levels/test_procedural_level.tscn" id="3_0etpu"]
 [ext_resource type="Script" uid="uid://4my2tqw0bf61" path="res://scenes/ui/minimap_camera.gd" id="4_emoax"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hhpbp"]
@@ -91,5 +90,3 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 1
 projection = 1
 size = 20.0
 script = ExtResource("4_emoax")
-
-[node name="TestProceduralLevel" parent="." unique_id=433839496 instance=ExtResource("3_0etpu")]
