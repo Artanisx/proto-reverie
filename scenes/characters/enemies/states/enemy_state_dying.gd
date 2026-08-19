@@ -11,6 +11,9 @@ extends EnemyState
 const DURATION_RAGDOLL_SIMULATION : float = 3.0
 
 func _enter_tree() -> void:	
+	## 0.0 - Just make sure the enemy's health is set to zero when dying	
+	enemy.health.current_life = 0
+	
 	## 0.1 - Apply the Hit Stop juice for highlighting the action - This will pause the game for a bit.
 	GameEvents.impact_felt.emit(GameEvents.ImpactIntensity.MEDIUM)
 		

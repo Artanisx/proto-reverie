@@ -75,8 +75,9 @@ func on_enemy_death(enemy_transform: Transform3D) -> void:
 		if not enemy.health.is_dead():
 			return	## There's at least one enemy alive in this room, so no key drop
 	
-	## If we're here and haven't returned, all enemies in the room are dead
-	drop_key(enemy_transform)	## Drop the related key in the last enemy transform position that emitted this signal
+	## If we're here and haven't returned, all enemies in the room are dead. Only if the room HAS a color
+	if key_color != Door.KeyColor.None:
+		drop_key(enemy_transform)	## Drop the related key in the last enemy transform position that emitted this signal
 
 ## Drop the correct key in the passed position [br]
 ## Takes the Transform3D position for the key to spawn.

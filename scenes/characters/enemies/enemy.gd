@@ -241,6 +241,10 @@ func on_player_detected(body: Player) -> void:
 ## Handles taking acid damage when in contact with the Acid Trap	
 func take_acid_damage() -> void:
 	## Acid is oneshot damage!
+	
+	## Let's make sure the enemy's health is set to zero just to make sure isdead is properly set
+	health.current_life = 0
+	
 	if state_node.can_die(): ## Only if not already dying or dead, basically only in states that doesn't specifically disallow dying
 		switch_state(State.DYING)
 		
@@ -248,6 +252,10 @@ func take_acid_damage() -> void:
 ## For enemy this is an instant kill
 func take_spike_damage(_spikes_trap: SpikesTrap) -> void:
 	## spikes is oneshot damage!
+	
+	## Let's make sure the enemy's health is set to zero just to make sure isdead is properly set
+	health.current_life = 0
+	
 	if state_node.can_die(): ## Only if not already dying or dead, basically only in states that doesn't specifically disallow dying
 		AudioManager.play("spikes", action_audio_stream_player) ## Play the SFX
 		switch_state(State.DYING)

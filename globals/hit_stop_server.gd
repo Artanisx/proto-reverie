@@ -10,9 +10,9 @@ var current_intensity : GameEvents.ImpactIntensity
 
 ## Dictonary that stores a pause amount in ms for each ImpactIntensity
 var duration_map := {
-	GameEvents.ImpactIntensity.LOW: 70,
-	GameEvents.ImpactIntensity.MEDIUM: 100,
-	GameEvents.ImpactIntensity.HIGH: 130
+	GameEvents.ImpactIntensity.LOW: 50,
+	GameEvents.ImpactIntensity.MEDIUM: 70,
+	GameEvents.ImpactIntensity.HIGH: 100
 }
 
 ## Store the time and used for the timer
