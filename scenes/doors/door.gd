@@ -15,7 +15,13 @@ static var COLOR_MAP : Dictionary [KeyColor, Color] = {
 
 const EMISSION_ENERGY : float = 2.5 ## The energy multiplier for the emission material of the key. How much it should "glow"
 
-@export var door_color: KeyColor
+@export var door_color: KeyColor:
+	set(new_color):	 ## We're using a setter because we need to do something when the exported variable is changed
+		door_color = new_color ## First we simply set the value
+		editor_update_key_indicator() ## Second, we update the editor key indicator, so that when the variable is changed in the editor that indicator is updated as well
+		
+		
+@export var editor_key_indicator: MeshInstance3D
 
 @onready var animation_player: AnimationPlayer = %AnimationPlayer
 @onready var collision_shape_3d: CollisionShape3D = %CollisionShape3D
@@ -24,12 +30,18 @@ const EMISSION_ENERGY : float = 2.5 ## The energy multiplier for the emission ma
 @onready var omni_light_3d_2: OmniLight3D = %OmniLight3D2
 
 
+
 func _ready() -> void:
-	## We need to make the frame visible only if the door has a key (so it will be of that key color)
-	frame.visible = door_color != KeyColor.None
-	
-	## Update the door frame material override with the right color
-	update_frame_color()
+	## Check if we're running in the editor
+	if Engine.is_editor_hint():
+		editor_update_key_indicator()  ## Update the keymesh indicator only if we're running in the editor
+	else:	
+		## We're running the game, so do the rest
+		## We need to make the frame visible only if the door has a key (so it will be of that key color)
+		frame.visible = door_color != KeyColor.None
+		
+		## Update the door frame material override with the right color
+		update_frame_color()
 	
 ## Update the door frame material override with the right color	
 func update_frame_color() -> void:
@@ -71,3 +83,16 @@ func open(source_transform: Transform3D) -> void:
 	
 	## Once adoor is opened if it had a frame it should be hidden
 	frame.hide()
+
+## This function will update the EditorKeyIndicator with the correct key color for this door (if any)
+## This also takes care of showing the keyindicator mesh IF IN EDITOR. Or hide it away if it's game running
+func editor_update_key_indicator() -> void:
+	if Engine.is_editor_hint():
+		editor_key_indicator.visible = door_color != Door.KeyColor.None ## Show the mesh only if the keycolor if this room is NOT None
+		if door_color != Door.KeyColor.None: ## This door is locked with a key
+			var material := editor_key_indicator.get_active_material(0).duplicate() as StandardMaterial3D
+			material.albedo_color = Door.COLOR_MAP[door_color]
+			editor_key_indicator.set_surface_override_material(0, material)
+	else:
+		## We're not in the editor, so hide it away
+		editor_key_indicator.visible = false

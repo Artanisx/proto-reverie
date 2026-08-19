@@ -65,10 +65,15 @@ data = PackedVector3Array(-1.2638, 0, 0.16849999, -1.2638, 2.0219998, -0.1684999
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d8f5h"]
 
-[node name="Door" type="StaticBody3D" unique_id=1307811451]
+[sub_resource type="SphereMesh" id="SphereMesh_5w87n"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3o04y"]
+
+[node name="Door" type="StaticBody3D" unique_id=1307811451 node_paths=PackedStringArray("editor_key_indicator")]
 collision_layer = 32
 collision_mask = 0
 script = ExtResource("1_cjc7v")
+editor_key_indicator = NodePath("EditorKeyIndicator")
 
 [node name="door" parent="." unique_id=1369555937 instance=ExtResource("1_vl1pl")]
 
@@ -105,9 +110,16 @@ omni_attenuation = 2.0
 
 [node name="Frame" parent="." unique_id=1202872994 instance=ExtResource("3_d8f5h")]
 unique_name_in_owner = true
+visible = false
 
 [node name="DoorFrame" parent="Frame" index="0" unique_id=1280328133]
 surface_material_override/0 = SubResource("StandardMaterial3D_d8f5h")
+
+[node name="EditorKeyIndicator" type="MeshInstance3D" parent="." unique_id=1874008901]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+mesh = SubResource("SphereMesh_5w87n")
+surface_material_override/0 = SubResource("StandardMaterial3D_3o04y")
 
 [editable path="door"]
 [editable path="Frame"]
