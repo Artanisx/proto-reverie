@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://c83i3cwebxvgh" path="res://scenes/characters/player/main_camera.gd" id="2_qd3e3"]
 [ext_resource type="PackedScene" uid="uid://doq2ddny7lxxo" path="res://assets/meshes/characters/character.glb" id="2_t61fv"]
 [ext_resource type="Texture2D" uid="uid://c7yd40jiqkhtf" path="res://assets/textures/cone_of_vision_minimap.png" id="3_686vu"]
+[ext_resource type="Texture2D" uid="uid://d4f1w5ff5y4g7" path="res://assets/textures/player_minimap.png" id="3_mk55u"]
 [ext_resource type="PackedScene" uid="uid://brmub7fj1q2ux" path="res://scenes/characters/components/health_component.tscn" id="4_hss88"]
 [ext_resource type="PackedScene" uid="uid://cdeki3jlgwcis" path="res://scenes/characters/components/equipment_component.tscn" id="6_6avc5"]
 
@@ -53,6 +54,7 @@ cast_shadow = 0
 modulate = Color(1, 0, 0, 1)
 axis = 1
 texture_filter = 0
+texture = ExtResource("3_mk55u")
 
 [node name="ConeOfVision_Minimap" type="Sprite3D" parent="." unique_id=948651875]
 transform = Transform3D(10, 0, 0, 0, 5, 0, 0, 0, 5, 0, 5, -2)
