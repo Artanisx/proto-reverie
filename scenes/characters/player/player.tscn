@@ -31,7 +31,6 @@ shape = SubResource("CapsuleShape3D_5w87n")
 [node name="MainCamera" type="Camera3D" parent="." unique_id=1598329383]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.4297889)
-cull_mask = 1048573
 current = true
 near = 0.001
 script = ExtResource("2_qd3e3")
@@ -69,7 +68,7 @@ projection = 1
 
 [node name="character" parent="." unique_id=902149486 instance=ExtResource("2_t61fv")]
 
-[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 172709949) index="0" unique_id=716764847]
+[node name="Skeleton3D" parent="character/Armature" parent_id_path=PackedInt32Array(902149486, 1176975584) index="0" unique_id=1309621462]
 bones/0/position = Vector3(-1.776356e-15, 0.62109935, -0.08423395)
 bones/0/rotation = Quaternion(0.064159825, 1.1896365e-07, 7.64845e-09, 0.99793965)
 bones/1/rotation = Quaternion(-0.24423768, -1.1559904e-07, -2.9115395e-08, 0.9697154)
@@ -103,7 +102,7 @@ bone_idx = 5
 unique_name_in_owner = true
 transform = Transform3D(0.68933934, 0.718483, 0.09269987, -0.7222657, 0.6717186, 0.16469991, 0.056065768, -0.18048805, 0.98197794, 0, 0, 0)
 
-[node name="AnimationPlayer" parent="character" index="1" unique_id=1640980022]
+[node name="AnimationPlayer" parent="character" index="1" unique_id=1310260831]
 autoplay = &"idle"
 
 [node name="EquipmentComponent" parent="." unique_id=535100031 node_paths=PackedStringArray("furniture_placeholder", "shield_placeholder", "weapon_placeholder", "weapon_spawn_position", "weapon_reach_raycast") instance=ExtResource("6_6avc5")]
