@@ -1,3 +1,4 @@
+@tool ## This makes this script ran IN THE EDITOR. It's needed for editor_key_indicator to work. WARNING: Any error in the code of this script WILL CRASH GODOT!
 class_name BaseRoom
 extends Node3D
 
@@ -11,18 +12,28 @@ extends Node3D
 
 const DROPPED_KEY_PREFAB := preload("res://scenes/collectibles/dropped_key/dropped_key.tscn")
 
-@export var key_color: Door.KeyColor = Door.KeyColor.None	## This sets wheter the room contains a key (which color) or not (None)
+@export var editor_key_indicator_mesh: MeshInstance3D		## This needs to be set to the Key mesh and will be used to show the mesh of the key in the editor
 
+@export var key_color: Door.KeyColor = Door.KeyColor.None:	## This sets wheter the room contains a key (which color) or not (None)
+	set(new_color):	 ## We're using a setter because we need to do something when the exported variable is changed
+		key_color = new_color ## First we simply set the value
+		editor_update_key_indicator() ## Second, we update the editor key indicator, so that when the variable is changed in the editor that indicator is updated as well
+		
 @onready var ceilings: GridMap = %Ceilings
 @onready var floors: GridMap = %Floors
 @onready var enemies: Node3D = %Enemies
-
+@onready var editor_key_indicator: Node3D = %EditorKeyIndicator
 
 var cell_ids_with_no_ceiling := []
 
 func _ready() -> void:
-	fill_ceilings()
-	prep_enemies()
+	## Check if we're running in the editor
+	if Engine.is_editor_hint():
+		editor_update_key_indicator() ## Update the keymesh indicator only if we're running in the editor
+	else:	
+		## We're running the game, so do the rest of the preparation
+		fill_ceilings()
+		prep_enemies()
 	
 func fill_ceilings() -> void:
 	# For each cell in the Floors, if the cell is one of the ones WITHOUT a ceiling...
@@ -80,3 +91,17 @@ func drop_key(key_transform: Transform3D) -> void:
 	var launch_velocity : Vector3 = Vector3(cos(rand_angle) * 2.0, 5.0, sin(rand_angle) * 2.0) ## set a random velocity x, y=5.0, z
 	key.apply_central_impulse(launch_velocity) ## Apply the calculated impulse
 	
+## This function will update the EditorKeyIndicator with the correct key color for this room (if any)
+## This also takes care of showing the keyindicator mesh IF IN EDITOR. Or hide it away if it's game running
+func editor_update_key_indicator() -> void:
+	## If we're in EDITOR
+	if Engine.is_editor_hint():
+		editor_key_indicator_mesh.visible = key_color != Door.KeyColor.None ## Show the mesh only if the keycolor if this room is NOT None
+		if key_color != Door.KeyColor.None: ## This room has a key
+			var material := editor_key_indicator_mesh.get_active_material(0).duplicate() as StandardMaterial3D
+			material.albedo_color = Door.COLOR_MAP[key_color]
+			editor_key_indicator_mesh.set_surface_override_material(0, material)
+	else:
+		## We're not in the editor, so hide it away
+		editor_key_indicator_mesh.visible = false
+			

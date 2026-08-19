@@ -1,3 +1,4 @@
+@tool ## This script needs to be run in the editor because base_room requires to acces Door.COLOR_MAP for EditorKeyIndicator
 class_name Door
 extends StaticBody3D
 

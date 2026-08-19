@@ -11,6 +11,7 @@
 
 [node name="Entrance" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="0" unique_id=1003464471 instance=ExtResource("2_iemd2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+key_color = 2
 
 [node name="Foyer" parent="Rooms" parent_id_path=PackedInt32Array(2122297286) index="1" unique_id=285906244 instance=ExtResource("3_xicp7")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14, 0, 4)
