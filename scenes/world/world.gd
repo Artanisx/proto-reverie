@@ -22,7 +22,8 @@ func _ready() -> void:
 
 func on_minimap_ready() -> void:
 	##print("received minimap readyness")
-	minimap_camera.set_player(test_procedural_level.get_player())
+	if test_procedural_level != null:
+		minimap_camera.set_player(test_procedural_level.get_player())
 
 
 ## WARNING: ONLY USED BY TUTORIAL 	

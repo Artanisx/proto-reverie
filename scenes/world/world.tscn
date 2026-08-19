@@ -58,8 +58,6 @@ light_energy = 5.0
 light_angular_distance = 0.5
 shadow_enabled = true
 
-[node name="TestProceduralLevel" parent="." unique_id=433839496 instance=ExtResource("3_0etpu")]
-
 [node name="UI" parent="." unique_id=903971547 instance=ExtResource("2_hyncs")]
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=428158854]
@@ -93,3 +91,5 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 1
 projection = 1
 size = 20.0
 script = ExtResource("4_emoax")
+
+[node name="TestProceduralLevel" parent="." unique_id=433839496 instance=ExtResource("3_0etpu")]
