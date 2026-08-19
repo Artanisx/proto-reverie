@@ -50,6 +50,8 @@ var state : State	## State the player is in
 var state_node : PlayerState ## The Node that holds the current state the player is in
 var current_possible_action: String = "" ## Stores the possible action (TEXT for the ActionLabel) for the player to take which might be PICKUP something or KICK the door
 
+var player_spawn_completed: bool = false
+
 var mouse_look_allowed : bool = true ## toggles mouselook
 
 func _ready() -> void:
@@ -60,9 +62,6 @@ func _ready() -> void:
 	## Register the player reference to the GameState global
 	GameState.register_player(self)	
 	
-	## Emit the player_spawned event, used for example by the UI to refresh HP bar
-	GameEvents.player_spawned.emit(self)
-	
 	## Register to the current_keys_changed event
 	GameEvents.current_keys_changed.connect(on_current_keys_changed)
 		
@@ -70,7 +69,7 @@ func _ready() -> void:
 	switch_state(State.MOVING)
 	
 	mapcamera.size = mapcamera_distance
-	
+		
 func _process(_delta: float) -> void:
 	## Setup the input direction using the get_vector function that maps a Vector2 to a input: 
 	## negative x motion (strafe left), positive x motion (stafe right), negative y motion (go backward), postive y motion (go forward)
@@ -82,6 +81,12 @@ func _physics_process(delta: float) -> void:
 	move_and_slide() ## Apply movemenet	
 	check_for_selection() ## Check if a pickable item is being looked at (inside the select_raycast range)
 	check_for_possible_action() ## Check if a new action is possible, meaning, check if the ActionPanel needs to be updated
+	
+	## Force registration of the player spawn (if set in _ready doesn't work..)
+	if not player_spawn_completed:
+		## Emit the player_spawned event, used for example by the UI to refresh HP bar
+		GameEvents.player_spawned.emit(GameState.current_player)
+		player_spawn_completed = true
 
 func process_movement(delta: float, speed_multiplier: float = 1.0) -> void:
 	## HANDLE MOVEMENT (moving around)
@@ -98,7 +103,7 @@ func process_movement(delta: float, speed_multiplier: float = 1.0) -> void:
 	## First, check if we are using either walk_speed or run speed depending if the player is holding the run key	
 	var target_speed : float
 	if Input.is_action_pressed("run"):
-		target_speed = run_speed
+		target_speed = run_speed	
 	else:
 		target_speed = walk_speed
 	

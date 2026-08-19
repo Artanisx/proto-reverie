@@ -32,4 +32,4 @@ func register_level(level: BaseLevel) -> void:
 
 ## Set the current player
 func register_player(player: Player) -> void:
-	current_player = player
+	current_player = player	
