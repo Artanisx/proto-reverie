@@ -1,16 +1,18 @@
 [gd_scene format=3 uid="uid://bjpcxgpmpe8b8"]
 
-[ext_resource type="Script" uid="uid://bkrlgm3y1kbma" path="res://scenes/world/world.gd" id="1_6m72w"]
-[ext_resource type="PackedScene" uid="uid://dlcqvtj4w04oc" path="res://scenes/ui/ui.tscn" id="1_sl2e5"]
+[ext_resource type="Script" uid="uid://c3eq53t77bbpa" path="res://scenes/world/world.gd" id="1_hhpbp"]
+[ext_resource type="PackedScene" uid="uid://dlcqvtj4w04oc" path="res://scenes/ui/ui.tscn" id="2_hyncs"]
+[ext_resource type="PackedScene" uid="uid://f6wr1jdq7npo" path="res://scenes/levels/test_procedural_level.tscn" id="3_0etpu"]
+[ext_resource type="Script" uid="uid://4my2tqw0bf61" path="res://scenes/ui/minimap_camera.gd" id="4_emoax"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_4rhad"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hhpbp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
 ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
 
 [sub_resource type="Sky" id="Sky_dphjl"]
-sky_material = SubResource("ProceduralSkyMaterial_4rhad")
+sky_material = SubResource("ProceduralSkyMaterial_hhpbp")
 
-[sub_resource type="Environment" id="Environment_sl2e5"]
+[sub_resource type="Environment" id="Environment_hyncs"]
 background_mode = 1
 background_color = Color(0, 0, 0.03529412, 1)
 sky = SubResource("Sky_dphjl")
@@ -30,17 +32,64 @@ adjustment_brightness = 0.9
 adjustment_contrast = 1.2
 adjustment_saturation = 1.3
 
-[node name="World" type="Node3D" unique_id=572461608]
-script = ExtResource("1_6m72w")
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v5dby"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0.6392176, 0.9411444, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 1.4439226e-07, 0.45277554, 0.6)
+shadow_size = 16
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=453325610]
-environment = SubResource("Environment_sl2e5")
+[node name="ProtoWorld" type="Node3D" unique_id=572461608]
+script = ExtResource("1_hhpbp")
 
-[node name="WorldLight" type="DirectionalLight3D" parent="." unique_id=1256429004]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=269518318]
+environment = SubResource("Environment_hyncs")
+
+[node name="WorldLight" type="DirectionalLight3D" parent="." unique_id=209904411]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 light_color = Color(0.60784316, 1, 0.6509804, 1)
-light_energy = 0.2
+light_energy = 5.0
 light_angular_distance = 0.5
 shadow_enabled = true
 
-[node name="UI" parent="." unique_id=903971547 instance=ExtResource("1_sl2e5")]
+[node name="TestProceduralLevel" parent="." unique_id=433839496 instance=ExtResource("3_0etpu")]
+
+[node name="UI" parent="." unique_id=903971547 instance=ExtResource("2_hyncs")]
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=428158854]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer" unique_id=1020801494]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_v5dby")
+
+[node name="Minimap" type="SubViewportContainer" parent="MarginContainer/PanelContainer" unique_id=952882686]
+custom_minimum_size = Vector2(320, 240)
+custom_maximum_size = Vector2(320, 240)
+layout_mode = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="MarginContainer/PanelContainer/Minimap" unique_id=721131013]
+handle_input_locally = false
+size = Vector2i(320, 240)
+render_target_update_mode = 4
+
+[node name="MinimapCamera" type="Camera3D" parent="MarginContainer/PanelContainer/Minimap/SubViewport" unique_id=297853279]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 10, 0)
+projection = 1
+size = 20.0
+script = ExtResource("4_emoax")
