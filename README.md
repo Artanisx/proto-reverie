@@ -19,11 +19,11 @@ That’s it, very basic. If it's fun, we will add system extensions, like chests
 Once the prototype is done, we can proceed with an in-depth design, deciding on the format, room layouts, balancing, whether there are chests, what kind of items are found, potential healing, equipment, different weapons, powers, etc. But not before creating the aforementioned prototype.
 
 # Credits
-Pixel Art done by me using [Aseprite](https://www.aseprite.org/). This being a prototype I'm using art I created following along this [tutorial repository](https://github.com/Artanisx/goblins-den) <br>
+Pixel Art done by me using a self compiled [Aseprite](https://www.aseprite.org/). This being a prototype I'm using art I created following along this [tutorial repository](https://github.com/Artanisx/goblins-den) <br>
 3D Art done by me using [Blender](https://www.blender.org/). This being a prototype I'm using art I created following along this [tutorial repository](https://github.com/Artanisx/goblins-den). However, this prototype also features art done entirely by myself with no guidance (for better or worse).<br>
 Font [Another Tiny Pixel Font](https://alasseearfalas.itch.io/another-tiny-pixel-font-mono-3x5).
 
-The actual project, if this prototype will be successful will be created with art entirely done by me without following step by step tutorials.
+The actual project, if this prototype will be successful will be created with art entirely done by me without following step by step tutorials. All software used will be entirely open source and/or with open licenses. No commercial software will be used in any way; all open source or free software used during the development will be credited in the README and in the game credits.
 
 NOTE! Do not keep open goblin or player tscn scenes if you aren't touching them. Bogus changes might appear if they are open and those might break the skeleton and produce issues with ragdool or physics.
 
