@@ -49,7 +49,8 @@ func gain_level(excess_experience: int = 0) -> void:
 		current_level = max_level
 		current_exp = 0
 		is_max_level = true
-		print("Player cannot level up anymore. Level is: (" + str(current_level) + ")")
+		GameEvents.level_up.emit()
+		print("Player reached max level, can't level up anymore. Level is: (" + str(current_level) + ")")
 		
 	
 		

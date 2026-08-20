@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://b53qkx04tdwca"]
+
+[ext_resource type="FontFile" uid="uid://dq8w1p5b8hk86" path="res://assets/fonts/my 3x5 tiny mono pixel font.ttf" id="1_7lfe2"]
+[ext_resource type="Script" uid="uid://s4yxrldr10ya" path="res://scenes/ui/number_indicator.gd" id="2_k6ybv"]
+
+[node name="NumberIndicator" type="Label" unique_id=1747566989]
+offset_right = 96.0
+offset_bottom = 17.0
+theme_override_fonts/font = ExtResource("1_7lfe2")
+text = "0/0"
+script = ExtResource("2_k6ybv")

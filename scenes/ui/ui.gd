@@ -9,6 +9,9 @@ extends CanvasLayer
 @onready var shield_icon: TextureRect = %ShieldIcon
 @onready var shield_indicator: StatIndicator = %ShieldIndicator
 @onready var exp_indicator: StatIndicator = $ExpIndicator
+@onready var level_indicator: NumberIndicator = $LevelIndicator
+@onready var strength_indicator: NumberIndicator = $StrengthIndicator
+
 @onready var action_panel: ColorRect = %ActionPanel
 @onready var action_label: Label = %ActionLabel
 @onready var key_container: HBoxContainer = %KeyContainer
@@ -45,6 +48,9 @@ func _ready() -> void:
 	
 	## Connect to the exp_up event signal for when player gains exp
 	GameEvents.exp_up.connect(on_exp_up)
+	
+	## Cooonec tto the level_up event signal for when the player gains a level
+	GameEvents.level_up.connect(on_level_up)
 	
 	
 ## Make the vignette appear and disappear briefly	
@@ -84,8 +90,10 @@ func on_player_spawned(player: Player) -> void:
 	on_shield_changed(player.equipment.shield_data)
 	## We update the XP bar UI
 	on_exp_up(player) 
+	##We udpoat ethe elevel text ui
+	on_level_up()
 	## Set the minimap camera offset based on player start global position
-	minimap_camera.set_offset(GameState.current_player.global_position)
+	minimap_camera.set_offset(GameState.current_player.global_position)	
 
 ## Something about the players' weapon changed and we need to update the ui
 func on_weapon_changed(data: WeaponData) -> void:
@@ -140,3 +148,12 @@ func on_current_keys_changed(_color: Door.KeyColor) -> void:
 func on_exp_up(player: Player) -> void:
 	## refresh the exp indicator
 	exp_indicator.refresh(player.experience.current_exp, player.experience.max_exp)
+	
+func on_level_up() -> void:
+	## On a level up several stast update. We need to refresh them all here.
+	## refreshes the LevelIndicator
+	level_indicator.refresh(GameState.current_player.experience.current_level, GameState.current_player.experience.max_level, "LEVEL: ")
+	##refreshes the HelathINdicator
+	health_indicator.refresh(GameState.current_player.health.current_life, GameState.current_player.health.max_life)
+	## refreshe the strethindicator
+	strength_indicator.refresh(GameState.current_player.player_strength, -1, "STR - ")
