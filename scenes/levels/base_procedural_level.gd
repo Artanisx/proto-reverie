@@ -49,6 +49,9 @@ enum RoomType{R10x10_1W_BOTTOM, R10x10_1W_LEFT, R10x10_1W_RIGHT, R10x10_1W_TOP,
 @export var room_size: int = 21 # The size of the room, including the portion related to the doors for proper placement.
 @export var rng_seed: int = -1 ## Seed for procedural generation. Use -1 for random seed.
 
+const DEBUG_SEED: int = -70058273485 ## WARNING: PRECISE SEED FOR DEBUG!
+const DEBUG_MODE: bool = true				## WARNING: IF SET TO TRUE, THINGS LIKE DEBUG_SEED WILL BE USED
+
 @onready var rooms_container: Node3D = $Rooms
 
 var room_map : Array ## 2D array of RoomData, mirroring the level grid structure
@@ -81,12 +84,17 @@ func _ready() -> void:
 	
 ## This function will procedurally generate the level assembling rooms
 func initialize_level() -> void:
+	## WARNING: DEBUG MODE
+	if DEBUG_MODE:
+		rng_seed = DEBUG_SEED
+	
 	## Initialize the random number generator
 	rng = RandomNumberGenerator.new()
-	if rng_seed >= 0:
+	if rng_seed != -1: ## -1 stands for random seed
 		rng.seed = rng_seed
 	else:
-		rng.randomize()
+		rng.seed = randi() ## Randomize a seed using randi() that returns a smaller value that can be properly seen in the inspector
+##		rng.randomize()
 
 	## ## Initialize the room_map array
 	for x in dimensions.x:
