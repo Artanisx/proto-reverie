@@ -35,7 +35,7 @@ func _process(_delta: float) -> void:
 		if player.weapon_reach_raycast.is_colliding():
 			var enemy := player.weapon_reach_raycast.get_collider() as Enemy
 			if enemy != null:
-				var damage := player.equipment.weapon_data.get_damage_dealt()
+				var damage := player.equipment.weapon_data.get_damage_dealt() + player.player_strength ## Include player stregnth in damage calculation
 				## Damage the weapon itself
 				player.equipment.apply_weapon_damage(WEAPON_DURABILITY_DAMAGE)
 				enemy.try_receive_hit(player, damage)	 ## try to hit the enemy that collided with the raycast, passing the player (for position) and damage	

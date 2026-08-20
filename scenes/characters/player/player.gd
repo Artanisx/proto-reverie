@@ -11,21 +11,33 @@ const SPIKE_DAMAGE : int = 5				##how much damage spike cause to the player
 const MAX_ANGLE_LOOK_UP := deg_to_rad(70)	## Can't go more than 70° looking up
 const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking down
 const GROUND_FRICTION : float = 15.0			## Used to slow down after a pushback
+const HP_GAIN_ON_LEVEL_UP: int = 10				## How much HP is added to max hp for each level up
+const STR_GAIN_ON_LEVEL_UP: int = 1				## How much STR is added to max hp for each level up
 
 ## UI STRINGS
 const UI_STRING_PICKUP : String = "[E] Pick Up"
 const UI_STRING_KICK_DOOR : String = "[F] Open"
 const UI_STRING_KICK_ENEMY : String = "[F] Kick"
 
+@export_group("Movement")
 @export var acceleration : float ## Acceleration of the player movement, used to allow for friction to speed up / down rather than abrut movement. A good value is walk_speed * 10.[br]For example for a 3 walk_speed and 30 acceleration, it will take 0.1s (100 ms) to reach it
 @export var jump_force : float ## The jump intensity for the player
 @export var gravity : float ## The force of gravity, that applies to the player
 @export var mouse_sensitivity : float ## Mouse Sensitivity: Use to determine the mouse look speed. 
 @export var run_speed : float ## Speed of running movement, used for WASD + SHIFT for running. 
 @export var walk_speed : float ## Speed of regular movement, used for WASD. 
+
+@export_group("Map and Minimap")
 @export var mapcamera_distance : float = 100.0 ##MAP CAMERA Y POSITION (DISTANCE/ZOOM)
+
+@export_group("Misc")
 @export var capture_mouse_enabled : bool = true ## If set to true, mouse will be captured so it can't go outside of the window.
 @export var duration_hurt : float			## Time in seconds for the duration of the hurt state
+
+@export_group("Player Stats")
+@export var player_strength: int ## Player Strenght: Adds damage to each attack
+@export var player_armor: int ## Player Armor: Reduces damage to each attack - NYI
+
 @onready var action_audio_stream_player: AudioStreamPlayer3D = %ActionAudioStreamPlayer3D
 @onready var footstep_audio_stream_player: AudioStreamPlayer3D = %FootstepAudioStreamPlayer
 @onready var vocal_audio_stream_player: AudioStreamPlayer3D = %VocalAudioStreamPlayer
@@ -66,6 +78,9 @@ func _ready() -> void:
 	
 	## Register to the current_keys_changed event
 	GameEvents.current_keys_changed.connect(on_current_keys_changed)
+	
+	## Register to the leveL_up event
+	GameEvents.level_up.connect(on_level_up)
 		
 	# Call the switch_state function to set the starting state
 	switch_state(State.MOVING)
@@ -299,3 +314,16 @@ func on_current_keys_changed(color: Door.KeyColor) -> void:
 		AudioManager.play("key-pickup", vocal_audio_stream_player) ## Play the SFX for when the player picks the key up	
 	else:
 		AudioManager.play("door-locked", vocal_audio_stream_player) ## Play the SFX for when the player USES the key (so he doesn has_key anymore 'cause he just used it up)
+
+## Player has leveled up
+func on_level_up() -> void:
+	## 1 - Max HP must increase by HP_GAIN_ON_LEVEL_UP
+	# Since we're not doing anything fancy here, we simply increase HP_GAIN_ON_LEVEL_UP by the previous max_health
+	health.max_life += HP_GAIN_ON_LEVEL_UP
+	# We also fully heal
+	health.current_life = health.max_life	
+	## 2 - Increase damage by STR_GAIN_ON_LEVEL_UP
+	player_strength += STR_GAIN_ON_LEVEL_UP
+	print("Player streght is now: (" + str (player_strength) + ")- Player Max HP is now: (" + str (health.max_life) + ")")
+	# Play a sound fx
+	AudioManager.play("key-pickup", vocal_audio_stream_player)
