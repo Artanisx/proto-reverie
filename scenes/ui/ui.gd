@@ -11,7 +11,7 @@ extends CanvasLayer
 @onready var action_panel: ColorRect = %ActionPanel
 @onready var action_label: Label = %ActionLabel
 @onready var key_container: HBoxContainer = %KeyContainer
-
+@onready var minimap_camera: MinimapCamera = $MinimapPanel/Minimap/SubViewport/MinimapCamera
 
 const TIME_FOR_HURT_VIGNETTE_ANIMATION: float = 0.1 ## 100ms
 const TIME_FOR_DEATH_SCREEN_ANIMATION: float = 0.3 ## 100ms
@@ -77,6 +77,8 @@ func on_player_spawned(player: Player) -> void:
 	on_weapon_changed(player.equipment.weapon_data)
 	## we update the shield bar UI (so if the player doesn't start with the shield the Ui is correct)
 	on_shield_changed(player.equipment.shield_data)
+	## Set the player to the Minimap
+	minimap_camera.set_player(GameState.current_player)
 
 ## Something about the players' weapon changed and we need to update the ui
 func on_weapon_changed(data: WeaponData) -> void:

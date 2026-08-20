@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://b56gyn0psj0ju" path="res://scenes/ui/stat_indicator.tscn" id="5_0dwhk"]
 [ext_resource type="Texture2D" uid="uid://bo0o7ydbf2qba" path="res://assets/textures/icons/icon-shield.png" id="6_7vp6q"]
 [ext_resource type="Texture2D" uid="uid://bdcvha6wdnlrj" path="res://assets/textures/icons/icon-weapon.png" id="6_pfayw"]
+[ext_resource type="PackedScene" uid="uid://f41vdjt1030g" path="res://scenes/ui/minimap.tscn" id="8_jcn1r"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5w87n"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -148,6 +149,16 @@ offset_bottom = -10.0
 grow_vertical = 0
 layout_direction = 3
 
+[node name="MinimapPanel" parent="." unique_id=192510716 instance=ExtResource("8_jcn1r")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -360.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 280.0
+grow_horizontal = 0
+
 [node name="DeathScreen" type="ColorRect" parent="." unique_id=253786456]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
@@ -174,3 +185,5 @@ PRESS \"R\" TO RESTART"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
+
+[editable path="MinimapPanel"]

@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://f41vdjt1030g"]
+
+[ext_resource type="Script" uid="uid://4my2tqw0bf61" path="res://scenes/ui/minimap_camera.gd" id="1_4bivy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v5dby"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0.6392176, 0.9411444, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 1.4439226e-07, 0.45277554, 0.6)
+shadow_size = 16
+
+[node name="MinimapPanel" type="PanelContainer" unique_id=192510716]
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_v5dby")
+
+[node name="Minimap" type="SubViewportContainer" parent="." unique_id=530020201]
+custom_minimum_size = Vector2(320, 240)
+custom_maximum_size = Vector2(320, 240)
+layout_mode = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Minimap" unique_id=1666835634]
+handle_input_locally = false
+size = Vector2i(320, 240)
+render_target_update_mode = 4
+
+[node name="MinimapCamera" type="Camera3D" parent="Minimap/SubViewport" unique_id=608039288]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 10, 0)
+projection = 1
+size = 20.0
+script = ExtResource("1_4bivy")

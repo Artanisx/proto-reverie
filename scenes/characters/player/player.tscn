@@ -130,6 +130,7 @@ collision_mask = 4
 unique_name_in_owner = true
 max_life = 30
 current_life = 30
+debug_mode = true
 
 [node name="FurniturePlaceholder" type="Node3D" parent="." unique_id=791181344]
 unique_name_in_owner = true
