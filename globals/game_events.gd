@@ -38,3 +38,6 @@ signal current_keys_changed(color: Door.KeyColor)
 
 ## SIGNAL for when the player levels up
 signal level_up
+
+## SIGNAL for when the player gains exp
+signal exp_up(player: Player)

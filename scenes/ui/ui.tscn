@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bo0o7ydbf2qba" path="res://assets/textures/icons/icon-shield.png" id="6_7vp6q"]
 [ext_resource type="Texture2D" uid="uid://bdcvha6wdnlrj" path="res://assets/textures/icons/icon-weapon.png" id="6_pfayw"]
 [ext_resource type="PackedScene" uid="uid://f41vdjt1030g" path="res://scenes/ui/minimap.tscn" id="8_jcn1r"]
+[ext_resource type="Texture2D" uid="uid://drw43g5kkn6p" path="res://assets/textures/icons/icon-exp.png" id="9_uegxj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5w87n"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -60,6 +61,23 @@ offset_left = 60.0
 offset_top = 24.0
 offset_right = 168.0
 offset_bottom = 40.0
+
+[node name="ExpIcon" type="TextureRect" parent="." unique_id=2063399229]
+offset_left = 16.0
+offset_top = 56.0
+offset_right = 48.0
+offset_bottom = 88.0
+texture = ExtResource("9_uegxj")
+
+[node name="ExpIndicator" parent="." unique_id=1765997473 instance=ExtResource("5_0dwhk")]
+offset_left = 60.0
+offset_top = 68.0
+offset_right = 168.0
+offset_bottom = 84.0
+high_value_color = Color(1, 1, 0, 1)
+med_value_color = Color(1, 1, 0, 1)
+low_value_color = Color(1, 1, 0, 1)
+very_low_value_color = Color(1, 1, 0, 1)
 
 [node name="WeaponIcon" type="TextureRect" parent="." unique_id=1708482828]
 unique_name_in_owner = true

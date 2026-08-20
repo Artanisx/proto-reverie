@@ -8,6 +8,7 @@ extends CanvasLayer
 @onready var weapon_icon: TextureRect = %WeaponIcon
 @onready var shield_icon: TextureRect = %ShieldIcon
 @onready var shield_indicator: StatIndicator = %ShieldIndicator
+@onready var exp_indicator: StatIndicator = $ExpIndicator
 @onready var action_panel: ColorRect = %ActionPanel
 @onready var action_label: Label = %ActionLabel
 @onready var key_container: HBoxContainer = %KeyContainer
@@ -27,20 +28,24 @@ func _ready() -> void:
 	## Connect the signal for restart (so we can hide the death screen)
 	GameEvents.level_restarted.connect(on_level_restarted)
 	
-	## Connec the signal for when the player spawns in the world
+	## Connect the signal for when the player spawns in the world
 	GameEvents.player_spawned.connect(on_player_spawned)	
 	
-	## Connec the signal for when the player equipped Weapon has something aobut it changed (durability/being equipped/dropped/thrown...)
+	## Connect the signal for when the player equipped Weapon has something aobut it changed (durability/being equipped/dropped/thrown...)
 	GameEvents.weapon_changed.connect(on_weapon_changed)	
 	
-	## Connec the signal for when the player equipped Shield has something aobut it changed (durability/being equipped/dropped/thrown...)
+	## Connect the signal for when the player equipped Shield has something aobut it changed (durability/being equipped/dropped/thrown...)
 	GameEvents.shield_changed.connect(on_shield_changed)	
 	
-	## Connec the signal for when the player can take a new action (selected a pickable item, a door in kick range...)
+	## Connect the signal for when the player can take a new action (selected a pickable item, a door in kick range...)
 	GameEvents.possible_action_changed.connect(on_possible_action_changed)	
 	
-	## Connec to the key_picked_up event signal for when the player picks up the key
+	## Connect to the key_picked_up event signal for when the player picks up the key
 	GameEvents.current_keys_changed.connect(on_current_keys_changed)
+	
+	## Connect to the exp_up event signal for when player gains exp
+	GameEvents.exp_up.connect(on_exp_up)
+	
 	
 ## Make the vignette appear and disappear briefly	
 func on_player_hurt(player: Player) -> void:
@@ -77,6 +82,8 @@ func on_player_spawned(player: Player) -> void:
 	on_weapon_changed(player.equipment.weapon_data)
 	## we update the shield bar UI (so if the player doesn't start with the shield the Ui is correct)
 	on_shield_changed(player.equipment.shield_data)
+	## We update the XP bar UI
+	on_exp_up(player) 
 	## Set the minimap camera offset based on player start global position
 	minimap_camera.set_offset(GameState.current_player.global_position)
 
@@ -128,3 +135,8 @@ func on_current_keys_changed(_color: Door.KeyColor) -> void:
 			var key_texture: TextureRect = KEY_TEXTURE_PREFAB.instantiate() as TextureRect
 			key_texture.modulate = Door.COLOR_MAP[key_color]
 			key_container.add_child(key_texture)
+
+## Player gained experience, so it must refresh the exp indicator
+func on_exp_up(player: Player) -> void:
+	## refresh the exp indicator
+	exp_indicator.refresh(player.experience.current_exp, player.experience.max_exp)

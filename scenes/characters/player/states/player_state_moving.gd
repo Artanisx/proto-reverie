@@ -36,7 +36,8 @@ func _process(_delta: float) -> void:
 	elif Input.is_action_just_pressed("kick"):
 		if DEBUG_MODE:
 			print_rich("[color=yellow][b]WARNING:[/b] player_State_moving.gd DEBUG MODE is [b]ON[/b][/color]")
-			player.experience.gain_experience(35)	
+			player.experience.gain_experience(35)
+			GameEvents.exp_up.emit(player) ## Emis the exp up signal	
 		transition_state(Player.State.KICKING)	## Emit the signal with the state to transition to		
 	
 	## Setup for the block button (RMB) to block
