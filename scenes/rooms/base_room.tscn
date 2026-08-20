@@ -37,6 +37,7 @@ unique_name_in_owner = true
 [node name="Decor" type="Node3D" parent="." unique_id=1087828784]
 
 [node name="Pickables" type="Node3D" parent="." unique_id=978293746]
+unique_name_in_owner = true
 
 [node name="EditorKeyIndicator" parent="." unique_id=1436847492 instance=ExtResource("4_ativ4")]
 unique_name_in_owner = true

@@ -18,7 +18,11 @@ extends Node
 	
 ## Reduce the health by the passed argument
 func take_damage(damage: int) -> void:	
-	current_life = clampi(current_life - damage, 0, max_life)	
+	current_life = clampi(current_life - damage, 0, max_life)
+
+## Get a heal by the passed arugment	
+func heal_damage(heal: int) -> void:
+	current_life = clampi(current_life + heal, 0, max_life)
 	
 ## Returns true if the character is dead
 func is_dead() -> bool:	
