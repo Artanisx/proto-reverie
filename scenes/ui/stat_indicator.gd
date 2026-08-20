@@ -12,16 +12,19 @@ extends ColorRect
 @export var very_low_value_color: Color = Color.DARK_RED ## The color the progress bar should be if the value is very low (<25%)
 
 @onready var progress_bar: TextureRect = %ProgressBar	## The progress bar texture (the "tick") that will fill in the bar
-
+@onready var text_health: Label = $TextHealth ## The Label that will show the health as current/max
 
 ## Refreshes the value of the bar (the tickness of the tick texture) to properly fill the progressbar itself
 ## current_value: The value of the property (hp for example)
 ## max_value: The max value of the property
 ## The arguments are used to properly calculate the percentage of the bar that  should be filled
 func refresh(current_value: int, max_value: int) -> void:	
+	## Set the health text
+	text_health.text = str(current_value) + "/" + str(max_value)	
+	
 	## any value <= 0 means the size is 0, Empty bar
 	if current_value <= 0:
-		progress_bar.size.x = 0
+		progress_bar.size.x = 0	
 	
 	## Now we calculate the actual size the bar should be depending on values
 	var percentage := (float(current_value) / float(max_value)) * 100.0
@@ -38,4 +41,5 @@ func refresh(current_value: int, max_value: int) -> void:
 	elif percentage > 25:
 		progress_bar.modulate = low_value_color
 	else:
-		progress_bar.modulate = very_low_value_color	
+		progress_bar.modulate = very_low_value_color		
+	

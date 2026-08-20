@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dlcqvtj4w04oc"]
 
-[ext_resource type="Script" uid="uid://dwvlbb7ibsw1i" path="res://scenes/ui/ui.gd" id="1_f5cxw"]
+[ext_resource type="Script" uid="uid://dhrb2048dyhpf" path="res://scenes/ui/ui.gd" id="1_f5cxw"]
 [ext_resource type="Texture2D" uid="uid://c17ompnse3807" path="res://assets/textures/cursor.png" id="1_u7n8c"]
 [ext_resource type="FontFile" uid="uid://dq8w1p5b8hk86" path="res://assets/fonts/my 3x5 tiny mono pixel font.ttf" id="3_aac20"]
 [ext_resource type="Texture2D" uid="uid://bn44milaj4qo8" path="res://assets/textures/icons/icon-hearth.png" id="4_g5kmx"]
@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://bo0o7ydbf2qba" path="res://assets/textures/icons/icon-shield.png" id="6_7vp6q"]
 [ext_resource type="Texture2D" uid="uid://bdcvha6wdnlrj" path="res://assets/textures/icons/icon-weapon.png" id="6_pfayw"]
 [ext_resource type="PackedScene" uid="uid://f41vdjt1030g" path="res://scenes/ui/minimap.tscn" id="8_jcn1r"]
+[ext_resource type="Texture2D" uid="uid://drw43g5kkn6p" path="res://assets/textures/icons/icon-exp.png" id="9_uegxj"]
+[ext_resource type="PackedScene" uid="uid://b53qkx04tdwca" path="res://scenes/ui/number_indicator.tscn" id="10_y220t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5w87n"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -60,6 +62,37 @@ offset_left = 60.0
 offset_top = 24.0
 offset_right = 168.0
 offset_bottom = 40.0
+
+[node name="ExpIcon" type="TextureRect" parent="." unique_id=2063399229]
+offset_left = 16.0
+offset_top = 56.0
+offset_right = 48.0
+offset_bottom = 88.0
+texture = ExtResource("9_uegxj")
+
+[node name="ExpIndicator" parent="." unique_id=1765997473 instance=ExtResource("5_0dwhk")]
+offset_left = 60.0
+offset_top = 68.0
+offset_right = 168.0
+offset_bottom = 84.0
+high_value_color = Color(1, 1, 0, 1)
+med_value_color = Color(1, 1, 0, 1)
+low_value_color = Color(1, 1, 0, 1)
+very_low_value_color = Color(1, 1, 0, 1)
+
+[node name="LevelIndicator" parent="." unique_id=1747566989 instance=ExtResource("10_y220t")]
+offset_left = 24.0
+offset_top = 100.0
+offset_right = 120.0
+offset_bottom = 117.0
+text = "LEVEL: 1"
+
+[node name="StrengthIndicator" parent="." unique_id=728753418 instance=ExtResource("10_y220t")]
+offset_left = 24.0
+offset_top = 132.0
+offset_right = 120.0
+offset_bottom = 149.0
+text = "STR - 10"
 
 [node name="WeaponIcon" type="TextureRect" parent="." unique_id=1708482828]
 unique_name_in_owner = true

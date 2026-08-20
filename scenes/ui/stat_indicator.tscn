@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://7aah44bgd8i0" path="res://assets/textures/tick.png" id="1_mjk7n"]
 [ext_resource type="Script" uid="uid://bk8nvfxrenbop" path="res://scenes/ui/stat_indicator.gd" id="1_rdlsc"]
+[ext_resource type="FontFile" uid="uid://dq8w1p5b8hk86" path="res://assets/fonts/my 3x5 tiny mono pixel font.ttf" id="3_6ntii"]
 
 [node name="StatIndicator" type="ColorRect" unique_id=2040463990]
 offset_right = 108.0
@@ -25,3 +26,11 @@ offset_top = 4.0
 offset_right = 8.0
 offset_bottom = 12.0
 texture = ExtResource("1_mjk7n")
+
+[node name="TextHealth" type="Label" parent="." unique_id=94361329]
+layout_mode = 0
+offset_left = 118.0
+offset_right = 214.0
+offset_bottom = 17.0
+theme_override_fonts/font = ExtResource("3_6ntii")
+text = "0/0"

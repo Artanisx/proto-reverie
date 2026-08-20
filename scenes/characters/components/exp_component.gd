@@ -16,7 +16,7 @@ var is_max_level: bool = false
 func gain_experience(exp: int) -> void:
 	if is_max_level:
 		return	## Can't gain experience if it's max level
-		
+			
 	if current_exp + exp >= max_exp:		
 		## Player gains a level
 		## Store excess experience for the next level
@@ -29,7 +29,7 @@ func gain_experience(exp: int) -> void:
 		## Player simply gains exp
 		current_exp = current_exp + exp
 		print("Player gains experience: (" + str(exp) + ") - Current Exp:"  + str(current_exp) + "/" + str(max_exp))
-
+	
 ## Increases the level
 ## Takes an optional paramenter with excess experience
 func gain_level(excess_experience: int = 0) -> void:	
@@ -49,7 +49,8 @@ func gain_level(excess_experience: int = 0) -> void:
 		current_level = max_level
 		current_exp = 0
 		is_max_level = true
-		print("Player cannot level up anymore. Level is: (" + str(current_level) + ")")
+		GameEvents.level_up.emit()
+		print("Player reached max level, can't level up anymore. Level is: (" + str(current_level) + ")")
 		
 	
 		
