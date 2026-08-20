@@ -77,8 +77,8 @@ func on_player_spawned(player: Player) -> void:
 	on_weapon_changed(player.equipment.weapon_data)
 	## we update the shield bar UI (so if the player doesn't start with the shield the Ui is correct)
 	on_shield_changed(player.equipment.shield_data)
-	## Set the player to the Minimap
-	minimap_camera.set_player(GameState.current_player)
+	## Set the minimap camera offset based on player start global position
+	minimap_camera.set_offset(GameState.current_player.global_position)
 
 ## Something about the players' weapon changed and we need to update the ui
 func on_weapon_changed(data: WeaponData) -> void:

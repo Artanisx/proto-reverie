@@ -185,5 +185,3 @@ PRESS \"R\" TO RESTART"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
-
-[editable path="MinimapPanel"]
