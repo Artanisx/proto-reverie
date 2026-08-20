@@ -136,6 +136,7 @@ max_life = 30
 current_life = 30
 
 [node name="ExperienceComponent" parent="." unique_id=1005314432 instance=ExtResource("8_xuses")]
+unique_name_in_owner = true
 max_exp = 100
 max_level = 10
 current_level = 1

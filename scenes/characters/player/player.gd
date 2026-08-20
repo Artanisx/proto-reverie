@@ -39,6 +39,8 @@ const UI_STRING_KICK_ENEMY : String = "[F] Kick"
 @onready var kick_raycast: RayCast3D = %KickRaycast
 @onready var equipment: EquipmentComponent = %EquipmentComponent 	## refenrec eto tehe quipment component
 @onready var health: HealthComponent = %HealthComponent			## refenrec eto tehe health component
+@onready var experience: ExpComponent = %ExperienceComponent
+
 @onready var weapon_reach_raycast: RayCast3D = %WeaponReachRaycast ## needed to check wheter the player can hit the Enemy
 
 enum State {MOVING, PICKING_UP, THROWING, SLASHING, KICKING, BLOCKING, HURT, DYING}

@@ -25,6 +25,7 @@ func gain_experience(exp: int) -> void:
 	else:
 		## Player simply gains exp
 		current_exp = current_exp + exp
+		print("Player gains experience: (" + str(exp) + ") - Current Exp:"  + str(current_exp) + "/" + str(max_exp))
 
 ## Increases the level
 ## Takes an optional paramenter with excess experience
@@ -32,6 +33,7 @@ func gain_level(excess_experience: int = 0) -> void:
 	## Attemp to level up
 	if current_level + 1 < max_level:
 		current_level += 1
+		print("Player gains a level: (" + str(current_level) + ")")
 		GameEvents.level_up.emit()
 		## Set the experience
 		if excess_experience > 0:
@@ -43,6 +45,7 @@ func gain_level(excess_experience: int = 0) -> void:
 		current_level = max_level
 		current_exp = 0
 		is_max_level = true
+		print("Player cannot level up anymore. Level is: (" + str(current_level) + ")")
 		
 	
 		
