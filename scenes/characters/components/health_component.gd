@@ -14,8 +14,7 @@ extends Node
 			print_rich("[color=yellow][b]WARNING:[/b] health_component.gd DEBUG MODE is [b]ON[/b][/color]")
 			current_life = 1
 		else:
-			current_life = max_life			
-
+			current_life = max_life	
 	
 ## Reduce the health by the passed argument
 func take_damage(damage: int) -> void:	
