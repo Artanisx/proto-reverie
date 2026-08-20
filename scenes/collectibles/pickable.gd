@@ -28,6 +28,9 @@ func on_player_entered(body: Player) -> void:
 	## Emit the correct signal for each Pickable
 	match pickCollectible:
 		PickCollectible.HEALTH:
+			## Check if the player is full; if he is don't pick this up
+			if body.health.current_life == body.health.max_life:
+				return
 			body.health.heal_damage(heal_amount) ## Heal the player
 			GameEvents.player_healed.emit(body) ## Emit the signal for UI
 			AudioManager.play("key-pickup", body.vocal_audio_stream_player) ## Play SFX
