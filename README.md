@@ -1,10 +1,7 @@
 # Proto Reverie
 This is a 3D FPS game done on [Godot](https://godotengine.org/).
 
-This prototype is based upon this [tutorial repository](https://github.com/Artanisx/goblins-den) which I'm currently following along.
-
-
-
+This prototype is based upon this [tutorial repository](https://github.com/Artanisx/goblins-den).
 
 # Idea
 The prototype must establish the main combat loop (FPS combat, deciding whether to grant powers alongside firearms) and a system that generates a single stage.
@@ -21,26 +18,12 @@ That’s it, very basic. If it's fun, we will add system extensions, like chests
 
 Once the prototype is done, we can proceed with an in-depth design, deciding on the format, room layouts, balancing, whether there are chests, what kind of items are found, potential healing, equipment, different weapons, powers, etc. But not before creating the aforementioned prototype.
 
-
-# Syncronization
-In case new features implemented in the tutorial repository can be beneficial, I'll sync this repository from that upstream, since this repository is linked to it.
-
-[Gist that Explains how Syncronization work](https://gist.github.com/Artanisx/e2329603860149e71b614e185dc9bd16#file-synchronize-to-upstream-md)
-
-# Solve Merge Conflicts
-During the Merge, there might be conflicts.
-
-[Gist that Explains how to handle Merge Conflicts](https://gist.github.com/Artanisx/e2329603860149e71b614e185dc9bd16#file-handle-merge-conflicts-md)
-
-# Solve Errors while loading rooms
-Open ProtoWorld scene and launch it with "Run current Scene (F6)". This will fix the 45 errors while parsing rooms.
-
 # Credits
 Pixel Art done by me using [Aseprite](https://www.aseprite.org/). This being a prototype I'm using art I created following along this [tutorial repository](https://github.com/Artanisx/goblins-den) <br>
-3D Art done by me using [Blender](https://www.blender.org/). This being a prototype I'm using art I created following along this [tutorial repository](https://github.com/Artanisx/goblins-den).
-Font [Another Tiny Pixel Font](https://alasseearfalas.itch.io/another-tiny-pixel-font-mono-3x5). Font from the tutorial, pixel art.
+3D Art done by me using [Blender](https://www.blender.org/). This being a prototype I'm using art I created following along this [tutorial repository](https://github.com/Artanisx/goblins-den). However, this prototype also features art done entirely by myself with no guidance (for better or worse).<br>
+Font [Another Tiny Pixel Font](https://alasseearfalas.itch.io/another-tiny-pixel-font-mono-3x5).
 
-The actual project, if this prototype will be successfull will be created with art entirely done by me without following step by step tutorials.
+The actual project, if this prototype will be successful will be created with art entirely done by me without following step by step tutorials.
 
 NOTE! Do not keep open goblin or player tscn scenes if you aren't touching them. Bogus changes might appear if they are open and those might break the skeleton and produce issues with ragdool or physics.
 
