@@ -14,13 +14,14 @@ extends PlayerState
 
 const DURATION_BETWEEN_FOOTSTEPS_WALK : int = 500 ## ms of wait between footsteps sfx while walking
 const DURATION_BETWEEN_FOOTSTEPS_RUN : int = 300 ## ms of wait between footsteps sfx while running
+const DEBUG_MODE : bool = true ## WARNING: This will enable debug mode!
 
 var time_since_last_footstep : = Time.get_ticks_msec() ## Variable to store the time between steps
 
 ## All input code needs to stay in _process
 func _process(_delta: float) -> void:
 	## Setup for the equipment button (E) to pickup an object and if he can pickup an object...
-	if Input.is_action_just_pressed("use") and player.can_pickup_object():
+	if Input.is_action_just_pressed("use") and player.can_pickup_object():		
 		transition_state(Player.State.PICKING_UP)	## Emit the signal with the state to transition to
 		
 	## Setup for the thrown button (R) to thrown an object and if he can thrown an object...
@@ -32,7 +33,10 @@ func _process(_delta: float) -> void:
 		transition_state(Player.State.SLASHING)	## Emit the signal with the state to transition to		
 		
 	## Setup for the thrown button (F) to kick
-	elif Input.is_action_just_pressed("kick"):	
+	elif Input.is_action_just_pressed("kick"):
+		if DEBUG_MODE:
+			print_rich("[color=yellow][b]WARNING:[/b] player_State_moving.gd DEBUG MODE is [b]ON[/b][/color]")
+			player.experience.gain_experience(35)	
 		transition_state(Player.State.KICKING)	## Emit the signal with the state to transition to		
 	
 	## Setup for the block button (RMB) to block

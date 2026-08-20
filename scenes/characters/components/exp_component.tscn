@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c08qqux04gg7w"]
+
+[ext_resource type="Script" uid="uid://dhelij4x0ihiq" path="res://scenes/characters/components/exp_component.gd" id="1_mntg5"]
+
+[node name="exp_component" type="Node" unique_id=1005314432]
+script = ExtResource("1_mntg5")

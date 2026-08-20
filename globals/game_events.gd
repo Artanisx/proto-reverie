@@ -35,3 +35,6 @@ signal possible_action_changed(action: String)
 
 ## SIGNAL for when the player picks up a key or in general when the keys they have changes (used/obtained)
 signal current_keys_changed(color: Door.KeyColor)
+
+## SIGNAL for when the player levels up
+signal level_up
