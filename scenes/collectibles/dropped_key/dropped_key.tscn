@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bt6rbc3l6ovgj" path="res://scenes/collectibles/dropped_key/dropped_key.gd" id="1_31daf"]
 [ext_resource type="PackedScene" uid="uid://cnhov78ujdrin" path="res://assets/meshes/collectibles/key.glb" id="1_bd4en"]
+[ext_resource type="PackedScene" uid="uid://d0vymom7u53wp" path="res://assets/meshes/collectibles/healthpack.glb" id="3_7qa88"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_31daf"]
 
@@ -20,7 +21,7 @@ mesh = NodePath("key/Key")
 [node name="key" parent="." unique_id=1436847492 instance=ExtResource("1_bd4en")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="Key" parent="key" index="0" unique_id=832775655]
+[node name="Key" parent="key" index="0" unique_id=1615772369]
 surface_material_override/0 = SubResource("StandardMaterial3D_31daf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=771614210]
@@ -43,5 +44,7 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerDetectionArea" unique_id=784244027]
 shape = SubResource("SphereShape3D_31daf")
+
+[node name="healthpack" parent="." unique_id=1005446441 instance=ExtResource("3_7qa88")]
 
 [editable path="key"]
