@@ -5,7 +5,7 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_5w87n"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_31daf"]
-radius = 2.0
+radius = 1.0
 
 [node name="Pickable" type="RigidBody3D" unique_id=437850055]
 collision_layer = 0

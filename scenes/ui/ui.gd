@@ -2,6 +2,7 @@ class_name UI
 extends CanvasLayer
 
 @onready var hurt_vignette: Panel = %HurtVignette
+@onready var heal_vignette: Panel = %HealVignette
 @onready var death_screen: ColorRect = %DeathScreen
 @onready var health_indicator: StatIndicator = %HealthIndicator
 @onready var weapon_indicator: StatIndicator = %WeaponIndicator
@@ -18,12 +19,18 @@ extends CanvasLayer
 @onready var minimap_camera: MinimapCamera = $MinimapPanel/Minimap/SubViewport/MinimapCamera
 
 const TIME_FOR_HURT_VIGNETTE_ANIMATION: float = 0.1 ## 100ms
+const TIME_FOR_HEAL_VIGNETTE_ANIMATION: float = 0.1 ## 100ms
 const TIME_FOR_DEATH_SCREEN_ANIMATION: float = 0.3 ## 100ms
+
+
 const KEY_TEXTURE_PREFAB := preload("res://scenes/ui/key_texture.tscn")
 
 func _ready() -> void:
 	## Connect the player_hurt signal
 	GameEvents.player_hurt.connect(on_player_hurt)
+	
+	## Connect the player_hurt signal
+	GameEvents.player_healed.connect(on_player_healed)
 	
 	## Connect the player_dead signal
 	GameEvents.player_dead.connect(on_player_dead)
@@ -62,6 +69,18 @@ func on_player_hurt(player: Player) -> void:
 	tween.tween_property(hurt_vignette, "modulate:a", 1.0, TIME_FOR_HURT_VIGNETTE_ANIMATION)
 	## Then make it invisible again, setting alpha back to 0.0 (fully INvisible) in TIME_FOR_HURT_VIGNETTE_ANIMATION ms
 	tween.tween_property(hurt_vignette, "modulate:a", 0.0, TIME_FOR_HURT_VIGNETTE_ANIMATION)
+	## Finally, update the HP bar
+	health_indicator.refresh(player.health.current_life, player.health.max_life)	
+	
+## Make the vignette appear and disappear briefly	
+func on_player_healed(player: Player) -> void:
+	## TWEEN
+	var tween := create_tween()
+	
+	## First bring the alpha of the heal vignette to 1.0 (fully visible) in TIME_FOR_HURT_VIGNETTE_ANIMATION ms 
+	tween.tween_property(heal_vignette, "modulate:a", 1.0, TIME_FOR_HEAL_VIGNETTE_ANIMATION)
+	## Then make it invisible again, setting alpha back to 0.0 (fully INvisible) in TIME_FOR_HURT_VIGNETTE_ANIMATION ms
+	tween.tween_property(heal_vignette, "modulate:a", 0.0, TIME_FOR_HEAL_VIGNETTE_ANIMATION)
 	## Finally, update the HP bar
 	health_indicator.refresh(player.health.current_life, player.health.max_life)	
 	

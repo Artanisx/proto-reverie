@@ -15,6 +15,9 @@ signal impact_felt(intensity: ImpactIntensity)
 ## SIGNAL for when the player gets hurt - Used for the "HurtVignette" functionality in the UI and invoked with this "GameEvents.player_hurt.emit(self)"
 signal player_hurt(player: Player)
 
+## SIGNAL for when the player gets healed - Used for the "HealVignette" functionality in the UI and to refresh hp and invoked with this "GameEvents.player_hurt.emit(self)"
+signal player_healed(player: Player)
+
 ## SIGNAL for when the player dies
 signal player_dead
 

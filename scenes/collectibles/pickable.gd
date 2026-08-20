@@ -12,21 +12,25 @@ extends RigidBody3D
 enum PickCollectible {HEALTH, EXPCOIN}
 
 var pickCollectible : PickCollectible	## Which Collectible this is
+var heal_amount: int = 20 ## Amount of heal if it's healt pack
 
 func _ready() -> void:
+	## Connect the collision signal
+	player_detection_area.body_entered.connect(on_player_entered)
+
+func _process(delta: float) -> void:
 	if rotation_speed > 0:
 		## Apply an angular velocity on the X axis so this key rotates
-		angular_velocity = Vector3.UP * rotation_speed
-		
-		## Connect the collision signal
-		player_detection_area.body_entered.connect(on_player_entered)
+		rotate(Vector3.UP, rotation_speed * delta)
 		
 ## Player pick up function	
-func on_player_entered(_body: Player) -> void:
+func on_player_entered(body: Player) -> void:
 	## Emit the correct signal for each Pickable
 	match pickCollectible:
 		PickCollectible.HEALTH:
-			##GameState.obtain_key(color) or GameState.gaetano.emit()
+			body.health.heal_damage(heal_amount) ## Heal the player
+			GameEvents.player_healed.emit(body) ## Emit the signal for UI
+			AudioManager.play("key-pickup", body.vocal_audio_stream_player) ## Play SFX
 			print("You picked up a Health Pack!")
 		PickCollectible.EXPCOIN:
 			print("You picked up a Exp Coin!")

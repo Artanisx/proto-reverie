@@ -20,6 +20,15 @@ border_width_bottom = 100
 border_color = Color(0.4627451, 0.09019608, 0.11764706, 1)
 border_blend = true
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_padm2"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 100
+border_width_top = 100
+border_width_right = 100
+border_width_bottom = 100
+border_color = Color(0, 1, 0, 1)
+border_blend = true
+
 [node name="UI" type="CanvasLayer" unique_id=903971547]
 script = ExtResource("1_f5cxw")
 
@@ -47,6 +56,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5w87n")
+metadata/_edit_lock_ = true
+
+[node name="HealVignette" type="Panel" parent="." unique_id=1549372875]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_padm2")
 metadata/_edit_lock_ = true
 
 [node name="HealthIcon" type="TextureRect" parent="." unique_id=334253599]

@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://d0vymom7u53wp" path="res://assets/meshes/collectibles/healthpack.glb" id="2_r2u2d"]
 
 [node name="PickableHealthPack" unique_id=437850055 instance=ExtResource("1_eqx80")]
-mass = 0.001
 rotation_speed = 10.0
 
 [node name="healthpack" parent="." index="0" unique_id=1995398753 instance=ExtResource("2_r2u2d")]
