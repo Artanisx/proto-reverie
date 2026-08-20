@@ -10,7 +10,8 @@ extends Node
 @export var debug_mode: bool: ## If set to true, current hp is set to 1. Other debug stuff might be added here.
 	set(new_debug_status):
 		debug_mode = new_debug_status		
-		if debug_mode:
+		if debug_mode:			
+			print_rich("[color=yellow][b]WARNING:[/b] health_component.gd DEBUG MODE is [b]ON[/b][/color]")
 			current_life = 1
 		else:
 			current_life = max_life			

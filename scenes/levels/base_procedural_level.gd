@@ -50,7 +50,7 @@ enum RoomType{R10x10_1W_BOTTOM, R10x10_1W_LEFT, R10x10_1W_RIGHT, R10x10_1W_TOP,
 @export var rng_seed: int = -1 ## Seed for procedural generation. Use -1 for random seed.
 
 const DEBUG_SEED: int = -70058273485 ## WARNING: PRECISE SEED FOR DEBUG!
-const DEBUG_MODE: bool = true				## WARNING: IF SET TO TRUE, THINGS LIKE DEBUG_SEED WILL BE USED
+const DEBUG_MODE: bool = false				## WARNING: IF SET TO TRUE, THINGS LIKE DEBUG_SEED WILL BE USED
 
 @onready var rooms_container: Node3D = $Rooms
 
@@ -78,7 +78,7 @@ func _ready() -> void:
 	print_rooms()
 	
 	print("Seed used: " + str(get_used_seed()))
-	
+			
 	## Finally call the super (baselevel) _ready function to initialize the player
 	super()
 	
@@ -86,6 +86,7 @@ func _ready() -> void:
 func initialize_level() -> void:
 	## WARNING: DEBUG MODE
 	if DEBUG_MODE:
+		print_rich("[color=yellow][b]WARNING:[/b] base_procedural_level.gd DEBUG MODE is [b]ON[/b][/color]")
 		rng_seed = DEBUG_SEED
 	
 	## Initialize the random number generator
@@ -330,13 +331,46 @@ func generate_level() -> void:
 					
 					if j-1 >= 0 and room_map[i][j-1].room_identifier != "" and room_map[i][j-1].room_identifier.contains("B") and calculate_branch_length(branch_num_name, room_map[i][j-1].room_identifier) == 2:
 						is_there_room_down = true
+						##print("For this BRANCHPATENDROOM: " + str(room_map[i][j].room_identifier) + "We are saying is_there_room_down = true")
 					if j+1 < dimensions.y and room_map[i][j+1].room_identifier != "" and room_map[i][j+1].room_identifier.contains("B") and calculate_branch_length(branch_num_name, room_map[i][j+1].room_identifier) == 2:
-						is_there_room_up = true
+						is_there_room_up = true						
 					if i-1 >= 0 and room_map[i-1][j].room_identifier != "" and room_map[i-1][j].room_identifier.contains("B") and calculate_branch_length(branch_num_name, room_map[i-1][j].room_identifier) == 2:
-						is_there_room_right = true
+						is_there_room_right = true						
 					if i+1 < dimensions.x and room_map[i+1][j].room_identifier != "" and room_map[i+1][j].room_identifier.contains("B") and calculate_branch_length(branch_num_name, room_map[i+1][j].room_identifier) == 2:
-						is_there_room_left = true
-				
+						is_there_room_left = true						
+					
+					## Check if no neighboors branchroom of length 2 have been detected
+					if not is_there_room_down and not is_there_room_up and not is_there_room_right and not is_there_room_left:
+						## There are no branchrooms (-1) nearby so this is a Branch of length 1
+						var length_A : int = 0
+						var length_B : int = 0
+						var length_C : int = 0
+						var length_D : int = 0						
+						
+						## Here we have to check for all neighbhoors the one with the highest CP as that will be the one connected
+						## High CP will have the entrance to the BRANCHENED room and the next CP
+						## We calculate each neighboors CP number
+						if j-1 >= 0 and room_map[i][j-1].room_identifier != "" and room_map[i][j-1].room_identifier.contains("CP"):
+							length_A = calculate_cp_length(room_map[i][j-1].room_identifier)							
+						if j+1 < dimensions.y and room_map[i][j+1].room_identifier != "" and room_map[i][j+1].room_identifier.contains("CP"):
+							length_B = calculate_cp_length(room_map[i][j+1].room_identifier)							
+						if i-1 >= 0 and room_map[i-1][j].room_identifier != "" and room_map[i-1][j].room_identifier.contains("CP"):
+							length_C = calculate_cp_length(room_map[i-1][j].room_identifier)							
+						if i+1 < dimensions.x and room_map[i+1][j].room_identifier != "" and room_map[i+1][j].room_identifier.contains("CP"):
+							length_D = calculate_cp_length(room_map[i+1][j].room_identifier)
+						
+						## Only the biggest CP enters the branchendroom (i.e. if there's CPL:9 and CPL:8, only CPL:9 will have its room direction set to true
+						if length_A > length_B and 	length_A > length_C and length_A > length_D:
+							is_there_room_down = true
+						elif length_B > length_A and 	length_B > length_C and length_B > length_D:
+							is_there_room_up = true
+						elif length_C > length_A and 	length_C > length_B and length_C > length_D:
+							is_there_room_right = true
+						elif length_D > length_A and 	length_D > length_B and length_D > length_C:
+							is_there_room_left = true						
+						
+						if not is_there_room_down and not is_there_room_up and not is_there_room_right and not is_there_room_left:
+							printerr("generate_level(372): Despite checks, there's still a BranchEndPathRoom with no connections. This should NOT happen.")
 				else:
 					## Regular room logic - check all adjacent rooms
 					if j-1 >= 0 and room_map[i][j-1].room_identifier != "":
@@ -397,6 +431,9 @@ func generate_level() -> void:
 				elif not is_there_room_up and is_there_room_down and is_there_room_right and is_there_room_left:
 					place_room(room_map[i][j].world_position, RoomType.R10x10_3W_BOTTOM, kind)
 				#	print("Placing a RoomType.R10x10_3W_TOP in room name: " + str(level[i][j]) + " in pos" + str(level_grid[i][j]))				
+				else:
+					## This should not happen right?
+					printerr("generate_level() #402: Not placed a room for: " + str(room_map[i][j].room_identifier))
 				
 				## Resets flags for the next run
 				is_there_room_up = false
@@ -409,6 +446,10 @@ func generate_level() -> void:
 				for child in rooms_container.get_children():
 					if child is BaseRoom and child.position.x == room_map[i][j].world_position.x and child.position.z == room_map[i][j].world_position.y:
 						room_map[i][j].room_instance = child
+						
+						if room_map[i][j].room_instance == null:
+							printerr("generate_level() #450: Room Instance NULL for " + str(room_map[i][j].room_identifier))
+						
 						break	
 		
 
@@ -609,7 +650,7 @@ func check_generated_level() -> void:
 			## We now check if the room is a special room
 			#var room : RoomData = room_map[x][y]						## RoomData structure that holds all the info
 			var room_instance : BaseRoom = room_map[x][y].room_instance ## BaseRoom instance that's instatiated
-			if room_instance == null:	## no room here
+			if room_instance == null:	## no room here				
 				continue				## next iteration
 			var room_kind : BaseRoom.RoomKind = room_instance.kind ## i.e. BaseRoom.RoomKind.START
 			var room_type : RoomType = room_instance.type		## i.e. RoomType.R10x10_1W_BOTTOM
