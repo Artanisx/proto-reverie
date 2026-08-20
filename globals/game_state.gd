@@ -5,7 +5,7 @@ extends Node
 ## This is a Global accesible to all the game. Takes care of registering a player refernece and the current level reference.
 ## It also store the inventory for the player (only the keys for now)
 
-var current_level : BaseLevel
+var current_level : BaseProceduralLevel
 var current_player : Player
 var current_keys : Dictionary[Door.KeyColor, bool] = {} ## This will store which keys (true/false) of each color the player has
 
@@ -26,7 +26,7 @@ func obtain_key(color: Door.KeyColor) -> void:
 		GameEvents.current_keys_changed.emit(color) ## Emit the signal as the keys changed
 
 ## Set the current level
-func register_level(level: BaseLevel) -> void:
+func register_level(level: BaseProceduralLevel) -> void:
 	current_level = level
 	current_keys = {} ##Reset the keys inventory
 
