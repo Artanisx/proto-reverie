@@ -48,6 +48,7 @@ const AIR_FRICTION: float = 20.0
 @export var duration_between_attacks : int 	## How often the enemy attacks, in ms
 @export var player : Player					## Player reference
 @export var speed: float					## Enemy movement speed
+@export var exp_for_kill: int					## Enemy experience gain for kill
 
 
 enum State {MOVING, IMPALING, DYING, DEAD, SLASHING, HURT, BLOCKING, STUNNED}

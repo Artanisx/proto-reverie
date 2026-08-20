@@ -41,3 +41,6 @@ signal level_up
 
 ## SIGNAL for when the player gains exp
 signal exp_up(player: Player)
+
+## Signal for when an enemy dies
+signal enemy_died(exp: int)

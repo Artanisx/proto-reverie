@@ -81,6 +81,9 @@ func _ready() -> void:
 	
 	## Register to the leveL_up event
 	GameEvents.level_up.connect(on_level_up)
+	
+	## Regigser to the enemy_died event for exp calculation
+	GameEvents.enemy_died.connect(on_enemy_died)
 		
 	# Call the switch_state function to set the starting state
 	switch_state(State.MOVING)
@@ -327,3 +330,8 @@ func on_level_up() -> void:
 	print("Player streght is now: (" + str (player_strength) + ")- Player Max HP is now: (" + str (health.max_life) + ")")
 	# Play a sound fx
 	AudioManager.play("key-pickup", vocal_audio_stream_player)
+
+## WHen an enemy dies, gain exp
+func on_enemy_died(exp_to_gain: int) -> void:
+	experience.gain_experience(exp_to_gain)
+	GameEvents.exp_up.emit(self) ## Emis the exp up signal
