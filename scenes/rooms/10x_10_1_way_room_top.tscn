@@ -18,7 +18,7 @@ data = {
 transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49999997, 7.9999995, 0, 7.0000005)
 
 [node name="EnemySpawn2" parent="Enemies" parent_id_path=PackedInt32Array(1372677429) index="1" unique_id=2078126792 instance=ExtResource("2_6epqc")]
-transform = Transform3D(-0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, -0.70710677, -7.0000005, 0, 5.9999995)
+transform = Transform3D(0.49999994, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, 0.49999994, -7.0000005, 0, 5.9999995)
 
 [node name="EnemySpawn3" parent="Enemies" parent_id_path=PackedInt32Array(1372677429) index="2" unique_id=837457595 instance=ExtResource("2_6epqc")]
 transform = Transform3D(-0.8660254, 0, 0.49999997, 0, 1, 0, -0.49999997, 0, -0.8660254, 8.000001, 0, -6.9999995)
