@@ -6,6 +6,8 @@ extends Node3D
 ## This Node3D is used to spawn enemies and it's manually placed inside a Room.
 ## The level generator will then spawn a single enemy (or not) inside of this node, that also provides an EnemyPosition Minimap sprite3D icon.
 
+@onready var enemy_position_minimap: Sprite3D = %EnemyPosition_Minimap
+
 var is_populated: bool = false ## If an enemy is assigned to this spawn, this is set to true
 
 ## Populate this spawn point with an enemy
@@ -22,6 +24,7 @@ func set_enemy(enemy_prefab: Enemy, duration_stun: float = 2.5, duration_between
 		enemy.exp_for_kill = enemy_exp_for_kill
 		enemy.health.max_life = enemy_max_life
 		enemy.health.current_life = enemy.health.max_life
+		enemy_position_minimap.visible = true ## Only show the minimap icon if it's populated
 		## Then, we add the enemy as a child of Enemies container (not Enemy Spawn)
 		var enemies_container = get_parent()
 		if enemies_container.name != "Enemies":

@@ -6,6 +6,8 @@ extends Node3D
 ## This Node3D is used to spawn Health Packs pickables and it's manually placed inside a Room.
 ## The level generator will then spawn a single Health Pack (or not) inside of this node, that also provides an Health Pack Minimap sprite3D icon.
 
+@onready var health_pack_position_minimap: Sprite3D = %HealthPackPosition_Minimap
+
 var is_populated: bool = false ## If an healthpack is assigned to this spawn, this is set to true
 
 ## Populate this spawn point with an enemy
@@ -20,6 +22,7 @@ func set_healthpack(healthpack_prefab: Pickable, rot_speed: float = 8.0, rot_dir
 		healthpack.rotation_direction = rot_dir
 		healthpack.heal_amount = heal_amount
 		healthpack.pickCollectible = Pickable.PickCollectible.HEALTH
+		health_pack_position_minimap.visible = true ## Only show the minimap icon if it's populated
 		## Then, we add the enemy as a child of Picables container (not HealthPack Spawn)
 		var pickables_container  = get_parent()
 		if pickables_container.name != "Pickables":

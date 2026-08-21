@@ -18,7 +18,9 @@ image = SubResource("Image_vlsm5")
 script = ExtResource("1_vlsm5")
 
 [node name="ExpCoinPosition_Minimap" type="Sprite3D" parent="." unique_id=1157635799]
+unique_name_in_owner = true
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 5, 0)
+visible = false
 layers = 2
 cast_shadow = 0
 modulate = Color(1, 1, 0, 1)
