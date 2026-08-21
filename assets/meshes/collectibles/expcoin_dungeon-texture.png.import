@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0qux8b1y0bda"
-path.s3tc="res://.godot/imported/healthpack_dungeon-texture.png-82d926d4b6579671f229749d0240492c.s3tc.ctex"
+uid="uid://cd5ct60b260qb"
+path.s3tc="res://.godot/imported/expcoin_dungeon-texture.png-132a6292c8a226332172fdcf3221b0e6.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/meshes/collectibles/healthpack_dungeon-texture.png"
-dest_files=["res://.godot/imported/healthpack_dungeon-texture.png-82d926d4b6579671f229749d0240492c.s3tc.ctex"]
+source_file="res://assets/meshes/collectibles/expcoin_dungeon-texture.png"
+dest_files=["res://.godot/imported/expcoin_dungeon-texture.png-132a6292c8a226332172fdcf3221b0e6.s3tc.ctex"]
 
 [params]
 
