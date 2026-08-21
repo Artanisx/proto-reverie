@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dihfuqnmd31eq"]
+
+[ext_resource type="Script" uid="uid://djx88kyja8kbm" path="res://scenes/characters/enemies/enemy_spawn.gd" id="1_4lfkb"]
+[ext_resource type="Texture2D" uid="uid://d4f1w5ff5y4g7" path="res://assets/textures/player_minimap.png" id="1_aua0b"]
+
+[node name="EnemySpawn" type="Node3D" unique_id=1964695494]
+script = ExtResource("1_4lfkb")
+
+[node name="EnemyPosition_Minimap" type="Sprite3D" parent="." unique_id=1157635799]
+unique_name_in_owner = true
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 5, 0)
+visible = false
+layers = 2
+cast_shadow = 0
+modulate = Color(1, 0, 0, 1)
+axis = 1
+texture_filter = 0
+texture = ExtResource("1_aua0b")

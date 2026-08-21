@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://bffrs1uqlwn8i"
+path="res://.godot/imported/minimap-expcoin.png-b123d27b23ff6a142bd2e28be8dab9ad.image"
+
+[deps]
+
+source_file="res://assets/textures/icons/minimap-expcoin.png"
+dest_files=["res://.godot/imported/minimap-expcoin.png-b123d27b23ff6a142bd2e28be8dab9ad.image"]
+
+[params]
+
