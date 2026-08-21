@@ -49,6 +49,8 @@ const REGULAR_ROOM_MIN_ENEMIES: int = 1
 const REGULAR_ROOM_MAX_ENEMIES: int = 3
 const REGULAR_ROOM_MIN_COINS: int = 1
 const REGULAR_ROOM_MAX_COINS: int = 7
+const BRANCH_ROOM_HEALTHPACK_CHANCE: int = 30
+
 
 const MINIMAP_ICONS_HEIGHT : float = 3.5 ## Y position for minimap icons
 
@@ -584,8 +586,23 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 	var room : BaseRoom = room_to_place
 	
 	## If it's a branche room, shoudl be more difficult, more enemies because it leads to goodies
+	## low chance to have a health pack, with med health
+	## always have 3 enemies (or as many spawners there are... for now 3)
 	if kind == BaseRoom.RoomKind.BRANCHROOM:
-		pass
+		## HEALTH PACK:
+		var hp_chance = randi_range(0, 100)
+		if hp_chance < BRANCH_ROOM_HEALTHPACK_CHANCE:
+			## Lucky! Spawn a low health pack
+			for child in room.pickables.get_children():
+				if child is HealthPackSpawn:
+					child.set_healthpack(PICKABLE_HEALTH_PACK_PREFAB, 8.0, Pickable.Direction.Y_AXIS, MED_HEALTH_PACK)
+					print("Lucky! Med HealthPack placed in a branch room.")
+					
+		## ENEMIES
+		for child in room.enemies.get_children():
+			if child is EnemySpawn:
+				child.set_enemy(GOBLIN_PREFAB, 2.5, 2000, 2.0, 10, 8)
+				print("Branch Room: Placed an enemy.")
 	
 	## If it's a REGULAR ROOM
 	## low chance to have a health pack, with low health
@@ -596,8 +613,7 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		## HEALTH PACK:
 		var hp_chance = randi_range(0, 100)
 		if hp_chance < REGULAR_ROOM_HEALTHPACK_CHANCE:
-			## Lucky! Spawn a low health pack	
-			## BIG HEALTH PACK		
+			## Lucky! Spawn a low health pack			
 			for child in room.pickables.get_children():
 				if child is HealthPackSpawn:
 					child.set_healthpack(PICKABLE_HEALTH_PACK_PREFAB, 8.0, Pickable.Direction.Y_AXIS, SMALL_HEALTH_PACK)
@@ -643,7 +659,7 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 					
 			## Spawn an coin			
 			selected_spawner.set_expcoin(PICKABLE_EXP_COIN_PREFAB, 12.0, Pickable.Direction.Y_AXIS, SMALL_EXP_COIN)
-			print("Licky! Spamm exp coin placed in a regular room.")
+			print("Lucky! Exp coin placed in a regular room.")
 			
 			##Remove th spawner from the array
 			expcoinspawners.erase(selected_spawner)
