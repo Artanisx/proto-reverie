@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://c2hn75i0fo8k3"]
+
+[ext_resource type="PackedScene" uid="uid://yeqcee64rbg4" path="res://scenes/collectibles/pickable.tscn" id="1_68r1f"]
+[ext_resource type="PackedScene" uid="uid://d3rr0b6ayt1vi" path="res://assets/meshes/collectibles/expcoin.glb" id="2_hqnn5"]
+[ext_resource type="Texture2D" uid="uid://cd5ct60b260qb" path="res://assets/meshes/collectibles/expcoin_dungeon-texture.png" id="3_hqnn5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hqnn5"]
+shading_mode = 0
+albedo_texture = ExtResource("3_hqnn5")
+texture_filter = 0
+
+[node name="PickableExpCoin" unique_id=437850055 node_paths=PackedStringArray("model") instance=ExtResource("1_68r1f")]
+rotation_speed = 12.0
+rotation_direction = 1
+pickCollectible = 1
+model = NodePath("expcoin")
+exp_amount = 20
+
+[node name="expcoin" parent="." index="0" unique_id=1245081986 instance=ExtResource("2_hqnn5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="ExpCoin" parent="expcoin" index="0" unique_id=2093714653]
+surface_material_override/0 = SubResource("StandardMaterial3D_hqnn5")
+
+[editable path="expcoin"]

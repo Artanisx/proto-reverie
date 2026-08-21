@@ -31,6 +31,7 @@ const ROOMS_MAP := {
 ## Some const for pickable items
 const PICKABLE_ITEM_PREFAB = preload("res://scenes/equipment/pickable_item.tscn")
 const PICKABLE_HEALTH_PACK_PREFAB = preload("res://scenes/collectibles/health_pack/pickable_health_pack.tscn")
+const PICKABLE_EXP_COIN_PREFAB = preload("res://scenes/collectibles/exp_coin/pickable_exp_coin.tscn")
 const GOBLIN_PREFAB = preload("res://scenes/characters/enemies/goblin.tscn")
 const WEAPON_SWORD_DATA = preload("res://data/weapons/shortsword.tres")
 
@@ -623,6 +624,11 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		var health_pack: Pickable = PICKABLE_HEALTH_PACK_PREFAB.instantiate()					
 		health_pack.position = Vector3(-5.0, 0.0, 0.0)
 		room.pickables.add_child(health_pack)		
+		
+		## Add a pickable exp coin to the start room
+		var exp_coin: Pickable = PICKABLE_EXP_COIN_PREFAB.instantiate()					
+		exp_coin.position = Vector3(-5.0, 0.0, -5.0)
+		room.pickables.add_child(exp_coin)
 		
 	## If it's an BRANCH PATH END ROOM (whre a chest/boss may lie) let's add a red omnilight3d
 	if kind == BaseRoom.RoomKind.BRANCHPATHEND:
