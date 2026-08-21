@@ -629,6 +629,12 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 			if child is ExpCoinSpawn:
 				child.set_expcoin(PICKABLE_EXP_COIN_PREFAB, 12.0, Pickable.Direction.Y_AXIS, BIG_EXP_COIN)
 				print("BRANCHENDROOM: Placed a Exp Coin")
+				
+		### BDEBUG IG enemies	
+		for child in room.enemies.get_children():
+			if child is EnemySpawn:
+				child.set_enemy(GOBLIN_PREFAB, 2.5, 2000, 2.0, 10, 8)
+				print("BRANCHENDROOM: Placed an enemy!!!!!!")
 		
 		
 	## If it's an BRANCH PATH END ROOM (whre a chest/boss may lie) let's add a red omnilight3d

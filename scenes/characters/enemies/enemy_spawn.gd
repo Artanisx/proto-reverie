@@ -21,9 +21,7 @@ func set_enemy(enemy_prefab: PackedScene, duration_stun: float = 2.5, duration_b
 		enemy.duration_stun = duration_stun
 		enemy.duration_between_attacks = duration_between_attacks
 		enemy.speed = enemy_speed
-		enemy.exp_for_kill = enemy_exp_for_kill
-		enemy.health.max_life = enemy_max_life
-		enemy.health.current_life = enemy.health.max_life
+		enemy.exp_for_kill = enemy_exp_for_kill		
 		enemy.position = position
 		
 		## Pass over the minimap icon position (it was in the spawn for level editing purposes)
@@ -35,6 +33,11 @@ func set_enemy(enemy_prefab: PackedScene, duration_stun: float = 2.5, duration_b
 		if enemies_container.name != "Enemies":
 			printerr("EnemySpawn.gd [18] - Enemies container not found. Is the parent of this EnemySpawn not the Enemies container?")			
 		enemies_container.add_child(enemy)
+		
+		## Stats that require components inside the enemy needs to be set after the enemy is added as a child
+		enemy.health.max_life = enemy_max_life
+		enemy.health.current_life = enemy.health.max_life
+		
 		## We mark this spawn as filled	
 		is_populated = true
 		## Spawner did its job so it should remove itself
