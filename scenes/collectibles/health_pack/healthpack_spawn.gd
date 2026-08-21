@@ -13,7 +13,7 @@ var is_populated: bool = false ## If an healthpack is assigned to this spawn, th
 ## Populate this spawn point with an enemy
 ## Pass the healthpack prefab as an argument
 ## Other arguments are optional and set the stats.
-func set_healthpack(healthpack_prefab: Pickable, rot_speed: float = 8.0, rot_dir: Pickable.Direction = Pickable.Direction.Y_AXIS, heal_amount: int = 20) -> void:
+func set_healthpack(healthpack_prefab: PackedScene, rot_speed: float = 8.0, rot_dir: Pickable.Direction = Pickable.Direction.Y_AXIS, heal_amount: int = 20) -> void:
 	if not is_populated:
 		## First, instantiate the health pack
 		var healthpack: Pickable = healthpack_prefab.instantiate()
@@ -22,7 +22,12 @@ func set_healthpack(healthpack_prefab: Pickable, rot_speed: float = 8.0, rot_dir
 		healthpack.rotation_direction = rot_dir
 		healthpack.heal_amount = heal_amount
 		healthpack.pickCollectible = Pickable.PickCollectible.HEALTH
-		health_pack_position_minimap.visible = true ## Only show the minimap icon if it's populated
+		healthpack.position = position
+		
+		## Pass over the minimap icon position (it was in the spawn for level editing purposes)
+		health_pack_position_minimap.visible = true		
+		health_pack_position_minimap.reparent(healthpack, false)
+				
 		## Then, we add the enemy as a child of Picables container (not HealthPack Spawn)
 		var pickables_container  = get_parent()
 		if pickables_container.name != "Pickables":
@@ -30,6 +35,8 @@ func set_healthpack(healthpack_prefab: Pickable, rot_speed: float = 8.0, rot_dir
 		pickables_container.add_child(healthpack)
 		## We mark this spawn as filled	
 		is_populated = true
+		## Spawner did its job so it should remove itself
+		queue_free()
 	else:
 		## Trying to set_enemy on a populated EnemySpawn
 		printerr("HealthPack_Spawn.gd [13] - Trying to set_healthpack() on an already populated HealthPackSpawn prefab.")

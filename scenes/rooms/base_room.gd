@@ -55,9 +55,7 @@ func _ready() -> void:
 		## We're running the game, so do the rest of the preparation
 		fill_ceilings()
 		prep_enemies()
-		bake_nav_room()
-		print("C'è enemsies? sono in ready: " +str(enemies))
-
+		bake_nav_room()	
 	
 func fill_ceilings() -> void:
 	# For each cell in the Floors, if the cell is one of the ones WITHOUT a ceiling...
@@ -87,24 +85,27 @@ func bake_nav_room() -> void:
 	room_navigation.bake_navigation_mesh(true)	
 
 ## This will listen to the screamed signal emitted by enemies
-func prep_enemies() -> void:
-	for enemy: Enemy in enemies.get_children():
-		enemy.screamed.connect(on_scream_heard)
-		## connect to the enemy.dead signal
-		enemy.dead.connect(on_enemy_death)
+func prep_enemies() -> void:	
+	for enemy in enemies.get_children():
+		if enemy is Enemy:
+			enemy.screamed.connect(on_scream_heard)
+			## connect to the enemy.dead signal
+			enemy.dead.connect(on_enemy_death)
 
 ## Each enemy will be warned (aggro)
 ## Basically if one enemy emits the screamed signal, this will be heard and all enemies will aggro the player
 func on_scream_heard() -> void:
-	for enemy: Enemy in enemies.get_children():
-		## This enemy should register the player so he's aware of them
-		enemy.player = GameState.current_player
+	for enemy in enemies.get_children():
+		if enemy is Enemy:
+			## This enemy should register the player so he's aware of them
+			enemy.player = GameState.current_player
 		
 ## When an enemy dies, check if it's the last one in order to drop a key if this is a room key
 func on_enemy_death(enemy_transform: Transform3D) -> void:
-	for enemy: Enemy in enemies.get_children():
-		if not enemy.health.is_dead():
-			return	## There's at least one enemy alive in this room, so no key drop
+	for enemy in enemies.get_children():
+		if enemy is Enemy:
+			if not enemy.health.is_dead():
+				return	## There's at least one enemy alive in this room, so no key drop
 	
 	## If we're here and haven't returned, all enemies in the room are dead. Only if the room HAS a color
 	if key_color != Door.KeyColor.None:

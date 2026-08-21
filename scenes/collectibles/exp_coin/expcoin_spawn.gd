@@ -14,7 +14,7 @@ var is_populated: bool = false ## If an healthpack is assigned to this spawn, th
 ## Populate this spawn point with an enemy
 ## Pass the healthpack prefab as an argument
 ## Other arguments are optional and set the stats.
-func set_expcoin(expcoin_prefab: Pickable, rot_speed: float = 12.0, rot_dir: Pickable.Direction = Pickable.Direction.Y_AXIS, exp_amount: int = 20) -> void:
+func set_expcoin(expcoin_prefab: PackedScene, rot_speed: float = 12.0, rot_dir: Pickable.Direction = Pickable.Direction.Y_AXIS, exp_amount: int = 20) -> void:
 	if not is_populated:
 		## First, instantiate the health pack
 		var expcoin: Pickable = expcoin_prefab.instantiate()
@@ -23,7 +23,12 @@ func set_expcoin(expcoin_prefab: Pickable, rot_speed: float = 12.0, rot_dir: Pic
 		expcoin.rotation_direction = rot_dir
 		expcoin.exp_amount = exp_amount
 		expcoin.pickCollectible = Pickable.PickCollectible.EXPCOIN
-		exp_coin_position_minimap.visible = true ## Only show the minimap icon if it's populated
+		expcoin.position = position
+		
+		## Pass over the minimap icon position (it was in the spawn for level editing purposes)
+		exp_coin_position_minimap.visible = true		
+		exp_coin_position_minimap.reparent(expcoin, false)
+		
 		## Then, we add the enemy as a child of Picables container (not HealthPack Spawn)
 		var pickables_container  = get_parent()
 		if pickables_container.name != "Pickables":
@@ -31,6 +36,8 @@ func set_expcoin(expcoin_prefab: Pickable, rot_speed: float = 12.0, rot_dir: Pic
 		pickables_container.add_child(expcoin)
 		## We mark this spawn as filled	
 		is_populated = true
+		## Spawner did its job so it should remove itself
+		queue_free()
 	else:
 		## Trying to set_enemy on a populated ExpCoinSpawn
 		printerr("ExpCoin_Spawn.gd [13] - Trying to set_expcoin() on an already populated ExpCoinSpawn prefab.")

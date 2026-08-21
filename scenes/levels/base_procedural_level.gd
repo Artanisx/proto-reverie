@@ -35,6 +35,14 @@ const PICKABLE_EXP_COIN_PREFAB = preload("res://scenes/collectibles/exp_coin/pic
 const GOBLIN_PREFAB = preload("res://scenes/characters/enemies/goblin.tscn")
 const WEAPON_SWORD_DATA = preload("res://data/weapons/shortsword.tres")
 
+## Constants for pickable stats
+const BIG_HEALTH_PACK: int = 50
+const MED_HEALTH_PACK: int = 25
+const SMALL_HEALTH_PACK: int = 10
+const BIG_EXP_COIN: int = 15
+const MED_EXP_COIN: int = 5
+const SMALL_EXP_COIN: int = 2
+
 const MINIMAP_ICONS_HEIGHT : float = 3.5 ## Y position for minimap icons
 
 ## Enum for room types
@@ -51,8 +59,8 @@ enum RoomType{R10x10_1W_BOTTOM, R10x10_1W_LEFT, R10x10_1W_RIGHT, R10x10_1W_TOP,
 @export var room_size: int = 21 # The size of the room, including the portion related to the doors for proper placement.
 @export var rng_seed: int = -1 ## Seed for procedural generation. Use -1 for random seed.
 
-const DEBUG_SEED: int = -70058273485 ## WARNING: PRECISE SEED FOR DEBUG!
-const DEBUG_MODE: bool = false				## WARNING: IF SET TO TRUE, THINGS LIKE DEBUG_SEED WILL BE USED
+const DEBUG_SEED: int = 205585640 ## WARNING: PRECISE SEED FOR DEBUG!
+const DEBUG_MODE: bool = true				## WARNING: IF SET TO TRUE, THINGS LIKE DEBUG_SEED WILL BE USED
 
 @onready var rooms_container: Node3D = $Rooms
 
@@ -468,13 +476,14 @@ func place_room(room_position: Vector2i, type: RoomType = RoomType.R10x10_4W, ki
 	
 	## Define its type
 	room.type = type
-	
-	## Place additional nodes depending on its kind
-	place_room_nodes(room)
-	
+		
 	## The room is ready to be added to the rooms container so	
 	## Add it to the rooms container as a child
 	rooms_container.add_child(room)
+	
+	## Place additional nodes depending on its kind
+	## Needs to happen after the room is in the tree, or won't physically exists
+	place_room_nodes(room)
 	
 	#print("I Have placed a room of kind: " + str(room.kind) + ", in position:" + str(room.position))
 	
@@ -607,28 +616,20 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		minimap_icon.scale = Vector3(20.0, 20.0, 20.0)
 		room.add_child(minimap_icon)
 		
-		## Add a sword to the Start Room		
-		var pickable_object: PickableItem = PICKABLE_ITEM_PREFAB.instantiate()	
-		var weapon_dt: WeaponData = WEAPON_SWORD_DATA	
-		pickable_object.weapon_data = weapon_dt
-		pickable_object.position = Vector3(0.0, 0.1, 0.0)
-		room.entities.add_child(pickable_object)
+		## Since it's a start room, nothing should spawn!
+		##DEBUG LET'S USE START ROOM
+		# BIG HEALTH PACK
+		for child in room.pickables.get_children():
+			if child is HealthPackSpawn:
+				child.set_healthpack(PICKABLE_HEALTH_PACK_PREFAB, 8.0, Pickable.Direction.Y_AXIS, BIG_HEALTH_PACK)
+				print("BRANCHENDROOM: Placed a HealthPack in START ROOM FOR DEBUGGING PURPOSES")
+				
+		### BDEBUG IG EXP COINS	
+		for child in room.pickables.get_children():
+			if child is ExpCoinSpawn:
+				child.set_expcoin(PICKABLE_EXP_COIN_PREFAB, 12.0, Pickable.Direction.Y_AXIS, BIG_EXP_COIN)
+				print("BRANCHENDROOM: Placed a Exp Coin")
 		
-		## Add an enemy to the start room (enemies container)
-		var goblin: Enemy = GOBLIN_PREFAB.instantiate()		
-		goblin.position = Vector3(5.0, 0.0, 5.0)
-		await get_tree().process_frame
-		room.enemies.add_child(goblin)	
-		
-		## Add a pickable health pack to the start room
-		var health_pack: Pickable = PICKABLE_HEALTH_PACK_PREFAB.instantiate()					
-		health_pack.position = Vector3(-5.0, 0.0, 0.0)
-		room.pickables.add_child(health_pack)		
-		
-		## Add a pickable exp coin to the start room
-		var exp_coin: Pickable = PICKABLE_EXP_COIN_PREFAB.instantiate()					
-		exp_coin.position = Vector3(-5.0, 0.0, -5.0)
-		room.pickables.add_child(exp_coin)
 		
 	## If it's an BRANCH PATH END ROOM (whre a chest/boss may lie) let's add a red omnilight3d
 	if kind == BaseRoom.RoomKind.BRANCHPATHEND:
@@ -648,7 +649,24 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		minimap_icon.set_layer_mask_value(2, true)
 		minimap_icon.position = Vector3(0.0, MINIMAP_ICONS_HEIGHT, 0.0) 
 		minimap_icon.scale = Vector3(20.0, 20.0, 20.0)
-		room.add_child(minimap_icon)	
+		room.add_child(minimap_icon)
+		
+		## Branch Path End Room should contian goodies:
+		## Always 1 big health pack
+		## No enemies
+		## Max (7) coins, each worth 15 exp to grant a full level
+		
+		### BIG HEALTH PACK		
+		#for child in room.pickables.get_children():
+			#if child is HealthPackSpawn:
+				#child.set_healthpack(PICKABLE_HEALTH_PACK_PREFAB, 8.0, Pickable.Direction.Y_AXIS, BIG_HEALTH_PACK)
+				#print("BRANCHENDROOM: Placed a HealthPack")
+		#
+		### BIG EXP COINS	
+		#for child in room.pickables.get_children():
+			#if child is ExpCoinSpawn:
+				#child.set_expcoin(PICKABLE_EXP_COIN_PREFAB, 12.0, Pickable.Direction.Y_AXIS, BIG_EXP_COIN)
+				#print("BRANCHENDROOM: Placed a Exp Coin")
 
 ## This function checks the placed rooms to see if the doors are correct
 func check_generated_level() -> void:
