@@ -22,7 +22,6 @@ func set_enemy(enemy_prefab: PackedScene, duration_stun: float = 2.5, duration_b
 		enemy.duration_between_attacks = duration_between_attacks
 		enemy.speed = enemy_speed
 		enemy.exp_for_kill = enemy_exp_for_kill		
-		enemy.position = position
 		
 		## Pass over the minimap icon position (it was in the spawn for level editing purposes)
 		enemy_position_minimap.visible = true		
@@ -37,6 +36,7 @@ func set_enemy(enemy_prefab: PackedScene, duration_stun: float = 2.5, duration_b
 		## Stats that require components inside the enemy needs to be set after the enemy is added as a child
 		enemy.health.max_life = enemy_max_life
 		enemy.health.current_life = enemy.health.max_life
+		enemy.global_transform = global_transform
 		
 		## We mark this spawn as filled	
 		is_populated = true
