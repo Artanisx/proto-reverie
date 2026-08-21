@@ -10,10 +10,16 @@ var is_populated: bool = false ## If an healthpack is assigned to this spawn, th
 
 ## Populate this spawn point with an enemy
 ## Pass the healthpack prefab as an argument
-func set_expcoin(expcoin_prefab: Pickable) -> void:
+## Other arguments are optional and set the stats.
+func set_expcoin(expcoin_prefab: Pickable, rot_speed: float = 12.0, rot_dir: Pickable.Direction = Pickable.Direction.Y_AXIS, exp_amount: int = 20) -> void:
 	if not is_populated:
 		## First, instantiate the health pack
-		var expcoin = expcoin_prefab.instantiate()
+		var expcoin: Pickable = expcoin_prefab.instantiate()
+		## Set its stats
+		expcoin.rotation_speed = rot_speed
+		expcoin.rotation_direction = rot_dir
+		expcoin.exp_amount = exp_amount
+		expcoin.pickCollectible = Pickable.PickCollectible.EXPCOIN
 		## Then, we add the enemy as a child of Picables container (not HealthPack Spawn)
 		var pickables_container  = get_parent()
 		if pickables_container.name != "Pickables":
