@@ -164,10 +164,11 @@ func _input(event: InputEvent) -> void:
 			## Player wants an harder level
 		
 			var world_node = get_node("/root/ProtoWorld")
-			var new_level_size : Vector2i = world_node.current_loaded_level.dimensions
-			var new_cp_length : int = world_node.current_loaded_level.critical_path_length
-			var new_branches : int = world_node.current_loaded_level.branches
-			var new_branch_length : Vector2i = world_node.current_loaded_level.branch_length			
+			var new_level_size : Vector2i = Vector2i(world_node.current_loaded_level.dimensions.x + 1, world_node.current_loaded_level.dimensions.y + 1) ## +1 in size on both axis
+			var new_cp_length : int = (new_level_size.x * new_level_size.y) / 5 ## length is the new size divided by 5
+			var new_branches : int = new_cp_length / 4 ## number of brancehs is the new length divided by 4
+			var new_branch_length : Vector2i = Vector2i(world_node.current_loaded_level.branch_length.x, (new_level_size.x * new_level_size.y) / 16) ## max branch legnth is new size / 16, min stays the original one
+			print("Harder level requested. New World Size: (" + str(new_level_size) + ") - New CP Length: " + str(new_cp_length) + " - New Branches: " + str(new_branches) + " New Branch Size: (" +str(new_branch_length) + ")" )
 			GameEvents.level_harder_restarted.emit(new_level_size, new_cp_length, new_branches, new_branch_length)  ## emit the level_restarted event with the harder settings (bigger map)
 		elif Input.is_action_just_pressed("quit"): ## ESC / Q button
 			get_tree().quit() # Close the game. WARNING: Nothing is saved!
