@@ -69,6 +69,9 @@ data = PackedVector3Array(-1.2638, 0, 0.16849999, -1.2638, 2.0219998, -0.1684999
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3o04y"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_5w87n"]
+size = Vector3(4, 3, 4)
+
 [node name="Door" type="StaticBody3D" unique_id=1307811451 node_paths=PackedStringArray("editor_key_indicator")]
 collision_layer = 32
 collision_mask = 0
@@ -112,14 +115,24 @@ omni_attenuation = 2.0
 unique_name_in_owner = true
 visible = false
 
-[node name="DoorFrame" parent="Frame" index="0" unique_id=1280328133]
+[node name="DoorFrame" parent="Frame" index="0" unique_id=366943544]
 surface_material_override/0 = SubResource("StandardMaterial3D_d8f5h")
 
 [node name="EditorKeyIndicator" type="MeshInstance3D" parent="." unique_id=1874008901]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+visible = false
 mesh = SubResource("SphereMesh_5w87n")
 surface_material_override/0 = SubResource("StandardMaterial3D_3o04y")
+
+[node name="DoorOverlapperChecker" type="Area3D" parent="." unique_id=1107505394]
+unique_name_in_owner = true
+collision_layer = 32
+collision_mask = 32
+
+[node name="DoorCollisionShape" type="CollisionShape3D" parent="DoorOverlapperChecker" unique_id=1243232869]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13812256, 1.2051392, -0.038085938)
+shape = SubResource("BoxShape3D_5w87n")
 
 [editable path="door"]
 [editable path="Frame"]

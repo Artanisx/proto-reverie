@@ -28,10 +28,11 @@ const EMISSION_ENERGY : float = 2.5 ## The energy multiplier for the emission ma
 @onready var frame: Node3D = %Frame
 @onready var omni_light_3d: OmniLight3D = %OmniLight3D
 @onready var omni_light_3d_2: OmniLight3D = %OmniLight3D2
+@onready var door_overlapper_checker: Area3D = %DoorOverlapperChecker
 
+var marked_for_death : bool = false
 
-
-func _ready() -> void:
+func _ready() -> void:	
 	## Check if we're running in the editor
 	if Engine.is_editor_hint():
 		editor_update_key_indicator()  ## Update the keymesh indicator only if we're running in the editor

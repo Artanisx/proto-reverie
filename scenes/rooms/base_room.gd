@@ -23,6 +23,7 @@ const DROPPED_KEY_PREFAB := preload("res://scenes/collectibles/dropped_key/dropp
 @onready var floors: GridMap = %Floors
 @onready var enemies: Node3D = %Enemies
 @onready var pickables: Node3D = %Pickables
+@onready var decor: Node3D = $Decor
 @onready var room_navigation: NavigationRegion3D = %RoomNavigation
 @onready var editor_key_indicator: Node3D = %EditorKeyIndicator
 

@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://dihfuqnmd31eq" path="res://scenes/characters/enemies/enemy_spawn.tscn" id="2_uch1k"]
 [ext_resource type="PackedScene" uid="uid://isrdinagrwpp" path="res://scenes/props/torch/torch.tscn" id="3_jupgn"]
 [ext_resource type="PackedScene" uid="uid://j7wvw3p0jm5l" path="res://scenes/collectibles/health_pack/healthpack_spawn.tscn" id="4_e1vyi"]
+[ext_resource type="PackedScene" uid="uid://c7qmxvi7s6nvn" path="res://scenes/doors/door.tscn" id="4_jupgn"]
 [ext_resource type="PackedScene" uid="uid://bjq74fihmflbi" path="res://scenes/collectibles/exp_coin/expcoin_spawn.tscn" id="5_vxa0w"]
 
 [node name="10x10_3WayRoom_left" unique_id=1003464471 instance=ExtResource("1_xiwfg")]
@@ -34,6 +35,15 @@ transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 6.00
 
 [node name="Torch4" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="3" unique_id=1135513629 instance=ExtResource("3_jupgn")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.999999, 0, -10)
+
+[node name="Door" parent="Decor" parent_id_path=PackedInt32Array(1087828784) index="0" unique_id=1307811451 instance=ExtResource("4_jupgn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.616506e-07, 0, -11)
+
+[node name="Door2" parent="Decor" parent_id_path=PackedInt32Array(1087828784) index="1" unique_id=2050743186 instance=ExtResource("4_jupgn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.616506e-07, 0, 11)
+
+[node name="Door3" parent="Decor" parent_id_path=PackedInt32Array(1087828784) index="2" unique_id=1095977941 instance=ExtResource("4_jupgn")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -11, 0, -9.616506e-07)
 
 [node name="HealthPackSpawn" parent="Pickables" parent_id_path=PackedInt32Array(978293746) index="0" unique_id=1336114521 instance=ExtResource("4_e1vyi")]
 transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, 9.044859, 0, 8.12608)

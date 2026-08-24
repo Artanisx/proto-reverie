@@ -85,6 +85,7 @@ const DEBUG_MODE: bool = true				## WARNING: IF SET TO TRUE, THINGS LIKE DEBUG_S
 
 @onready var rooms_container: Node3D = $Rooms
 
+
 var room_map : Array ## 2D array of RoomData, mirroring the level grid structure
 var branch_candidates : Array[Vector2i] ## List of room that can have branches added to them, so which rooms can support these detours
 var rng: RandomNumberGenerator ## Random number generator for seeded generation
@@ -105,6 +106,7 @@ func _ready() -> void:
 	
 	generate_level()	
 	check_generated_level()		## Fixes doors if they go towards a special room that is closed that way
+	check_overlapping_doors()
 	
 	print_rooms()
 	
@@ -1157,3 +1159,17 @@ func reverse_print_level_grid() -> void:
 ## Returns the seed used for generation. If no seed was set (seed < 0), returns the randomly generated seed that was used.
 func get_used_seed() -> int:
 	return rng.seed
+	
+## Checks if there is another overlapping door here, if there is, queue_free() this one
+func check_overlapping_doors() -> void:
+	## Since doors are hardplaced in each room, some door might overlap. Check and remove duplicates
+	## 1- reparent all doors to Doors container
+	##2 - do the below:	
+	#if decor.get_child_count() > 1:
+		#for door in decor.get_children():
+			#if door is Door:
+				#var areas3d = door.door_overlapper_checker.get_overlapping_areas()
+				#if areas3d.size() > 0:		
+					#print("Another door found!! I'll kill it")
+					#areas3d[0].get_parent().queue_free()##marked_for_death = true
+	pass
