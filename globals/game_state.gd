@@ -9,6 +9,9 @@ var current_level : BaseProceduralLevel
 var current_player : Player
 var current_keys : Dictionary[Door.KeyColor, bool] = {} ## This will store which keys (true/false) of each color the player has
 
+var number_of_kills : int = 0 ## Stores the number of kills for the Victory Screen
+var start_time : float = Time.get_ticks_msec() ## Stores the start run time, to be used for the Victory Screen time calculation
+
 ## Check if the player has the passed Door.KeyColor key.
 func has_key(color: Door.KeyColor) -> bool:
 	return current_keys.get(color, false) ## Return wheter the player has the passed color. False if the dictionary key (not DoorKey) is not found!
@@ -33,3 +36,8 @@ func register_level(level: BaseProceduralLevel) -> void:
 ## Set the current player
 func register_player(player: Player) -> void:
 	current_player = player	
+	
+## Add to the enemy kills
+func add_enemy_counter(amount: int = 1) -> void:
+	if amount > 0:
+		number_of_kills += amount

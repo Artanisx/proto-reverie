@@ -335,3 +335,5 @@ func on_level_up() -> void:
 func on_enemy_died(exp_to_gain: int) -> void:
 	experience.gain_experience(exp_to_gain)
 	GameEvents.exp_up.emit(self) ## Emis the exp up signal
+	GameState.add_enemy_counter() ## Add to the kills counter
+	
