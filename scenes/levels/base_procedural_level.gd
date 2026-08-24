@@ -108,6 +108,7 @@ func _ready() -> void:
 	
 	generate_level()	
 	check_generated_level()		## Fixes doors if they go towards a special room that is closed that way
+	set_locked_doors()
 	check_overlapping_doors()
 	
 	print_rooms()
@@ -1187,3 +1188,21 @@ func check_overlapping_doors() -> void:
 				else:
 					checked_doors = checked_doors + 1 		
 		
+## If a door is in a branchendroom, lock it
+## FOr now all blue
+func set_locked_doors() -> void:
+	for room in rooms_container.get_children():
+		if room.kind == BaseRoom.RoomKind.BRANCHPATHEND:
+			var door = room.decor.get_child(0) as Door ##a branch endroom only has one door right?
+			var rand_color = randi_range(1,4)
+			match rand_color:
+				1:
+					door.door_color = Door.KeyColor.Blue
+				2:
+					door.door_color = Door.KeyColor.Red
+				3:
+					door.door_color = Door.KeyColor.Yellow
+				4:
+					door.door_color = Door.KeyColor.Purple
+			door.update_frame_color()
+	
