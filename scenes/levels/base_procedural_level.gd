@@ -401,7 +401,38 @@ func generate_level() -> void:
 							is_there_room_left = true						
 						
 						if not is_there_room_down and not is_there_room_up and not is_there_room_right and not is_there_room_left:
-							printerr("generate_level(372): Despite checks, there's still a BranchEndPathRoom with no connections. This should NOT happen.")
+							printerr("Well, a BranchEndPathRoom is still with no connections. Checking if there's a Branch room nearby...")
+							## There are no CP nearby so this is a Branch of length 1
+							var length_Ax : int = 0
+							var length_Bx : int = 0
+							var length_Cx : int = 0
+							var length_Dx : int = 0						
+							
+							## Here we have to check for all neighbhoors the one with the highest CP as that will be the one connected
+							## High B will have the entrance to the BRANCHENED room 
+							## We calculate each neighboors CP number
+							if j-1 >= 0 and room_map[i][j-1].room_identifier != "" and room_map[i][j-1].room_identifier.contains("B"):
+								length_Ax = calculate_cp_length(room_map[i][j-1].room_identifier)							
+							if j+1 < dimensions.y and room_map[i][j+1].room_identifier != "" and room_map[i][j+1].room_identifier.contains("B"):
+								length_Bx = calculate_cp_length(room_map[i][j+1].room_identifier)							
+							if i-1 >= 0 and room_map[i-1][j].room_identifier != "" and room_map[i-1][j].room_identifier.contains("B"):
+								length_Cx = calculate_cp_length(room_map[i-1][j].room_identifier)							
+							if i+1 < dimensions.x and room_map[i+1][j].room_identifier != "" and room_map[i+1][j].room_identifier.contains("B"):
+								length_Dx = calculate_cp_length(room_map[i+1][j].room_identifier)
+							
+							## Only the biggest B enters the branchendroom (i.e. if there's BXMLYL:9 and BXMLYL:8, only BXMLYL:9 will have its room direction set to true
+							if length_Ax > length_Bx and 	length_Ax > length_Cx and length_Ax > length_Dx:
+								is_there_room_down = true
+							elif length_Bx > length_Ax and 	length_Bx > length_Cx and length_Bx > length_Dx:
+								is_there_room_up = true
+							elif length_Cx > length_Ax and 	length_Cx > length_Bx and length_Cx > length_Dx:
+								is_there_room_right = true
+							elif length_Dx > length_Ax and 	length_Dx > length_Bx and length_Dx > length_Cx:
+								is_there_room_left = true
+								
+							if not is_there_room_down and not is_there_room_up and not is_there_room_right and not is_there_room_left:
+								printerr("generate_level(434): Despite checks, there's still a BranchEndPathRoom with no connections. This should NOT happen!")	
+							
 				else:
 					## Regular room logic - check all adjacent rooms
 					if j-1 >= 0 and room_map[i][j-1].room_identifier != "":
