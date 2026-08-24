@@ -401,7 +401,38 @@ func generate_level() -> void:
 							is_there_room_left = true						
 						
 						if not is_there_room_down and not is_there_room_up and not is_there_room_right and not is_there_room_left:
-							printerr("generate_level(372): Despite checks, there's still a BranchEndPathRoom with no connections. This should NOT happen.")
+							printerr("Well, a BranchEndPathRoom is still with no connections. Checking if there's a Branch room nearby...")
+							## There are no CP nearby so this is a Branch of length 1
+							var length_Ax : int = 0
+							var length_Bx : int = 0
+							var length_Cx : int = 0
+							var length_Dx : int = 0						
+							
+							## Here we have to check for all neighbhoors the one with the highest CP as that will be the one connected
+							## High B will have the entrance to the BRANCHENED room 
+							## We calculate each neighboors CP number
+							if j-1 >= 0 and room_map[i][j-1].room_identifier != "" and room_map[i][j-1].room_identifier.contains("B"):
+								length_Ax = calculate_cp_length(room_map[i][j-1].room_identifier)							
+							if j+1 < dimensions.y and room_map[i][j+1].room_identifier != "" and room_map[i][j+1].room_identifier.contains("B"):
+								length_Bx = calculate_cp_length(room_map[i][j+1].room_identifier)							
+							if i-1 >= 0 and room_map[i-1][j].room_identifier != "" and room_map[i-1][j].room_identifier.contains("B"):
+								length_Cx = calculate_cp_length(room_map[i-1][j].room_identifier)							
+							if i+1 < dimensions.x and room_map[i+1][j].room_identifier != "" and room_map[i+1][j].room_identifier.contains("B"):
+								length_Dx = calculate_cp_length(room_map[i+1][j].room_identifier)
+							
+							## Only the biggest B enters the branchendroom (i.e. if there's BXMLYL:9 and BXMLYL:8, only BXMLYL:9 will have its room direction set to true
+							if length_Ax > length_Bx and 	length_Ax > length_Cx and length_Ax > length_Dx:
+								is_there_room_down = true
+							elif length_Bx > length_Ax and 	length_Bx > length_Cx and length_Bx > length_Dx:
+								is_there_room_up = true
+							elif length_Cx > length_Ax and 	length_Cx > length_Bx and length_Cx > length_Dx:
+								is_there_room_right = true
+							elif length_Dx > length_Ax and 	length_Dx > length_Bx and length_Dx > length_Cx:
+								is_there_room_left = true
+								
+							if not is_there_room_down and not is_there_room_up and not is_there_room_right and not is_there_room_left:
+								printerr("generate_level(434): Despite checks, there's still a BranchEndPathRoom with no connections. This should NOT happen!")	
+							
 				else:
 					## Regular room logic - check all adjacent rooms
 					if j-1 >= 0 and room_map[i][j-1].room_identifier != "":
@@ -755,6 +786,28 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		
 		## Since it's a start room, nothing should spawn!
 		
+		if DEBUG_MODE:
+			## SPAWN THE BOSS		
+			var enemyspawners : Array[EnemySpawn]		
+			
+			## Populate the array of enemy spawners
+			for child in room.enemies.get_children():
+				if child is EnemySpawn:
+					enemyspawners.append(child)
+			
+			## Pick a random spawner for the boss
+			var selected_spawner = enemyspawners.pick_random()
+					
+			## Spawn the BOSS
+			
+			## First we duplicate the Axe weapon data in order to be able to modify it without modifing everything
+			## TO be fair, a better approach would be to soimply create another resource, but let's do it via code
+			var BossWeapon : WeaponData = WEAPON_AXE_DATA.duplicate()
+			BossWeapon.damage_min = 1		
+			BossWeapon.damage_max = 2
+					
+			selected_spawner.set_enemy(KOBOLD_PREFAB, KOBOLD_DURATION_STUN, KOBOLD_DURATION_BETWEEN_ATTACKS, KOBOLD_SPEED, KOBOLD_XP_FOR_KILL, 1, WEAPON_SWORD_DATA, 2.0, true)				
+			print("DEBUG!!! START ROOM: Spawning the BOSS!")
 		
 		## BIG HEALTH PACK
 		#for child in room.pickables.get_children():

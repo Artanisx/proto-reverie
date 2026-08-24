@@ -32,6 +32,7 @@ func _enter_tree() -> void:
 	
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("restart"):
+		GameState.current_game_state = GameState.PlayState.LOSE ## Unused at the moment, but let's set it correctly
 		GameEvents.level_restarted.emit()	## emit thelevel_restereted event so the world can act on it and restart
 	
 ## Since we're already Dying, we cannot get hurt again (i.e. acid trap)

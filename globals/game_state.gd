@@ -5,9 +5,16 @@ extends Node
 ## This is a Global accesible to all the game. Takes care of registering a player refernece and the current level reference.
 ## It also store the inventory for the player (only the keys for now)
 
+enum PlayState {PLAYING, WIN, LOSE}
+var current_game_state: PlayState = PlayState.PLAYING	## PlayState is used to determine input actions from the play state (default) or lose state
+var run_time_from_start: int = 0 ## Current run time start
+
 var current_level : BaseProceduralLevel
 var current_player : Player
 var current_keys : Dictionary[Door.KeyColor, bool] = {} ## This will store which keys (true/false) of each color the player has
+
+var number_of_kills : int = 0 ## Stores the number of kills for the Victory Screen
+var end_time : String ## Stores the end time in HH:MM:SS format
 
 ## Check if the player has the passed Door.KeyColor key.
 func has_key(color: Door.KeyColor) -> bool:
@@ -33,3 +40,8 @@ func register_level(level: BaseProceduralLevel) -> void:
 ## Set the current player
 func register_player(player: Player) -> void:
 	current_player = player	
+	
+## Add to the enemy kills
+func add_enemy_counter(amount: int = 1) -> void:
+	if amount > 0:
+		number_of_kills += amount

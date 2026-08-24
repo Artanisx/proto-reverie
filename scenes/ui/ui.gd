@@ -4,6 +4,12 @@ extends CanvasLayer
 @onready var hurt_vignette: Panel = %HurtVignette
 @onready var heal_vignette: Panel = %HealVignette
 @onready var death_screen: ColorRect = %DeathScreen
+@onready var victory_screen: ColorRect = %VictoryScreen
+@onready var totalkills: Label = %TOTALKILLS
+@onready var level: Label = %LEVEL
+@onready var runtime: Label = %RUNTIME
+
+
 @onready var health_indicator: StatIndicator = %HealthIndicator
 @onready var weapon_indicator: StatIndicator = %WeaponIndicator
 @onready var weapon_icon: TextureRect = %WeaponIcon
@@ -20,8 +26,8 @@ extends CanvasLayer
 
 const TIME_FOR_HURT_VIGNETTE_ANIMATION: float = 0.1 ## 100ms
 const TIME_FOR_HEAL_VIGNETTE_ANIMATION: float = 0.1 ## 100ms
-const TIME_FOR_DEATH_SCREEN_ANIMATION: float = 0.3 ## 100ms
-
+const TIME_FOR_DEATH_SCREEN_ANIMATION: float = 0.3 ## 300ms
+const TIME_FOR_VICTORY_SCREEN_ANIMATION: float = 0.3 ## 300ms
 
 const KEY_TEXTURE_PREFAB := preload("res://scenes/ui/key_texture.tscn")
 
@@ -40,6 +46,9 @@ func _ready() -> void:
 	
 	## Connect the signal for restart (so we can hide the death screen)
 	GameEvents.level_restarted.connect(on_level_restarted)
+	
+	## Connec tthe harder rtestart with the same callback
+	GameEvents.level_harder_restarted.connect(on_level_harder_restarted)
 	
 	## Connect the signal for when the player spawns in the world
 	GameEvents.player_spawned.connect(on_player_spawned)	
@@ -100,12 +109,47 @@ func on_player_dead() -> void:
 
 ## Make the DeathScreen appear WARNING NYI		 
 func on_boss_dead() -> void:
-	print("BOSS IS DEAD! PLAYER WON! NYI")
+	## CALCULATE STATS	
+	var duration_since_gamestart := Time.get_ticks_msec() - GameState.run_time_from_start 
+	var time_passed = duration_since_gamestart / 1000
+	GameState.end_time = time_convert(time_passed)
+	runtime.text = "RUN TIME: " + GameState.end_time
+	totalkills.text = "TOTAL KILL(S): " + str(GameState.number_of_kills)
+	level.text = "LEVEL REACHED: " + str(GameState.current_player.experience.current_level)	
+	
+	## TWEEN
+	var tween := create_tween()
+	
+	## Let's modulate everything back to white (this basically just move the alpha 1.0 (fully visible), keeping the rgs back as white)
+	#  in TIME_FOR_VICTORY_SCREEN_ANIMATION ms, with a set transition and ease
+	tween.tween_property(victory_screen, "modulate", Color.WHITE, TIME_FOR_VICTORY_SCREEN_ANIMATION)\
+		.set_trans(Tween.TRANS_QUAD)\
+		.set_ease(Tween.EASE_OUT)
+
+
+## Convert secocds in HH:MM:SS format	
+func time_convert(time_in_sec: int) -> String:
+	var seconds = time_in_sec%60
+	var minutes = time_in_sec/60
+	var hours = minutes/60
+
+	#returns a string with the format "HH:MM:SS"
+	return "%02d:%02d:%02d" % [hours, minutes - (60 * hours), seconds - (60 * minutes)]
 		
 ## Make the DeathScreen disappear
 func on_level_restarted() -> void:	
 	## Let's modulate this back to transparent instantly
 	death_screen.modulate = Color.TRANSPARENT
+	victory_screen.modulate = Color.TRANSPARENT
+	## Set the playstate
+	GameState.current_game_state = GameState.PlayState.PLAYING
+	
+func on_level_harder_restarted(_level_size: Vector2i, _cp_length: int, _branches: int, _branch_length: Vector2i) -> void:
+	## Let's modulate this back to transparent instantly
+	death_screen.modulate = Color.TRANSPARENT
+	victory_screen.modulate = Color.TRANSPARENT
+	## Set the playstate
+	GameState.current_game_state = GameState.PlayState.PLAYING
 	
 ## Player just spawned, refresh HealthIndicator
 func on_player_spawned(player: Player) -> void:

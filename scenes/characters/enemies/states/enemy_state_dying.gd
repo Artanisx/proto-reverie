@@ -43,6 +43,7 @@ func _enter_tree() -> void:
 	
 	## 0.9 - Emit the signal for the boss death if this enemy is a boss
 	if enemy.is_boss:
+		GameState.current_game_state = GameState.PlayState.WIN ## Set the game state ti playstate.win to allow special input for the victoryscreen
 		GameEvents.boss_dead.emit()
 	
 	## 1- Disable collision shape since we are no longer handling phsyics with it
