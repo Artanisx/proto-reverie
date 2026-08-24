@@ -3,10 +3,15 @@ extends Node3D
 
 const BASE_PROCEDURAL_LEVEL := preload("res://scenes/levels/base_procedural_level.tscn")
 
-const DEFAULT_SIZE : Vector2i = Vector2i(8,8)
-const DEFAULT_CRITICAL_LENGTH : int = 13
-const DEFAULT_BRANCHES : int = 3
-const DEFAULT_BRANCHES_SIZE : Vector2i = Vector2i(1,4)
+const DEFAULT_SIZE : Vector2i = Vector2i(5,5)
+const DEFAULT_CRITICAL_LENGTH : int = 5
+const DEFAULT_BRANCHES : int = 1
+const DEFAULT_BRANCHES_SIZE : Vector2i = Vector2i(1,1)
+
+const MID_SIZE : Vector2i = Vector2i(8,8)
+const MID_CRITICAL_LENGTH : int = 13
+const MID_BRANCHES : int = 3
+const MID_BRANCHES_SIZE : Vector2i = Vector2i(1,4)
 
 var current_loaded_level : BaseProceduralLevel = null
 
