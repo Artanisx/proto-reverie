@@ -3,6 +3,10 @@ extends Node3D
 
 const BASE_PROCEDURAL_LEVEL := preload("res://scenes/levels/base_procedural_level.tscn")
 
+const MAX_SIZE_X: int = 11
+const MAX_SIZE_Y: int = 11
+const MAX_BRANCHES: int = 6
+
 const DEFAULT_SIZE : Vector2i = Vector2i(5,5)
 const DEFAULT_CRITICAL_LENGTH : int = 5
 const DEFAULT_BRANCHES : int = 1
@@ -52,4 +56,9 @@ func on_level_restarted() -> void:
 ## Function to restart the Level hajrder
 func on_level_harder_restarted(level_size: Vector2i = DEFAULT_SIZE, cp_length: int = DEFAULT_CRITICAL_LENGTH, branches: int = DEFAULT_BRANCHES, branch_length: Vector2i = DEFAULT_BRANCHES_SIZE) -> void:	
 	## Just load the level again passing the current level (restarting THIS level)
-	load_level(level_size, cp_length, branches, branch_length)
+	
+	## However, we don't want to restart going over the max level to avoid crashing FPS to the ground
+	var actual_level_size : Vector2i = Vector2i(clampi(level_size.x, DEFAULT_SIZE.x, MAX_SIZE_X), clampi(level_size.x, DEFAULT_SIZE.y, MAX_SIZE_Y))
+	var actual_branches: int = clampi(branches, 1, MAX_BRANCHES)
+	
+	load_level(actual_level_size, cp_length, actual_branches, branch_length)
