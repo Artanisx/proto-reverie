@@ -158,12 +158,17 @@ func process_pushback(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	## Handle Lose Screen
 	if GameState.current_game_state == GameState.PlayState.WIN:
-		if Input.is_action_just_released("restart"): ## R Button - Just released so it doesn't throw the weapon at the start
-			print("Restargint the amge")
+		if Input.is_action_just_released("restart"): ## R Button - Just released so it doesn't throw the weapon at the start			
 			GameEvents.level_restarted.emit()  ## emit the level_restarted event so the world can act on it and restart
 		elif Input.is_action_just_pressed("harder_restart"): ## H Button
-			## TODO: Implement harder restart
-			print("Player wants an harder level, but this isn't implemented.")
+			## Player wants an harder level
+		
+			var world_node = get_node("/root/ProtoWorld")
+			var new_level_size : Vector2i = world_node.current_loaded_level.dimensions
+			var new_cp_length : int = world_node.current_loaded_level.critical_path_length
+			var new_branches : int = world_node.current_loaded_level.branches
+			var new_branch_length : Vector2i = world_node.current_loaded_level.branch_length			
+			GameEvents.level_harder_restarted.emit(new_level_size, new_cp_length, new_branches, new_branch_length)  ## emit the level_restarted event with the harder settings (bigger map)
 		elif Input.is_action_just_pressed("quit"): ## ESC / Q button
 			get_tree().quit() # Close the game. WARNING: Nothing is saved!
 	

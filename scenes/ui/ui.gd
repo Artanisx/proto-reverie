@@ -47,6 +47,9 @@ func _ready() -> void:
 	## Connect the signal for restart (so we can hide the death screen)
 	GameEvents.level_restarted.connect(on_level_restarted)
 	
+	## Connec tthe harder rtestart with the same callback
+	GameEvents.level_harder_restarted.connect(on_level_harder_restarted)
+	
 	## Connect the signal for when the player spawns in the world
 	GameEvents.player_spawned.connect(on_player_spawned)	
 	
@@ -135,6 +138,13 @@ func time_convert(time_in_sec: int) -> String:
 		
 ## Make the DeathScreen disappear
 func on_level_restarted() -> void:	
+	## Let's modulate this back to transparent instantly
+	death_screen.modulate = Color.TRANSPARENT
+	victory_screen.modulate = Color.TRANSPARENT
+	## Set the playstate
+	GameState.current_game_state = GameState.PlayState.PLAYING
+	
+func on_level_harder_restarted(_level_size: Vector2i, _cp_length: int, _branches: int, _branch_length: Vector2i) -> void:
 	## Let's modulate this back to transparent instantly
 	death_screen.modulate = Color.TRANSPARENT
 	victory_screen.modulate = Color.TRANSPARENT

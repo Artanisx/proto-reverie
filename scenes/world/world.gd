@@ -1,36 +1,50 @@
 class_name World
 extends Node3D
 
-const LEVEL := preload("res://scenes/levels/test_procedural_level.tscn")
+const BASE_PROCEDURAL_LEVEL := preload("res://scenes/levels/base_procedural_level.tscn")
 
-## LIST OF LEVELS - ONLY USED BY TUTORIAL 
-##const LEVELS := [preload("res://scenes/levels/level_01_welcome.tscn")] ## Only used by tutorial
+const DEFAULT_SIZE : Vector2i = Vector2i(8,8)
+const DEFAULT_CRITICAL_LENGTH : int = 13
+const DEFAULT_BRANCHES : int = 3
+const DEFAULT_BRANCHES_SIZE : Vector2i = Vector2i(1,4)
 
-##var current_level_index := 0  ## Only used by tutorial
 var current_loaded_level : BaseProceduralLevel = null
 
 func _ready() -> void:
 	## Connect the signal for restart 
 	GameEvents.level_restarted.connect(on_level_restarted)
+	
+	## Connect the signal for restart 
+	GameEvents.level_harder_restarted.connect(on_level_harder_restarted)
 		
-	load_level(0) ## load test level
+	load_level() ## load test level
 	
 ## Add a base procedural level node to the level which will hold the level itself
-func load_level(_index: int) -> void:	
+func load_level(level_size: Vector2i = DEFAULT_SIZE, cp_length: int = DEFAULT_CRITICAL_LENGTH, branches: int = DEFAULT_BRANCHES, branch_length: Vector2i = DEFAULT_BRANCHES_SIZE) -> void:	
 	## If there's a level loaded, clear it out
 	if current_loaded_level != null:
 		current_loaded_level.queue_free()
 	
-	## Instantiate the level (base cprocedfural level for now)
-	## TODO: This should NOT be a set scene, but generated directly so values like criticalpath legnth etc can be set via code
-	## THAT woudl also allow for a restart_harder function with bigger values, that could be simply bigger than the previous run
-	current_loaded_level = LEVEL.instantiate()
-	GameState.register_level(current_loaded_level)	 ## Register the currently loaded level
+	current_loaded_level = BASE_PROCEDURAL_LEVEL.instantiate()
+	
+	current_loaded_level.dimensions = Vector2i(8, 8)
+	current_loaded_level.start = Vector2i.ZERO
+	current_loaded_level.critical_path_length = 13
+	current_loaded_level.branches = 3
+	current_loaded_level.branch_length = Vector2i(1, 4)
+	
+	GameState.register_level(current_loaded_level)
 	add_child(current_loaded_level)
+	
 	GameState.run_time_from_start = Time.get_ticks_msec() ## Reset the current start timer
 	GameState.number_of_kills = 0 ## Reset the kill count	
 
 ## Function to restart the Level
 func on_level_restarted() -> void:	
 	## Just load the level again passing the current level (restarting THIS level)
-	load_level(0)
+	load_level()
+	
+## Function to restart the Level hajrder
+func on_level_harder_restarted(level_size: Vector2i = DEFAULT_SIZE, cp_length: int = DEFAULT_CRITICAL_LENGTH, branches: int = DEFAULT_BRANCHES, branch_length: Vector2i = DEFAULT_BRANCHES_SIZE) -> void:	
+	## Just load the level again passing the current level (restarting THIS level)
+	load_level(level_size, cp_length, branches, branch_length)

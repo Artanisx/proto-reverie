@@ -24,6 +24,9 @@ signal player_dead
 ## SIGNAL for when the level needs to be restarted (HINT: to be used to load a new floor in proto-reverie?)
 signal level_restarted
 
+## SIGNAL for when the level needs to be harder restfarted!!!!!!!!
+signal level_harder_restarted(level_size: Vector2i, cp_length: int, branches: int, branch_length: Vector2i)
+
 ## SIGNAL for when the player spawns in the game
 signal player_spawned(player: Player)
 
