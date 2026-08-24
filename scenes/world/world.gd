@@ -22,6 +22,8 @@ func load_level(_index: int) -> void:
 		current_loaded_level.queue_free()
 	
 	## Instantiate the level (base cprocedfural level for now)
+	## TODO: This should NOT be a set scene, but generated directly so values like criticalpath legnth etc can be set via code
+	## THAT woudl also allow for a restart_harder function with bigger values, that could be simply bigger than the previous run
 	current_loaded_level = LEVEL.instantiate()
 	GameState.register_level(current_loaded_level)	 ## Register the currently loaded level
 	add_child(current_loaded_level)
