@@ -101,6 +101,21 @@ func on_player_dead() -> void:
 ## Make the DeathScreen appear WARNING NYI		 
 func on_boss_dead() -> void:
 	print("BOSS IS DEAD! PLAYER WON! NYI")
+	var end_time = Time.get_ticks_msec()
+	var time_passed = end_time / 1000
+	GameState.end_time = time_convert(time_passed)	
+		
+	## For now we simply priont this
+	print ("VICTORY INDEED! KILLS: " + str(GameState.number_of_kills) + " - TOTAL TIME: " + GameState.end_time)
+
+## Convert secocds in HH:MM:SS format	
+func time_convert(time_in_sec: int) -> String:
+	var seconds = time_in_sec%60
+	var minutes = time_in_sec/60
+	var hours = minutes/60
+
+	#returns a string with the format "HH:MM:SS"
+	return "%02d:%02d:%02d" % [hours, minutes - (60 * hours), seconds - (60 * minutes)]
 		
 ## Make the DeathScreen disappear
 func on_level_restarted() -> void:	

@@ -755,6 +755,28 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		
 		## Since it's a start room, nothing should spawn!
 		
+		if DEBUG_MODE:
+			## SPAWN THE BOSS		
+			var enemyspawners : Array[EnemySpawn]		
+			
+			## Populate the array of enemy spawners
+			for child in room.enemies.get_children():
+				if child is EnemySpawn:
+					enemyspawners.append(child)
+			
+			## Pick a random spawner for the boss
+			var selected_spawner = enemyspawners.pick_random()
+					
+			## Spawn the BOSS
+			
+			## First we duplicate the Axe weapon data in order to be able to modify it without modifing everything
+			## TO be fair, a better approach would be to soimply create another resource, but let's do it via code
+			var BossWeapon : WeaponData = WEAPON_AXE_DATA.duplicate()
+			BossWeapon.damage_min = 1		
+			BossWeapon.damage_max = 2
+					
+			selected_spawner.set_enemy(KOBOLD_PREFAB, KOBOLD_DURATION_STUN, KOBOLD_DURATION_BETWEEN_ATTACKS, KOBOLD_SPEED, KOBOLD_XP_FOR_KILL, 1, WEAPON_SWORD_DATA, 2.0, true)				
+			print("DEBUG!!! START ROOM: Spawning the BOSS!")
 		
 		## BIG HEALTH PACK
 		#for child in room.pickables.get_children():

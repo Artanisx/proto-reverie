@@ -10,7 +10,7 @@ var current_player : Player
 var current_keys : Dictionary[Door.KeyColor, bool] = {} ## This will store which keys (true/false) of each color the player has
 
 var number_of_kills : int = 0 ## Stores the number of kills for the Victory Screen
-var start_time : float = Time.get_ticks_msec() ## Stores the start run time, to be used for the Victory Screen time calculation
+var end_time : String ## Stores the end time in HH:MM:SS format
 
 ## Check if the player has the passed Door.KeyColor key.
 func has_key(color: Door.KeyColor) -> bool:
