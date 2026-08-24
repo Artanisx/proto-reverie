@@ -84,6 +84,8 @@ const DEBUG_SEED: int = 205585640 ## WARNING: PRECISE SEED FOR DEBUG!
 const DEBUG_MODE: bool = true				## WARNING: IF SET TO TRUE, THINGS LIKE DEBUG_SEED WILL BE USED
 
 @onready var rooms_container: Node3D = $Rooms
+@onready var doors: Node3D = $Doors
+
 
 
 var room_map : Array ## 2D array of RoomData, mirroring the level grid structure
@@ -1164,12 +1166,24 @@ func get_used_seed() -> int:
 func check_overlapping_doors() -> void:
 	## Since doors are hardplaced in each room, some door might overlap. Check and remove duplicates
 	## 1- reparent all doors to Doors container
-	##2 - do the below:	
-	#if decor.get_child_count() > 1:
-		#for door in decor.get_children():
-			#if door is Door:
-				#var areas3d = door.door_overlapper_checker.get_overlapping_areas()
-				#if areas3d.size() > 0:		
-					#print("Another door found!! I'll kill it")
-					#areas3d[0].get_parent().queue_free()##marked_for_death = true
-	pass
+	for room in rooms_container.get_children():
+		for decor in room.decor.get_children():
+			if decor is Door:
+				decor.reparent(doors)
+	##2 - Check doors
+	var checked_doors: int = 0	
+	await get_tree().process_frame
+	var max_doors: int = doors.get_child_count()
+	
+	while (checked_doors < max_doors):
+		for door : Door in doors.get_children():
+			if door is Door:
+				var areas3d = door.door_overlapper_checker.get_overlapping_areas()
+				if areas3d.size() > 0:
+					door.queue_free()
+					await get_tree().process_frame
+					checked_doors = checked_doors + 1 		
+					break
+				else:
+					checked_doors = checked_doors + 1 		
+		
