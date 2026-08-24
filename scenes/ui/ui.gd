@@ -106,9 +106,9 @@ func on_player_dead() -> void:
 
 ## Make the DeathScreen appear WARNING NYI		 
 func on_boss_dead() -> void:
-	## CALCULATE STATS
-	var end_time = Time.get_ticks_msec()
-	var time_passed = end_time / 1000
+	## CALCULATE STATS	
+	var duration_since_gamestart := Time.get_ticks_msec() - GameState.run_time_from_start 
+	var time_passed = duration_since_gamestart / 1000
 	GameState.end_time = time_convert(time_passed)
 	runtime.text = "RUN TIME: " + GameState.end_time
 	totalkills.text = "TOTAL KILL(S): " + str(GameState.number_of_kills)

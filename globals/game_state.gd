@@ -7,6 +7,7 @@ extends Node
 
 enum PlayState {PLAYING, WIN, LOSE}
 var current_game_state: PlayState = PlayState.PLAYING	## PlayState is used to determine input actions from the play state (default) or lose state
+var run_time_from_start: int = 0 ## Current run time start
 
 var current_level : BaseProceduralLevel
 var current_player : Player

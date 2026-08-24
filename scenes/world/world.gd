@@ -27,6 +27,8 @@ func load_level(_index: int) -> void:
 	current_loaded_level = LEVEL.instantiate()
 	GameState.register_level(current_loaded_level)	 ## Register the currently loaded level
 	add_child(current_loaded_level)
+	GameState.run_time_from_start = Time.get_ticks_msec() ## Reset the current start timer
+	GameState.number_of_kills = 0 ## Reset the kill count	
 
 ## Function to restart the Level
 func on_level_restarted() -> void:	
