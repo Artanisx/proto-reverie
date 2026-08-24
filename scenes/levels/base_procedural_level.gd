@@ -33,7 +33,9 @@ const PICKABLE_ITEM_PREFAB = preload("res://scenes/equipment/pickable_item.tscn"
 const PICKABLE_HEALTH_PACK_PREFAB = preload("res://scenes/collectibles/health_pack/pickable_health_pack.tscn")
 const PICKABLE_EXP_COIN_PREFAB = preload("res://scenes/collectibles/exp_coin/pickable_exp_coin.tscn")
 const GOBLIN_PREFAB = preload("res://scenes/characters/enemies/goblin.tscn")
+const KOBOLD_PREFAB = preload("res://scenes/characters/enemies/kobold.tscn")
 const WEAPON_SWORD_DATA = preload("res://data/weapons/shortsword.tres")
+const WEAPON_AXE_DATA = preload("res://data/weapons/axe.tres")
 
 ## Constants for pickable stats
 const BIG_HEALTH_PACK: int = 50
@@ -42,6 +44,16 @@ const SMALL_HEALTH_PACK: int = 10
 const BIG_EXP_COIN: int = 15
 const MED_EXP_COIN: int = 5
 const SMALL_EXP_COIN: int = 2
+
+## Constants for Boss (KOBOLD)
+const KOBOLD_MAX_HP: int = 50
+const KOBOLD_DURATION_STUN: float = 1.5
+const KOBOLD_DURATION_BETWEEN_ATTACKS: int = 1000
+const KOBOLD_SPEED: float = 3.0
+const KOBOLD_XP_FOR_KILL: int = 100
+const KOBOLD_MIN_DAMAGE: int = 10
+const KOBOLD_MAX_DAMAGE: int = 20
+const KOBOLD_DETECTION_RANGE: float = 10.0
 
 ## Constants for random gen
 const REGULAR_ROOM_HEALTHPACK_CHANCE: int = 25
@@ -634,7 +646,7 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 			var selected_spawner = enemyspawners.pick_random()
 					
 			## Spawn an enemy
-			selected_spawner.set_enemy(GOBLIN_PREFAB, 2.5, 2000, 2.0, 10, 8)				
+			selected_spawner.set_enemy(GOBLIN_PREFAB, 2.5, 2000, 2.0, 10, 8)
 			print("Enemy placed in a regular room.")
 			
 			##Remove th spawner from the array
@@ -690,7 +702,7 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		
 		## End  Room should contian goodies:
 		## Always 1 big health pack
-		## FINAL BOSS : NYI		
+		## Always the Boss
 		
 		## BIG HEALTH PACK		
 		for child in room.pickables.get_children():
@@ -698,7 +710,7 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 				child.set_healthpack(PICKABLE_HEALTH_PACK_PREFAB, 8.0, Pickable.Direction.Y_AXIS, BIG_HEALTH_PACK)
 				print("Placed a HealthPack in the End Room")		
 				
-		## SPAWN AN ENEMY: TODO: SHOULD BE A BOSS		
+		## SPAWN THE BOSS		
 		var enemyspawners : Array[EnemySpawn]		
 		
 		## Populate the array of enemy spawners
@@ -709,9 +721,16 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		## Pick a random spawner for the boss
 		var selected_spawner = enemyspawners.pick_random()
 				
-		## Spawn the "boss"		
-		selected_spawner.set_enemy(GOBLIN_PREFAB, 1.5, 1000, 4.0, 100, 45)				
-		print("END ROOM: Spawning an enemy, but we should spawn a proper BOSS!")
+		## Spawn the BOSS
+		
+		## First we duplicate the Axe weapon data in order to be able to modify it without modifing everything
+		## TO be fair, a better approach would be to soimply create another resource, but let's do it via code
+		var BossWeapon : WeaponData = WEAPON_AXE_DATA.duplicate()
+		BossWeapon.damage_min = KOBOLD_MIN_DAMAGE		
+		BossWeapon.damage_max = KOBOLD_MAX_DAMAGE
+				
+		selected_spawner.set_enemy(KOBOLD_PREFAB, KOBOLD_DURATION_STUN, KOBOLD_DURATION_BETWEEN_ATTACKS, KOBOLD_SPEED, KOBOLD_XP_FOR_KILL, KOBOLD_MAX_HP, BossWeapon, KOBOLD_DETECTION_RANGE, true)				
+		print("END ROOM: Spawning the BOSS!")
 
 		
 	## If it's an START ROOM let's add a green omnilight3d
@@ -735,7 +754,8 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		room.add_child(minimap_icon)
 		
 		## Since it's a start room, nothing should spawn!
-		###DEBUG LET'S USE START ROOM
+		
+		
 		## BIG HEALTH PACK
 		#for child in room.pickables.get_children():
 			#if child is HealthPackSpawn:

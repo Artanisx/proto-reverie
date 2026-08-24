@@ -11,7 +11,8 @@ var current_loaded_level : BaseProceduralLevel = null
 
 func _ready() -> void:
 	## Connect the signal for restart 
-	GameEvents.level_restarted.connect(on_level_restarted)	
+	GameEvents.level_restarted.connect(on_level_restarted)
+		
 	load_level(0) ## load test level
 	
 ## Add a base procedural level node to the level which will hold the level itself

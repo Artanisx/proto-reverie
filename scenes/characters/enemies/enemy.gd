@@ -57,6 +57,7 @@ var pushback_force: Vector3 = Vector3.ZERO ## If set, it will cause this enemy t
 var state : State	## State the enemy is in
 var state_node : EnemyState ## The Node that holds the current state the enemy is in
 var time_since_last_attack: int  ## Needed for timing the attacks, in ms
+var is_boss: bool = false ## If true, he will emit the boss_dead signal on death
 
 func _ready() -> void:
 	## Connets the body_entered signal of the player detection area
