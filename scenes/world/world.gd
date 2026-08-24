@@ -29,6 +29,6 @@ func load_level(_index: int) -> void:
 	add_child(current_loaded_level)
 
 ## Function to restart the Level
-func on_level_restarted() -> void:
+func on_level_restarted() -> void:	
 	## Just load the level again passing the current level (restarting THIS level)
 	load_level(0)
