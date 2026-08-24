@@ -27,11 +27,11 @@ func load_level(level_size: Vector2i = DEFAULT_SIZE, cp_length: int = DEFAULT_CR
 	
 	current_loaded_level = BASE_PROCEDURAL_LEVEL.instantiate()
 	
-	current_loaded_level.dimensions = Vector2i(8, 8)
+	current_loaded_level.dimensions = level_size
 	current_loaded_level.start = Vector2i.ZERO
-	current_loaded_level.critical_path_length = 13
-	current_loaded_level.branches = 3
-	current_loaded_level.branch_length = Vector2i(1, 4)
+	current_loaded_level.critical_path_length = cp_length
+	current_loaded_level.branches = branches
+	current_loaded_level.branch_length = branch_length
 	
 	GameState.register_level(current_loaded_level)
 	add_child(current_loaded_level)
