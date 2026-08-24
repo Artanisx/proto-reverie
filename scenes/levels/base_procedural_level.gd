@@ -110,6 +110,7 @@ func _ready() -> void:
 	check_generated_level()		## Fixes doors if they go towards a special room that is closed that way
 	set_locked_doors()
 	check_overlapping_doors()
+	place_keys()
 	
 	print_rooms()
 	
@@ -1206,3 +1207,6 @@ func set_locked_doors() -> void:
 					door.door_color = Door.KeyColor.Purple
 			door.update_frame_color()
 	
+## This function will check for colored rooms and will place a key for each in a random CP room
+func place_keys() -> void:
+	pass
