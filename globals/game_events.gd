@@ -47,3 +47,6 @@ signal exp_up(player: Player)
 
 ## Signal for when an enemy dies
 signal enemy_died(exp: int)
+
+## Signal for when the boss enemy dies
+signal boss_dead

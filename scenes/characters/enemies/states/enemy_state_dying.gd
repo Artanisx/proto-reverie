@@ -39,7 +39,11 @@ func _enter_tree() -> void:
 	enemy.dead.emit(enemy.global_transform)
 	
 	## 0.8 - Emit a signal for an enemy just died for exp calculations
-	GameEvents.enemy_died.emit(enemy.exp_for_kill)
+	GameEvents.enemy_died.emit(enemy.exp_for_kill)	
+	
+	## 0.9 - Emit the signal for the boss death if this enemy is a boss
+	if enemy.is_boss:
+		GameEvents.boss_dead.emit()
 	
 	## 1- Disable collision shape since we are no longer handling phsyics with it
 	enemy.collision_shape.disabled = true

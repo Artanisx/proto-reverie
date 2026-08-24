@@ -35,6 +35,9 @@ func _ready() -> void:
 	## Connect the player_dead signal
 	GameEvents.player_dead.connect(on_player_dead)
 	
+	## Connect the boss_dead signal
+	GameEvents.boss_dead.connect(on_boss_dead)
+	
 	## Connect the signal for restart (so we can hide the death screen)
 	GameEvents.level_restarted.connect(on_level_restarted)
 	
@@ -94,6 +97,10 @@ func on_player_dead() -> void:
 	tween.tween_property(death_screen, "modulate", Color.WHITE, TIME_FOR_DEATH_SCREEN_ANIMATION)\
 		.set_trans(Tween.TRANS_QUAD)\
 		.set_ease(Tween.EASE_OUT)
+
+## Make the DeathScreen appear WARNING NYI		 
+func on_boss_dead() -> void:
+	print("BOSS IS DEAD! PLAYER WON! NYI")
 		
 ## Make the DeathScreen disappear
 func on_level_restarted() -> void:	
