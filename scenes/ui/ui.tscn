@@ -190,6 +190,32 @@ text = "[E] Pick Up"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="MessagePanel" type="ColorRect" parent="." unique_id=119444318]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -302.0
+offset_top = 195.0
+offset_right = 301.5
+offset_bottom = 255.0
+grow_horizontal = 2
+color = Color(0.011764706, 0.10980392, 0.11372549, 0.5372549)
+
+[node name="MessageLabel" type="Label" parent="MessagePanel" unique_id=2051272883]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_aac20")
+theme_override_font_sizes/font_size = 26
+text = "Hey!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="KeyContainer" type="HBoxContainer" parent="." unique_id=109537989]
 unique_name_in_owner = true
 anchors_preset = 2

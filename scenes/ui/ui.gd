@@ -21,6 +21,10 @@ extends CanvasLayer
 
 @onready var action_panel: ColorRect = %ActionPanel
 @onready var action_label: Label = %ActionLabel
+@onready var message_panel: ColorRect = %MessagePanel
+@onready var message_label: Label = $MessagePanel/MessageLabel
+
+
 @onready var key_container: HBoxContainer = %KeyContainer
 @onready var minimap_camera: MinimapCamera = $MinimapPanel/Minimap/SubViewport/MinimapCamera
 
@@ -28,6 +32,15 @@ const TIME_FOR_HURT_VIGNETTE_ANIMATION: float = 0.1 ## 100ms
 const TIME_FOR_HEAL_VIGNETTE_ANIMATION: float = 0.1 ## 100ms
 const TIME_FOR_DEATH_SCREEN_ANIMATION: float = 0.3 ## 300ms
 const TIME_FOR_VICTORY_SCREEN_ANIMATION: float = 0.3 ## 300ms
+const TIME_UI_MESSAGE_FADETOUT_TIME: float = 2.0 ## 300ms
+
+
+const UI_STRING_KEY_PICKED_UP_PART_1 : String = "You picked up a "
+const UI_STRING_KEY_PICKED_UP_PART_2 : String = " key!"
+const UI_STRING_KEY_COLOR_BLUE: String = "Blue"
+const UI_STRING_KEY_COLOR_RED: String = "Red"
+const UI_STRING_KEY_COLOR_YELLOW: String = "Yellow"
+const UI_STRING_KEY_COLOR_PURPLE: String = "Purple"
 
 const KEY_TEXTURE_PREFAB := preload("res://scenes/ui/key_texture.tscn")
 
@@ -62,8 +75,11 @@ func _ready() -> void:
 	## Connect the signal for when the player can take a new action (selected a pickable item, a door in kick range...)
 	GameEvents.possible_action_changed.connect(on_possible_action_changed)	
 	
-	## Connect to the key_picked_up event signal for when the player picks up the key
+	## Connect to the key_picked_up event signal for when the player picks up the key / use a key / loses a key
 	GameEvents.current_keys_changed.connect(on_current_keys_changed)
+	
+	## Connect to the key_picked_up event signal for when the player picks up the key
+	GameEvents.obtained_key.connect(on_picked_up_key)
 	
 	## Connect to the exp_up event signal for when player gains exp
 	GameEvents.exp_up.connect(on_exp_up)
@@ -82,7 +98,8 @@ func on_player_hurt(player: Player) -> void:
 	## Then make it invisible again, setting alpha back to 0.0 (fully INvisible) in TIME_FOR_HURT_VIGNETTE_ANIMATION ms
 	tween.tween_property(hurt_vignette, "modulate:a", 0.0, TIME_FOR_HURT_VIGNETTE_ANIMATION)
 	## Finally, update the HP bar
-	health_indicator.refresh(player.health.current_life, player.health.max_life)	
+	health_indicator.refresh(player.health.current_life, player.health.max_life)
+	
 	
 ## Make the vignette appear and disappear briefly	
 func on_player_healed(player: Player) -> void:
@@ -197,7 +214,7 @@ func on_shield_changed(data: ShieldData) -> void:
 func on_possible_action_changed(action: String) -> void:
 	## Toggle action panel visiblity to wheter the action is empty or not
 	action_panel.visible = not action.is_empty()
-	action_label.text = action	
+	action_label.text = action		
 	
 ## Update the KeyContainer accordingly each time there's a key change in the inventory	
 func on_current_keys_changed(_color: Door.KeyColor) -> void:
@@ -212,7 +229,41 @@ func on_current_keys_changed(_color: Door.KeyColor) -> void:
 		if GameState.has_key(key_color):
 			var key_texture: TextureRect = KEY_TEXTURE_PREFAB.instantiate() as TextureRect
 			key_texture.modulate = Door.COLOR_MAP[key_color]
+				
 			key_container.add_child(key_texture)
+			
+
+
+## SHow a message
+func on_picked_up_key(color: Door.KeyColor) -> void:
+	var str_color : String = ""
+	
+	match color:
+				Door.KeyColor.Blue:			
+					str_color = UI_STRING_KEY_COLOR_BLUE
+				Door.KeyColor.Red:			
+					str_color = UI_STRING_KEY_COLOR_RED
+				Door.KeyColor.Yellow:			
+					str_color = UI_STRING_KEY_COLOR_YELLOW
+				Door.KeyColor.Purple:			
+					str_color = UI_STRING_KEY_COLOR_PURPLE
+	
+	## We need to briefly show a message to the player	
+	show_message(UI_STRING_KEY_PICKED_UP_PART_1 + str_color + UI_STRING_KEY_PICKED_UP_PART_2)	
+
+## Show a text message in the screen for a set time.
+## If timeout time is not set, the default is assumed
+func show_message(message: String, timeout: float = TIME_UI_MESSAGE_FADETOUT_TIME) -> void:
+	message_panel.visible = true
+	message_label.text = message
+	
+	## Start a timer to make the message vanish
+	var timer := get_tree().create_timer(timeout)	## Create atimer of the set duration
+	timer.timeout.connect(on_message_fadeout.bind(message_panel))						## Set its callback rto the timeout signal
+
+## Makes the passed ColorRect panel invisible
+func on_message_fadeout(panel: ColorRect) -> void:
+	panel.visible = false	
 
 ## Player gained experience, so it must refresh the exp indicator
 func on_exp_up(player: Player) -> void:

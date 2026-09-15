@@ -652,6 +652,9 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 			if child is EnemySpawn:
 				child.set_enemy(GOBLIN_PREFAB, 2.5, 2000, 2.0, 10, 8)
 				print("Branch Room: Placed an enemy.")
+		
+		## Now that enemies are set, connect their signals
+		room.prep_enemies()
 	
 	## If it's a REGULAR ROOM
 	## low chance to have a health pack, with low health
@@ -691,6 +694,9 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 			
 			## reduce the counter
 			num_enemies_to_spawn -= 1
+		
+		## Now that enemies are set, connect their signals
+		room.prep_enemies()
 			
 		## COINS			
 		var num_coins_to_spawn = randi_range(REGULAR_ROOM_MIN_COINS, REGULAR_ROOM_MAX_COINS)
@@ -1190,7 +1196,6 @@ func check_overlapping_doors() -> void:
 					checked_doors = checked_doors + 1 		
 		
 ## If a door is in a branchendroom, lock it
-## FOr now all blue
 func set_locked_doors() -> void:
 	for room in rooms_container.get_children():
 		if room.kind == BaseRoom.RoomKind.BRANCHPATHEND:
@@ -1209,4 +1214,35 @@ func set_locked_doors() -> void:
 	
 ## This function will check for colored rooms and will place a key for each in a random CP room
 func place_keys() -> void:
-	pass
+	var keys : Array[Door.KeyColor]	
+		
+	## First, we cycle through all rooms to see which ones are locked and which keys we need
+	for door in doors.get_children():		
+		match door.door_color:
+			Door.KeyColor.Blue:
+				keys.append(Door.KeyColor.Blue)
+				print("Found a blue door")
+			Door.KeyColor.Red:
+				keys.append(Door.KeyColor.Red)
+				print("Found a red door")
+			Door.KeyColor.Yellow:
+				keys.append(Door.KeyColor.Yellow)
+				print("Found a yellow door")
+			Door.KeyColor.Purple:
+				keys.append(Door.KeyColor.Purple)
+				print("Found a purple door")
+	
+	## THen cycle through all required keys and place them in random CP rooms.			
+	for key in keys:
+		## Pick a random room
+		var room : BaseRoom = rooms_container.get_children().pick_random()
+		
+		## Keep picking rooms until you find a CP one
+		while (room.kind != BaseRoom.RoomKind.CRITICALPATH):
+			room = rooms_container.get_children().pick_random()
+			
+		##It's a CP room, set its colro so it will drop a needed key once all mobs are dead
+		room.key_color = key
+		print("Set a room to drop a " + str(key) + " key!" )
+		
+	
