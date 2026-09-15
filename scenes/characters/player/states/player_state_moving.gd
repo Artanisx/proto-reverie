@@ -14,7 +14,7 @@ extends PlayerState
 
 const DURATION_BETWEEN_FOOTSTEPS_WALK : int = 500 ## ms of wait between footsteps sfx while walking
 const DURATION_BETWEEN_FOOTSTEPS_RUN : int = 300 ## ms of wait between footsteps sfx while running
-const DEBUG_MODE : bool = true ## WARNING: This will enable debug mode!
+const DEBUG_MODE : bool = false ## WARNING: This will enable debug mode!
 
 var time_since_last_footstep : = Time.get_ticks_msec() ## Variable to store the time between steps
 

@@ -11,3 +11,4 @@ critical_path_length = 13
 branches = 3
 branch_length = Vector2i(1, 4)
 room_size = 21
+rng_seed = -1

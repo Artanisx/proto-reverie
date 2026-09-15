@@ -23,6 +23,7 @@ const DROPPED_KEY_PREFAB := preload("res://scenes/collectibles/dropped_key/dropp
 @onready var floors: GridMap = %Floors
 @onready var enemies: Node3D = %Enemies
 @onready var pickables: Node3D = %Pickables
+@onready var decor: Node3D = $Decor
 @onready var room_navigation: NavigationRegion3D = %RoomNavigation
 @onready var editor_key_indicator: Node3D = %EditorKeyIndicator
 
@@ -91,6 +92,7 @@ func prep_enemies() -> void:
 			enemy.screamed.connect(on_scream_heard)
 			## connect to the enemy.dead signal
 			enemy.dead.connect(on_enemy_death)
+			
 
 ## Each enemy will be warned (aggro)
 ## Basically if one enemy emits the screamed signal, this will be heard and all enemies will aggro the player
@@ -101,7 +103,7 @@ func on_scream_heard() -> void:
 			enemy.player = GameState.current_player
 		
 ## When an enemy dies, check if it's the last one in order to drop a key if this is a room key
-func on_enemy_death(enemy_transform: Transform3D) -> void:
+func on_enemy_death(enemy_transform: Transform3D) -> void:	
 	for enemy in enemies.get_children():
 		if enemy is Enemy:
 			if not enemy.health.is_dead():
@@ -110,6 +112,7 @@ func on_enemy_death(enemy_transform: Transform3D) -> void:
 	## If we're here and haven't returned, all enemies in the room are dead. Only if the room HAS a color
 	if key_color != Door.KeyColor.None:
 		drop_key(enemy_transform)	## Drop the related key in the last enemy transform position that emitted this signal
+		print("dropping key")
 
 ## Drop the correct key in the passed position [br]
 ## Takes the Transform3D position for the key to spawn.

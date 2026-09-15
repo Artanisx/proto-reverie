@@ -84,6 +84,9 @@ const DEBUG_SEED: int = 205585640 ## WARNING: PRECISE SEED FOR DEBUG!
 const DEBUG_MODE: bool = true				## WARNING: IF SET TO TRUE, THINGS LIKE DEBUG_SEED WILL BE USED
 
 @onready var rooms_container: Node3D = $Rooms
+@onready var doors: Node3D = $Doors
+
+
 
 var room_map : Array ## 2D array of RoomData, mirroring the level grid structure
 var branch_candidates : Array[Vector2i] ## List of room that can have branches added to them, so which rooms can support these detours
@@ -105,6 +108,9 @@ func _ready() -> void:
 	
 	generate_level()	
 	check_generated_level()		## Fixes doors if they go towards a special room that is closed that way
+	set_locked_doors()
+	check_overlapping_doors()
+	place_keys()
 	
 	print_rooms()
 	
@@ -646,6 +652,9 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 			if child is EnemySpawn:
 				child.set_enemy(GOBLIN_PREFAB, 2.5, 2000, 2.0, 10, 8)
 				print("Branch Room: Placed an enemy.")
+		
+		## Now that enemies are set, connect their signals
+		room.prep_enemies()
 	
 	## If it's a REGULAR ROOM
 	## low chance to have a health pack, with low health
@@ -685,6 +694,9 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 			
 			## reduce the counter
 			num_enemies_to_spawn -= 1
+		
+		## Now that enemies are set, connect their signals
+		room.prep_enemies()
 			
 		## COINS			
 		var num_coins_to_spawn = randi_range(REGULAR_ROOM_MIN_COINS, REGULAR_ROOM_MAX_COINS)
@@ -1157,3 +1169,80 @@ func reverse_print_level_grid() -> void:
 ## Returns the seed used for generation. If no seed was set (seed < 0), returns the randomly generated seed that was used.
 func get_used_seed() -> int:
 	return rng.seed
+	
+## Checks if there is another overlapping door here, if there is, queue_free() this one
+func check_overlapping_doors() -> void:
+	## Since doors are hardplaced in each room, some door might overlap. Check and remove duplicates
+	## 1- reparent all doors to Doors container
+	for room in rooms_container.get_children():
+		for decor in room.decor.get_children():
+			if decor is Door:
+				decor.reparent(doors)
+	##2 - Check doors
+	var checked_doors: int = 0	
+	await get_tree().process_frame
+	var max_doors: int = doors.get_child_count()
+	
+	while (checked_doors < max_doors):
+		for door : Door in doors.get_children():
+			if door is Door:
+				var areas3d = door.door_overlapper_checker.get_overlapping_areas()
+				if areas3d.size() > 0:
+					door.queue_free()
+					await get_tree().process_frame
+					checked_doors = checked_doors + 1 		
+					break
+				else:
+					checked_doors = checked_doors + 1 		
+		
+## If a door is in a branchendroom, lock it
+func set_locked_doors() -> void:
+	for room in rooms_container.get_children():
+		if room.kind == BaseRoom.RoomKind.BRANCHPATHEND:
+			var door = room.decor.get_child(0) as Door ##a branch endroom only has one door right?
+			var rand_color = randi_range(1,4)
+			match rand_color:
+				1:
+					door.door_color = Door.KeyColor.Blue
+				2:
+					door.door_color = Door.KeyColor.Red
+				3:
+					door.door_color = Door.KeyColor.Yellow
+				4:
+					door.door_color = Door.KeyColor.Purple
+			door.update_frame_color()
+	
+## This function will check for colored rooms and will place a key for each in a random CP room
+func place_keys() -> void:
+	var keys : Array[Door.KeyColor]	
+		
+	## First, we cycle through all rooms to see which ones are locked and which keys we need
+	for door in doors.get_children():		
+		match door.door_color:
+			Door.KeyColor.Blue:
+				keys.append(Door.KeyColor.Blue)
+				print("Found a blue door")
+			Door.KeyColor.Red:
+				keys.append(Door.KeyColor.Red)
+				print("Found a red door")
+			Door.KeyColor.Yellow:
+				keys.append(Door.KeyColor.Yellow)
+				print("Found a yellow door")
+			Door.KeyColor.Purple:
+				keys.append(Door.KeyColor.Purple)
+				print("Found a purple door")
+	
+	## THen cycle through all required keys and place them in random CP rooms.			
+	for key in keys:
+		## Pick a random room
+		var room : BaseRoom = rooms_container.get_children().pick_random()
+		
+		## Keep picking rooms until you find a CP one
+		while (room.kind != BaseRoom.RoomKind.CRITICALPATH):
+			room = rooms_container.get_children().pick_random()
+			
+		##It's a CP room, set its colro so it will drop a needed key once all mobs are dead
+		room.key_color = key
+		print("Set a room to drop a " + str(key) + " key!" )
+		
+	

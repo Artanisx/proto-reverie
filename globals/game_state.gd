@@ -31,6 +31,7 @@ func obtain_key(color: Door.KeyColor) -> void:
 	if not has_key(color):
 		current_keys[color] = true ## this key has been granted
 		GameEvents.current_keys_changed.emit(color) ## Emit the signal as the keys changed
+		GameEvents.obtained_key.emit(color) ## Emit the signal that the player pickedup a new key
 
 ## Set the current level
 func register_level(level: BaseProceduralLevel) -> void:

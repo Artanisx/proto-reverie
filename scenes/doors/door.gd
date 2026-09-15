@@ -28,23 +28,24 @@ const EMISSION_ENERGY : float = 2.5 ## The energy multiplier for the emission ma
 @onready var frame: Node3D = %Frame
 @onready var omni_light_3d: OmniLight3D = %OmniLight3D
 @onready var omni_light_3d_2: OmniLight3D = %OmniLight3D2
+@onready var door_overlapper_checker: Area3D = %DoorOverlapperChecker
 
-
-
-func _ready() -> void:
+func _ready() -> void:	
 	## Check if we're running in the editor
 	if Engine.is_editor_hint():
 		editor_update_key_indicator()  ## Update the keymesh indicator only if we're running in the editor
 	else:	
 		## We're running the game, so do the rest
-		## We need to make the frame visible only if the door has a key (so it will be of that key color)
-		frame.visible = door_color != KeyColor.None
 		
-		## Update the door frame material override with the right color
+		
+		## Update the door frame material override with the right color		
 		update_frame_color()
 	
 ## Update the door frame material override with the right color	
 func update_frame_color() -> void:
+	## We need to make the frame visible only if the door has a key (so it will be of that key color)
+	frame.visible = door_color != KeyColor.None
+	
 	if door_color != KeyColor.None:	
 		## First we need to set the color of the material so it matches the KeyColor
 		var mesh := frame.get_child(0) ## get the mesh for the door frame

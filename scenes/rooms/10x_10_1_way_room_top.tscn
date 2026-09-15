@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bx51fif0cdly2" path="res://scenes/rooms/base_room.tscn" id="1_7ks0t"]
 [ext_resource type="PackedScene" uid="uid://dihfuqnmd31eq" path="res://scenes/characters/enemies/enemy_spawn.tscn" id="2_6epqc"]
 [ext_resource type="PackedScene" uid="uid://isrdinagrwpp" path="res://scenes/props/torch/torch.tscn" id="2_hpfw3"]
+[ext_resource type="PackedScene" uid="uid://c7qmxvi7s6nvn" path="res://scenes/doors/door.tscn" id="4_0q3jp"]
 [ext_resource type="PackedScene" uid="uid://j7wvw3p0jm5l" path="res://scenes/collectibles/health_pack/healthpack_spawn.tscn" id="4_y8yjf"]
 [ext_resource type="PackedScene" uid="uid://bjq74fihmflbi" path="res://scenes/collectibles/exp_coin/expcoin_spawn.tscn" id="5_0q3jp"]
 
@@ -34,6 +35,9 @@ transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 6.00
 
 [node name="Torch4" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="3" unique_id=1305680713 instance=ExtResource("2_hpfw3")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.999999, 0, -10)
+
+[node name="Door" parent="Decor" parent_id_path=PackedInt32Array(1087828784) index="0" unique_id=1307811451 instance=ExtResource("4_0q3jp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
 
 [node name="HealthPackSpawn" parent="Pickables" parent_id_path=PackedInt32Array(978293746) index="0" unique_id=131882859 instance=ExtResource("4_y8yjf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9999995, 0, -7)

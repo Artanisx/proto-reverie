@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dhppq6yieog5p" path="res://scenes/traps/acid_trap.tscn" id="3_fmv74"]
 [ext_resource type="PackedScene" uid="uid://j7wvw3p0jm5l" path="res://scenes/collectibles/health_pack/healthpack_spawn.tscn" id="4_fmv74"]
 [ext_resource type="PackedScene" uid="uid://bjq74fihmflbi" path="res://scenes/collectibles/exp_coin/expcoin_spawn.tscn" id="5_7ahwg"]
+[ext_resource type="PackedScene" uid="uid://c7qmxvi7s6nvn" path="res://scenes/doors/door.tscn" id="5_fmv74"]
 
 [node name="10x10_4WayRoom" unique_id=1003464471 instance=ExtResource("1_y7ejk")]
 
@@ -81,6 +82,18 @@ transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 6.00
 
 [node name="Torch4" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="3" unique_id=270135582 instance=ExtResource("3_5hrsw")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.999999, 0, -10)
+
+[node name="Door" parent="Decor" parent_id_path=PackedInt32Array(1087828784) index="0" unique_id=1307811451 instance=ExtResource("5_fmv74")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11)
+
+[node name="Door2" parent="Decor" parent_id_path=PackedInt32Array(1087828784) index="1" unique_id=1285954323 instance=ExtResource("5_fmv74")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
+
+[node name="Door3" parent="Decor" parent_id_path=PackedInt32Array(1087828784) index="2" unique_id=282101779 instance=ExtResource("5_fmv74")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -11, 0, 0)
+
+[node name="Door4" parent="Decor" parent_id_path=PackedInt32Array(1087828784) index="3" unique_id=1675622846 instance=ExtResource("5_fmv74")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 11, 0, 0)
 
 [node name="HealthPackSpawn" parent="Pickables" parent_id_path=PackedInt32Array(978293746) index="0" unique_id=1418683613 instance=ExtResource("4_fmv74")]
 transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, -3.9551396, 0, -3.8739219)
