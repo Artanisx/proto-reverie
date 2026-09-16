@@ -29,8 +29,12 @@ func _process(_delta: float) -> void:
 		transition_state(Player.State.THROWING)	## Emit the signal with the state to transition to		
 		
 	## Setup for the thrown button (LMB) to slash with the melee weapon that player should have equipped...
-	elif Input.is_action_just_pressed("action") and player.equipment.has_weapon():	
-		transition_state(Player.State.SLASHING)	## Emit the signal with the state to transition to		
+	elif Input.is_action_just_pressed("action") and player.equipment.has_weapon() and player.equipment.weapon_data.name != "Gun":	
+		transition_state(Player.State.SLASHING)	## Emit the signal with the state to transition to
+	
+	## PLayer has a gun	
+	elif Input.is_action_just_pressed("action") and player.equipment.has_weapon() and player.equipment.weapon_data.name == "Gun":
+		transition_state(Player.State.SHOOTING)	## Emit the signal with the state to transition to
 		
 	## Setup for the thrown button (F) to kick
 	elif Input.is_action_just_pressed("kick"):

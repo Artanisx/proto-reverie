@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://d4f1w5ff5y4g7" path="res://assets/textures/player_minimap.png" id="3_mk55u"]
 [ext_resource type="PackedScene" uid="uid://brmub7fj1q2ux" path="res://scenes/characters/components/health_component.tscn" id="4_hss88"]
 [ext_resource type="PackedScene" uid="uid://cdeki3jlgwcis" path="res://scenes/characters/components/equipment_component.tscn" id="6_6avc5"]
-[ext_resource type="Resource" uid="uid://bytsvb4l5x04r" path="res://data/weapons/shortsword.tres" id="7_42irl"]
+[ext_resource type="Resource" uid="uid://bo6x2ksefwvt7" path="res://data/weapons/gun.tres" id="7_42irl"]
 [ext_resource type="PackedScene" uid="uid://c08qqux04gg7w" path="res://scenes/characters/components/exp_component.tscn" id="8_xuses"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5w87n"]
@@ -99,7 +99,7 @@ bone_idx = 8
 
 [node name="WeaponPlaceholder" type="Node3D" parent="character/Armature/Skeleton3D/WeaponBoneAttachment" unique_id=1888966459]
 unique_name_in_owner = true
-transform = Transform3D(0.22814482, 0.2324464, -0.94547284, -0.08349022, -0.9628353, -0.25686145, -0.970041, 0.13753916, -0.20025888, -0.02997258, -2.910383e-11, 0.07420103)
+transform = Transform3D(0.056983523, 0.35976472, -0.9313028, -0.9979434, 0.047990635, -0.042522267, 0.029395929, 0.9318097, 0.3617592, 0.39469033, 0.25804722, 0.22490829)
 
 [node name="ShieldBoneAttachment" type="BoneAttachment3D" parent="character/Armature/Skeleton3D" index="2" unique_id=2074636165]
 transform = Transform3D(0.35908586, 0.68137074, -0.6378019, -0.5968514, 0.693024, 0.4043345, 0.71751344, 0.23548207, 0.6555323, -0.37728417, 1.1453462, -0.41934544)

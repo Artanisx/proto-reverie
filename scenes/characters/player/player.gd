@@ -55,7 +55,7 @@ const UI_STRING_KICK_ENEMY : String = "[F] Kick"
 
 @onready var weapon_reach_raycast: RayCast3D = %WeaponReachRaycast ## needed to check wheter the player can hit the Enemy
 
-enum State {MOVING, PICKING_UP, THROWING, SLASHING, KICKING, BLOCKING, HURT, DYING}
+enum State {MOVING, PICKING_UP, THROWING, SLASHING, KICKING, BLOCKING, HURT, DYING, SHOOTING}
 
 var current_pickable_focused_item : PickableItem = null	## This will hold a PickableItem that is currently pickable (in range and hit by the select_raycast)
 var input_dir := Vector2.ZERO ## Store the direction of movement from player input. Represents the player hitting W-A-S-D
@@ -222,7 +222,8 @@ func switch_state(new_state: State, data: PlayerStateData = PlayerStateData.new(
 		State.KICKING: PlayerStateKicking,
 		State.BLOCKING: PlayerStateBlocking,
 		State.HURT: PlayerStateHurt,
-		State.DYING: PlayerStateDying
+		State.DYING: PlayerStateDying,
+		State.SHOOTING: PlayerStateShooting
 	}	
 	## 1 - Create the proper PlayerState node
 	state_node = state_map[new_state].new(self, data)
