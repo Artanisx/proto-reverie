@@ -81,7 +81,7 @@ enum RoomType{R10x10_1W_BOTTOM, R10x10_1W_LEFT, R10x10_1W_RIGHT, R10x10_1W_TOP,
 @export var rng_seed: int = -1 ## Seed for procedural generation. Use -1 for random seed.
 
 const DEBUG_SEED: int = 205585640 ## WARNING: PRECISE SEED FOR DEBUG!
-const DEBUG_MODE: bool = true				## WARNING: IF SET TO TRUE, THINGS LIKE DEBUG_SEED WILL BE USED
+const DEBUG_MODE: bool = false				## WARNING: IF SET TO TRUE, THINGS LIKE DEBUG_SEED WILL BE USED
 
 @onready var rooms_container: Node3D = $Rooms
 @onready var doors: Node3D = $Doors
