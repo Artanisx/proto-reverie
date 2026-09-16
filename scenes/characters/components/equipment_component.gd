@@ -138,8 +138,11 @@ func equip_weapon(data: WeaponData, pickup_transform: Transform3D = Transform3D.
 	## Setup wheter the weapon should be on front of the player camera (i.e. player is holding it)
 	weapon.is_always_in_front = is_always_in_front
 	
-	## Add this instance as a child of the weapon placeholder
-	weapon_placeholder.add_child(weapon)
+	if weapon_data.name != "Gun":
+		## Add this instance as a child of the weapon placeholder
+		weapon_placeholder.add_child(weapon)
+	else:
+		pass
 	
 	## Update the lenght of the raycast to the weapon's reach (square root just for performance)
 	weapon_reach_raycast.target_position.z = -sqrt(weapon_data.reach)
