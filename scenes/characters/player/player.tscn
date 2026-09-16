@@ -83,7 +83,7 @@ bone_idx = 8
 
 [node name="WeaponPlaceholder" type="Node3D" parent="character/Armature/Skeleton3D/WeaponBoneAttachment" unique_id=1888966459]
 unique_name_in_owner = true
-transform = Transform3D(0.056983523, 0.35976472, -0.9313028, -0.9979434, 0.047990635, -0.042522267, 0.029395929, 0.9318097, 0.3617592, 0.39469033, 0.25804722, 0.22490829)
+transform = Transform3D(0.22814482, 0.2324464, -0.94547284, -0.08349022, -0.9628353, -0.25686145, -0.970041, 0.13753916, -0.20025888, -0.02997258, -2.910383e-11, 0.07420103)
 
 [node name="ShieldBoneAttachment" type="BoneAttachment3D" parent="character/Armature/Skeleton3D" parent_id_path=PackedInt32Array(902149486, 1983464718) index="2" unique_id=2074636165]
 transform = Transform3D(0.9999999, 0, 1.1920929e-07, -1.7136335e-07, -2.9802322e-08, 1.0000002, 1.6391277e-07, -0.99999994, -2.9802322e-08, -0.6787489, 0.7930284, 7.450581e-09)
