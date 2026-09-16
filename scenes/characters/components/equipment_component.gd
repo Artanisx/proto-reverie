@@ -19,6 +19,8 @@ const THROWN_ITEM_PREFAB := preload("res://scenes/equipment/thrown_item.tscn")	#
 @export var weapon_placeholder: Node3D	## The node reference where the Equipment will be attached to (right hand)
 @export var weapon_spawn_position: Node3D ## The position from where the thrownable weapon will spawn so it move in the right direction / rotation
 @export var weapon_reach_raycast: RayCast3D	 ## Raycast to calculate the weapon reach, needed so it works only facing the enemy/player rather than from behind
+@export var main_camera: MainCamera
+
 
 ## This does:
 ## - Equip the weapon and/or shield
@@ -141,8 +143,10 @@ func equip_weapon(data: WeaponData, pickup_transform: Transform3D = Transform3D.
 	if weapon_data.name != "Gun":
 		## Add this instance as a child of the weapon placeholder
 		weapon_placeholder.add_child(weapon)
-	else:
-		pass
+	else:		
+		## The weapon is a gun, so attach it to the camera instead and position it so it makes sense
+		main_camera.add_child(weapon)
+		weapon.position = Vector3(0.263,-0.199,-0.392)		
 	
 	## Update the lenght of the raycast to the weapon's reach (square root just for performance)
 	weapon_reach_raycast.target_position.z = -sqrt(weapon_data.reach)
@@ -269,6 +273,13 @@ func animate_to_hand(equipped_item: EquippedItem) -> void:
 func has_shield() -> bool:	
 	## If there's shield data and there's an instance in the shield placeholder...
 	return shield_data != null and shield_placeholder.get_child_count() > 0
+
+## Check if the equipped weapon is a ranged weapon
+func has_gun() -> bool:	
+	if weapon_data != null and weapon_data.name == "Gun":	
+		return true
+	else:
+		return false
 	
 ## Check if there's a weapon equipped
 func has_weapon() -> bool:	

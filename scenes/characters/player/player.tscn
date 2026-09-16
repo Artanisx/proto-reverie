@@ -97,7 +97,7 @@ transform = Transform3D(0.68933934, 0.718483, 0.09269987, -0.7222657, 0.6717186,
 [node name="AnimationPlayer" parent="character" index="1" unique_id=162687507]
 autoplay = &"idle"
 
-[node name="EquipmentComponent" parent="." unique_id=535100031 node_paths=PackedStringArray("furniture_placeholder", "shield_placeholder", "weapon_placeholder", "weapon_spawn_position", "weapon_reach_raycast") instance=ExtResource("6_6avc5")]
+[node name="EquipmentComponent" parent="." unique_id=535100031 node_paths=PackedStringArray("furniture_placeholder", "shield_placeholder", "weapon_placeholder", "weapon_spawn_position", "weapon_reach_raycast", "main_camera") instance=ExtResource("6_6avc5")]
 unique_name_in_owner = true
 is_linked_to_ui = true
 is_always_in_front = true
@@ -107,6 +107,7 @@ weapon_data = ExtResource("7_42irl")
 weapon_placeholder = NodePath("../character/Armature/Skeleton3D/WeaponBoneAttachment/WeaponPlaceholder")
 weapon_spawn_position = NodePath("../WeaponSpawnPosition")
 weapon_reach_raycast = NodePath("../WeaponReachRaycast")
+main_camera = NodePath("../MainCamera")
 
 [node name="WeaponSpawnPosition" type="Node3D" parent="." unique_id=2096267246]
 transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0.3, 1.3, -0.5)
