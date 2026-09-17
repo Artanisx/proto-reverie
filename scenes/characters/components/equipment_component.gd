@@ -146,7 +146,7 @@ func equip_weapon(data: WeaponData, pickup_transform: Transform3D = Transform3D.
 	else:		
 		## The weapon is a gun, so attach it to the camera instead and position it so it makes sense
 		main_camera.add_child(weapon)
-		weapon.position = Vector3(0.263,-0.199,-0.392)		
+		weapon.position = Vector3(0.263,-0.199,-0.292)		
 	
 	## Update the lenght of the raycast to the weapon's reach (square root just for performance)
 	weapon_reach_raycast.target_position.z = -sqrt(weapon_data.reach)
