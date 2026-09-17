@@ -40,4 +40,13 @@ func _ready() -> void:
 		if mesh_node != null and is_always_in_front:
 			mesh_node.material_override = ZCLIP_MATERIAL.duplicate()	## Apply the zclip material that will be drawn in front; needs to be duplicated as it's a resource!
 			
+
+## Returns an animationplayer if it exists (only on the gun)
+func get_animation_player() -> AnimationPlayer:
+	var node = get_children()[0] ## get the "model" scene of this equipped item
 	
+	for kid : Node in node.get_children():
+		if kid is AnimationPlayer: ## find the Animation player children if it exists
+			return kid
+	
+	return null

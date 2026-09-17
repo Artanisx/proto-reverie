@@ -2,4 +2,48 @@
 
 [ext_resource type="PackedScene" uid="uid://dhershbwvqdap" path="res://assets/meshes/weapons/gun.glb" id="1_r3yl4"]
 
+[sub_resource type="Animation" id="Animation_c183v"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Gun:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, -0.13799001)]
+}
+
+[sub_resource type="Animation" id="Animation_r3yl4"]
+resource_name = "Shoot"
+length = 0.1
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Gun:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.01, 0.1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, -0.13799001), Vector3(0, 0, -0.088), Vector3(0, 0, -0.13799001)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_c183v"]
+_data = {
+&"RESET": SubResource("Animation_c183v"),
+&"Shoot": SubResource("Animation_r3yl4")
+}
+
 [node name="DuckGun" unique_id=102962088 instance=ExtResource("1_r3yl4")]
+
+[node name="Gun" parent="." index="0" unique_id=2132019818]
+cast_shadow = 0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1" unique_id=879488179]
+libraries/ = SubResource("AnimationLibrary_c183v")
