@@ -50,3 +50,13 @@ func get_animation_player() -> AnimationPlayer:
 			return kid
 	
 	return null
+	
+## Returns a raycast if it exists (only on the gun)
+func get_raycast() -> RayCast3D:
+	var node = get_children()[0] ## get the "model" scene of this equipped item
+	
+	for kid : Node in node.get_children():
+		if kid is RayCast3D: ## find the raycast 3d children if it exists
+			return kid
+	
+	return null

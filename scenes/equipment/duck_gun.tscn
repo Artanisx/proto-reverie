@@ -47,3 +47,7 @@ cast_shadow = 0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1" unique_id=879488179]
 libraries/ = SubResource("AnimationLibrary_c183v")
+
+[node name="RayCast3D" type="RayCast3D" parent="." index="2" unique_id=2003399155]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08707486, -0.7736101)
+target_position = Vector3(0, 0, -1)

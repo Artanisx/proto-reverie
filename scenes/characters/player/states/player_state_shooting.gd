@@ -8,6 +8,8 @@ extends PlayerState
 ## Transitions:
 ## Shooting > Moving
 
+const WEAPON_DURABILITY_DAMAGE: int = 1 # how much the weapon is damanged by a shooting -- Might be disabled
+
 ## Execute what needs to be done immediately when the node enters the tree, so when we switch to this state (basically kind of a _ready)	
 func  _enter_tree() -> void:
 	## Get the gun scene
@@ -16,11 +18,7 @@ func  _enter_tree() -> void:
 	
 	for child in player.equipment.main_camera.get_children():
 		if child is EquippedItem:
-			weapon = child
-	
-	#for kid in weapon.get_children():
-		#if kid is AnimationPlayer:
-			#
+			weapon = child	
 	
 	if weapon != null:
 		## Play the Shoot animation
@@ -34,11 +32,17 @@ func  _enter_tree() -> void:
 		
 	## Hookup to the finish signal
 	anim_player.animation_finished.connect(on_animation_finished)	
-	
+
 ## Since we want to be able to move while shooting, we call player.process() super
 func _physics_process(delta: float) -> void:
 	## Process Movement
 	player.process_movement(delta)
 
 func on_animation_finished(_animation_name: String) -> void:	
+	## HANDLE THE SHOOTING
+	player.equipment.shoot_with_gun()
+	
+	##Damage the gun (NOT SURE MIGHT BE DISABLED)
+	player.equipment.apply_weapon_damage(WEAPON_DURABILITY_DAMAGE)
+	
 	transition_state(Player.State.MOVING)	## Emit the signal and transition to Moving
