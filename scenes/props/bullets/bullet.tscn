@@ -23,7 +23,7 @@ initial_velocity_max = 5.0
 [sub_resource type="BoxMesh" id="BoxMesh_kkagi"]
 size = Vector3(0.04, 0.04, 0.04)
 
-[node name="Bullet" type="Node3D" unique_id=1310087189]
+[node name="Bullet" type="Node3D" unique_id=1039536840]
 script = ExtResource("1_kkagi")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1988602956]
@@ -48,5 +48,9 @@ draw_pass_1 = SubResource("BoxMesh_kkagi")
 wait_time = 10.0
 one_shot = true
 autostart = true
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1055495299]
+unique_name_in_owner = true
+bus = &"SFX"
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
