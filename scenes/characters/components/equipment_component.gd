@@ -7,6 +7,7 @@ extends Node3D
 
 const EQUIPPED_ITEM_PREFAB := preload("res://scenes/equipment/equipped_item.tscn")	## The Equipped Item prefab
 const THROWN_ITEM_PREFAB := preload("res://scenes/equipment/thrown_item.tscn")	## The Thrown Item prefab
+const BULLET_PREFAB := preload("res://scenes/props/bullets/bullet.tscn") ## The bullet prefab
 
 
 @export var is_linked_to_ui: bool		## Is this Equipment component linked to the ui (so, does this belongs to the player?)
@@ -19,6 +20,11 @@ const THROWN_ITEM_PREFAB := preload("res://scenes/equipment/thrown_item.tscn")	#
 @export var weapon_placeholder: Node3D	## The node reference where the Equipment will be attached to (right hand)
 @export var weapon_spawn_position: Node3D ## The position from where the thrownable weapon will spawn so it move in the right direction / rotation
 @export var weapon_reach_raycast: RayCast3D	 ## Raycast to calculate the weapon reach, needed so it works only facing the enemy/player rather than from behind
+@export var main_camera: MainCamera
+
+## Variables for Gun
+var gun_barrel_raycast: RayCast3D	## This will hold the barrel raycast of a gun (if there's a gun equipped)
+var bullet_instance 				## This will hold the instances of the bullets
 
 ## This does:
 ## - Equip the weapon and/or shield
@@ -138,8 +144,16 @@ func equip_weapon(data: WeaponData, pickup_transform: Transform3D = Transform3D.
 	## Setup wheter the weapon should be on front of the player camera (i.e. player is holding it)
 	weapon.is_always_in_front = is_always_in_front
 	
-	## Add this instance as a child of the weapon placeholder
-	weapon_placeholder.add_child(weapon)
+	if weapon_data.name != "Gun":
+		## Add this instance as a child of the weapon placeholder
+		weapon_placeholder.add_child(weapon)		
+	else:		
+		## The weapon is a gun, so attach it to the camera instead and position it so it makes sense
+		main_camera.add_child(weapon)
+		weapon.position = Vector3(0.263,-0.199,-0.292)		
+		
+		## Assign the barrel raycast
+		gun_barrel_raycast = weapon.get_raycast()
 	
 	## Update the lenght of the raycast to the weapon's reach (square root just for performance)
 	weapon_reach_raycast.target_position.z = -sqrt(weapon_data.reach)
@@ -266,6 +280,13 @@ func animate_to_hand(equipped_item: EquippedItem) -> void:
 func has_shield() -> bool:	
 	## If there's shield data and there's an instance in the shield placeholder...
 	return shield_data != null and shield_placeholder.get_child_count() > 0
+
+## Check if the equipped weapon is a ranged weapon
+func has_gun() -> bool:	
+	if weapon_data != null and weapon_data.name == "Gun":	
+		return true
+	else:
+		return false
 	
 ## Check if there's a weapon equipped
 func has_weapon() -> bool:	
@@ -302,3 +323,17 @@ func apply_shield_damage(amount: int) -> void:
 		
 		## Since we just changed the durability of the shield, let's emit this event	
 		GameEvents.shield_changed.emit(shield_data)
+
+## HANDLE SHOOTING
+func shoot_with_gun() -> void:
+	## FIrst we instantiate a new bullet
+	bullet_instance = BULLET_PREFAB.instantiate()
+	
+	## Then we position it at the end of the gun ballre
+	bullet_instance.position = gun_barrel_raycast.global_position
+	
+	## We set the rotation accordingly
+	bullet_instance.transform.basis = gun_barrel_raycast.global_transform.basis
+	
+	## Finally we add the child to the level world
+	GameState.current_level.add_child(bullet_instance)

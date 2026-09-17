@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://cm06ca6h2wqpw"]
+
+[ext_resource type="Script" uid="uid://dbafhexg2qk7g" path="res://scenes/props/bullets/bullet.gd" id="1_kkagi"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_f2k0i"]
+size = Vector3(0.05, 0.05, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f2k0i"]
+albedo_color = Color(1, 0.7647059, 0.29411766, 1)
+emission_enabled = true
+emission = Color(0.5686275, 1, 0.3137255, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kkagi"]
+albedo_color = Color(0.9411765, 1, 0.33333334, 1)
+emission_enabled = true
+emission = Color(0.32156864, 0.9372549, 0.26666668, 1)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kkagi"]
+direction = Vector3(0, 0, 1)
+initial_velocity_min = 3.0
+initial_velocity_max = 5.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_kkagi"]
+size = Vector3(0.04, 0.04, 0.04)
+
+[node name="Bullet" type="Node3D" unique_id=1039536840]
+script = ExtResource("1_kkagi")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1988602956]
+mesh = SubResource("BoxMesh_f2k0i")
+surface_material_override/0 = SubResource("StandardMaterial3D_f2k0i")
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=1605632958]
+target_position = Vector3(0, 0, -0.6)
+collision_mask = 229
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=192943433]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.57350034)
+material_override = SubResource("StandardMaterial3D_kkagi")
+emitting = false
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_kkagi")
+draw_pass_1 = SubResource("BoxMesh_kkagi")
+
+[node name="Timer" type="Timer" parent="." unique_id=1268436263]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1055495299]
+unique_name_in_owner = true
+bus = &"SFX"
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

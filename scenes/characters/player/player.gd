@@ -13,6 +13,7 @@ const MAX_ANGLE_LOOK_DOWN := deg_to_rad(-70)	## Can't go more than -70° looking
 const GROUND_FRICTION : float = 15.0			## Used to slow down after a pushback
 const HP_GAIN_ON_LEVEL_UP: int = 10				## How much HP is added to max hp for each level up
 const STR_GAIN_ON_LEVEL_UP: int = 1				## How much STR is added to max hp for each level up
+const DISABLE_PICKING_UP_MELEE_WEAPONS = true	## TRUE won't allow to pickup swords or shields
 
 ## UI STRINGS
 const UI_STRING_PICKUP : String = "[E] Pick Up"
@@ -55,7 +56,7 @@ const UI_STRING_KICK_ENEMY : String = "[F] Kick"
 
 @onready var weapon_reach_raycast: RayCast3D = %WeaponReachRaycast ## needed to check wheter the player can hit the Enemy
 
-enum State {MOVING, PICKING_UP, THROWING, SLASHING, KICKING, BLOCKING, HURT, DYING}
+enum State {MOVING, PICKING_UP, THROWING, SLASHING, KICKING, BLOCKING, HURT, DYING, SHOOTING}
 
 var current_pickable_focused_item : PickableItem = null	## This will hold a PickableItem that is currently pickable (in range and hit by the select_raycast)
 var input_dir := Vector2.ZERO ## Store the direction of movement from player input. Represents the player hitting W-A-S-D
@@ -222,7 +223,8 @@ func switch_state(new_state: State, data: PlayerStateData = PlayerStateData.new(
 		State.KICKING: PlayerStateKicking,
 		State.BLOCKING: PlayerStateBlocking,
 		State.HURT: PlayerStateHurt,
-		State.DYING: PlayerStateDying
+		State.DYING: PlayerStateDying,
+		State.SHOOTING: PlayerStateShooting
 	}	
 	## 1 - Create the proper PlayerState node
 	state_node = state_map[new_state].new(self, data)
@@ -243,7 +245,7 @@ func check_for_possible_action() -> void:
 	var new_action := ""
 	
 	## Check if there's something that can be picked up
-	if select_raycast.is_colliding():
+	if select_raycast.is_colliding() and DISABLE_PICKING_UP_MELEE_WEAPONS == false:
 		new_action = UI_STRING_PICKUP
 	## Check if there's instead a door ready to be kicked	
 	elif kick_raycast.is_colliding():
@@ -320,8 +322,11 @@ func take_spike_damage(spikes_trap: SpikesTrap) -> void:
 	switch_state(State.HURT, data) ## go to to hurt state, passing damage and hitdirection		
 
 ## This returns true if there is an pickable item being looked at right now		
-func can_pickup_object() -> bool:			
-	return current_pickable_focused_item != null
+func can_pickup_object() -> bool:
+	if DISABLE_PICKING_UP_MELEE_WEAPONS:			
+		return false
+	else:
+		return current_pickable_focused_item != null
 	
 ## Handles taking acid damage when in contact with the Acid Trap	
 func take_acid_damage() -> void: 

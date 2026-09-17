@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://bo6x2ksefwvt7"]
+
+[ext_resource type="Script" uid="uid://qvncwfl4tehm" path="res://data/weapon_data.gd" id="1_l0a3a"]
+[ext_resource type="PackedScene" uid="uid://dj6qm1ujcwa32" path="res://scenes/equipment/duck_gun.tscn" id="1_us1u3"]
+
+[resource]
+script = ExtResource("1_l0a3a")
+name = "Gun"
+condition = 50
+max_condition = 50
+damage_min = 3
+damage_max = 5
+glb_mesh = ExtResource("1_us1u3")
+metadata/_custom_type_script = "uid://qvncwfl4tehm"
