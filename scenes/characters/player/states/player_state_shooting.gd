@@ -42,6 +42,9 @@ func on_animation_finished(_animation_name: String) -> void:
 	## HANDLE THE SHOOTING
 	player.equipment.shoot_with_gun()
 	
+	## PLAY SFX
+	AudioManager.play("pick-up", player.action_audio_stream_player) ## Plays the SFX after the bullet is shot
+	
 	##Damage the gun (NOT SURE MIGHT BE DISABLED)
 	player.equipment.apply_weapon_damage(WEAPON_DURABILITY_DAMAGE)
 	

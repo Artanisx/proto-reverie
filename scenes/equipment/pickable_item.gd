@@ -12,6 +12,8 @@ const HIGHLIGHT_MATERIAL := preload("res://materials/highlight_material.tres")
 ## This holds a material for glowing to be used for weapons/shields. They will glow intently and don't need to be highlighted
 const GLOW_MATERIAL := preload("res://materials/glow_material.tres")
 
+const DISABLE_PICKABLE_WEAPONS = true ## If true the weapons won't glow since they cannot be picked up
+
 @export var mesh_node: MeshInstance3D
 @export var furniture_data: FurnitureData
 @export var weapon_data: WeaponData
@@ -28,7 +30,11 @@ var glow_material : StandardMaterial3D
 ## - Create the mesh for the pickable item
 ## - Add it as a child
 ## - Create the proper collision shape
-func _ready() -> void:
+func _ready() -> void:	
+	
+	if DISABLE_PICKABLE_WEAPONS:
+		presence_light.visible = false
+	
 	## Create the highlight material (duplicating the base one)
 	## This will be used by the highlight() func
 	highlight_material = HIGHLIGHT_MATERIAL.duplicate()
@@ -52,18 +58,18 @@ func _ready() -> void:
 	## However we do need to generate collision shape if the mesh_node is not null at this point	
 	if mesh_node != null:
 		collision_shape.shape = mesh_node.mesh.create_convex_shape()	
-		if weapon_data or shield_data: ## if this pickable item is a weapon or shield
+		if (weapon_data or shield_data) and DISABLE_PICKABLE_WEAPONS == false: ## if this pickable item is a weapon or shield
 			presence_light.visible = false ## Remove the light for weapons/shield (only furniture should have it)
 			mesh_node.material_override = glow_material ## Set the glow material for it (so basically weapon/shields will glow brightly as themsevles
 	
 			
 ## Change the mesh material	with the highlight material
-func highlight() -> void:
+func highlight() -> void:		
 	if furniture_data: ##we only want to higlight it's a furnitre, since weapon / shield have a glow material instead which is arelady super glowy
 		mesh_node.material_override = highlight_material ## We don't do duplicate() here on the const material as we'd end up duplicating lots of materials each time the player looks at this..
 	
 ## Change the mesh material	back with its original material 
-func unhighlight() -> void:
+func unhighlight() -> void:		
 	if furniture_data: ##we only want to unhiglight it's a furnitre, since weapon / shield have a glow material instead which is arelady super glowy
 		mesh_node.material_override = null	## reset the override (so it will default back to its original material)
 	
