@@ -30,10 +30,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.999999, 0, 10.000001)
 [node name="Torch2" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="1" unique_id=876562441 instance=ExtResource("2_o0d8l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.000001, 0, 10)
 
-[node name="Torch3" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="2" unique_id=1012542816 instance=ExtResource("2_o0d8l")]
+[node name="Torch5" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="2" unique_id=1067123868 instance=ExtResource("2_o0d8l")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -10, 0, -8.742278e-07)
+
+[node name="Torch6" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="3" unique_id=1685699023 instance=ExtResource("2_o0d8l")]
+transform = Transform3D(-4.371138e-08, 0, 1, 0, 1, 0, -1, 0, -4.371138e-08, 10, 0, 8.742278e-07)
+
+[node name="Torch3" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="4" unique_id=1012542816 instance=ExtResource("2_o0d8l")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 6.000001, 0, -9.999999)
 
-[node name="Torch4" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="3" unique_id=1984935481 instance=ExtResource("2_o0d8l")]
+[node name="Torch4" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="5" unique_id=1984935481 instance=ExtResource("2_o0d8l")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.999999, 0, -10)
 
 [node name="Door" parent="Decor" parent_id_path=PackedInt32Array(1087828784) index="0" unique_id=1307811451 instance=ExtResource("4_rt2as")]

@@ -14,14 +14,14 @@ sky_material = SubResource("ProceduralSkyMaterial_hhpbp")
 background_mode = 1
 background_color = Color(0, 0, 0.03529412, 1)
 sky = SubResource("Sky_dphjl")
-ambient_light_color = Color(0, 0.8392157, 0, 1)
+ambient_light_color = Color(0.741527, 0.68006194, 0.6360433, 1)
 ambient_light_energy = 0.3
 tonemap_mode = 3
 glow_enabled = true
 glow_intensity = 0.8
 glow_bloom = 0.3
 fog_enabled = true
-fog_light_color = Color(0.15686275, 0.27450982, 0.050980393, 1)
+fog_light_color = Color(0.24831015, 0.23961845, 0.17432156, 1)
 fog_light_energy = 0.5
 fog_sun_scatter = 0.2
 fog_density = 0.15
@@ -38,7 +38,7 @@ environment = SubResource("Environment_hyncs")
 
 [node name="WorldLight" type="DirectionalLight3D" parent="." unique_id=209904411]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
-light_color = Color(0.60784316, 1, 0.6509804, 1)
+light_color = Color(0.79907835, 0.91456264, 0.95840186, 1)
 light_energy = 0.2
 light_angular_distance = 0.5
 shadow_enabled = true

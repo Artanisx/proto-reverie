@@ -27,13 +27,19 @@ transform = Transform3D(-0.8660254, 0, 0.49999997, 0, 1, 0, -0.49999997, 0, -0.8
 [node name="Torch" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="0" unique_id=1646109275 instance=ExtResource("2_hpfw3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.999999, 0, 10.000001)
 
-[node name="Torch2" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="1" unique_id=1103550634 instance=ExtResource("2_hpfw3")]
+[node name="Torch5" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="1" unique_id=892554522 instance=ExtResource("2_hpfw3")]
+transform = Transform3D(2.9802322e-08, 0, 1, 0, 1, 0, -1, 0, 2.9802322e-08, 9.999999, 0, 9.536743e-07)
+
+[node name="Torch6" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="2" unique_id=1730866911 instance=ExtResource("2_hpfw3")]
+transform = Transform3D(-1.172251e-07, 0, -1, 0, 1, 0, 1, 0, -1.172251e-07, -10.000001, 0, 2.7020508e-07)
+
+[node name="Torch2" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="3" unique_id=1103550634 instance=ExtResource("2_hpfw3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.000001, 0, 10)
 
-[node name="Torch3" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="2" unique_id=1151620289 instance=ExtResource("2_hpfw3")]
+[node name="Torch3" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="4" unique_id=1151620289 instance=ExtResource("2_hpfw3")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 6.000001, 0, -9.999999)
 
-[node name="Torch4" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="3" unique_id=1305680713 instance=ExtResource("2_hpfw3")]
+[node name="Torch4" parent="Lights" parent_id_path=PackedInt32Array(1275491181) index="5" unique_id=1305680713 instance=ExtResource("2_hpfw3")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.999999, 0, -10)
 
 [node name="Door" parent="Decor" parent_id_path=PackedInt32Array(1087828784) index="0" unique_id=1307811451 instance=ExtResource("4_0q3jp")]
