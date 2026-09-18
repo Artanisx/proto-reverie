@@ -7,10 +7,10 @@ const MAX_SIZE_X: int = 11
 const MAX_SIZE_Y: int = 11
 const MAX_BRANCHES: int = 6
 
-const DEFAULT_SIZE : Vector2i = Vector2i(5,5)
-const DEFAULT_CRITICAL_LENGTH : int = 5
-const DEFAULT_BRANCHES : int = 1
-const DEFAULT_BRANCHES_SIZE : Vector2i = Vector2i(1,1)
+const DEFAULT_SIZE : Vector2i = Vector2i(7,5)
+const DEFAULT_CRITICAL_LENGTH : int = 13
+const DEFAULT_BRANCHES : int = 3
+const DEFAULT_BRANCHES_SIZE : Vector2i = Vector2i(1,3)
 
 const MID_SIZE : Vector2i = Vector2i(8,8)
 const MID_CRITICAL_LENGTH : int = 13
