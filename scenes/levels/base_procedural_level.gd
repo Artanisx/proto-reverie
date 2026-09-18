@@ -38,10 +38,10 @@ const WEAPON_SWORD_DATA = preload("res://data/weapons/shortsword.tres")
 const WEAPON_AXE_DATA = preload("res://data/weapons/axe.tres")
 
 ## Constants for pickable stats
-const BIG_HEALTH_PACK: int = 50
+const BIG_HEALTH_PACK: int = 60
 const MED_HEALTH_PACK: int = 25
 const SMALL_HEALTH_PACK: int = 10
-const BIG_EXP_COIN: int = 15
+const BIG_EXP_COIN: int = 20
 const MED_EXP_COIN: int = 5
 const SMALL_EXP_COIN: int = 2
 
