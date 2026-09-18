@@ -38,6 +38,7 @@ const UI_STRING_KICK_ENEMY : String = "[F] Kick"
 @export_group("Player Stats")
 @export var player_strength: int ## Player Strenght: Adds damage to each attack
 @export var player_armor: int ## Player Armor: Reduces damage to each attack - NYI
+@export var duration_between_range_attacks : int ## How often the player can shoot
 
 @onready var action_audio_stream_player: AudioStreamPlayer3D = %ActionAudioStreamPlayer3D
 @onready var footstep_audio_stream_player: AudioStreamPlayer3D = %FootstepAudioStreamPlayer
@@ -68,6 +69,9 @@ var current_possible_action: String = "" ## Stores the possible action (TEXT for
 var player_spawn_completed: bool = false
 
 var mouse_look_allowed : bool = true ## toggles mouselook
+
+## TIMERS
+var time_since_last_range_attack := 0#Time.get_ticks_msec()
 
 func _ready() -> void:
 	if capture_mouse_enabled:
@@ -361,4 +365,11 @@ func on_enemy_died(exp_to_gain: int) -> void:
 	experience.gain_experience(exp_to_gain)
 	GameEvents.exp_up.emit(self) ## Emis the exp up signal
 	GameState.add_enemy_counter() ## Add to the kills counter
+
+## THis returns true if the player can shoot	
+func can_range_attack() -> bool:
+	if Time.get_ticks_msec() - time_since_last_range_attack < duration_between_range_attacks:
+		return false
+	else:
+		return true
 	

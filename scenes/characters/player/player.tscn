@@ -29,6 +29,7 @@ run_speed = 5.0
 walk_speed = 3.0
 duration_hurt = 0.2
 player_strength = 1
+duration_between_range_attacks = 1000
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1102748645]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
@@ -117,9 +118,9 @@ autoplay = &"idle"
 unique_name_in_owner = true
 is_linked_to_ui = true
 is_always_in_front = true
+weapon_data = ExtResource("7_42irl")
 furniture_placeholder = NodePath("../FurniturePlaceholder")
 shield_placeholder = NodePath("../character/Armature/Skeleton3D/ShieldBoneAttachment/ShieldPlaceholder")
-weapon_data = ExtResource("7_42irl")
 weapon_placeholder = NodePath("../character/Armature/Skeleton3D/WeaponBoneAttachment/WeaponPlaceholder")
 weapon_spawn_position = NodePath("../WeaponSpawnPosition")
 weapon_reach_raycast = NodePath("../WeaponReachRaycast")
