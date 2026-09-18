@@ -17,6 +17,8 @@ const DISABLE_PICKING_UP_MELEE_WEAPONS = true	## TRUE won't allow to pickup swor
 const MAX_DURATION_BETWEEN_RANGED_ATTACKS: int = 2000 # Cna't shoot any later than each 2 seconds
 const RATE_REDUCTION_PER_STR_LEVEL: int = 50 ## how much rate reduction in ms you get per STR point
 
+const WEAPON_SHIELD_DATA = preload("res://data/shields/buckler.tres")
+
 ## UI STRINGS
 const UI_STRING_PICKUP : String = "[E] Pick Up"
 const UI_STRING_KICK_DOOR : String = "[F] Open"
@@ -360,6 +362,11 @@ func on_level_up() -> void:
 	player_strength += STR_GAIN_ON_LEVEL_UP
 	## 3 - REDUCES THE DURATION BETWEEN ATTACKS SO THE PLAYER CAN SHOOT QUCKLIER?!
 	duration_between_range_attacks = clampi(duration_between_range_attacks - RATE_REDUCTION_PER_STR_LEVEL, 0, MAX_DURATION_BETWEEN_RANGED_ATTACKS)
+	
+	## 4 - GRANT SHIELD on level 3-6-9
+	if experience.current_level == 3 or experience.current_level == 6 or experience.current_level == 9:
+		equipment.equip_shield(WEAPON_SHIELD_DATA) ## Grant a shield	
+	
 	print("Player streght is now: (" + str (player_strength) + ")- Player Max HP is now: (" + str (health.max_life) + ")")
 	# Play a sound fx
 	AudioManager.play("key-pickup", vocal_audio_stream_player)

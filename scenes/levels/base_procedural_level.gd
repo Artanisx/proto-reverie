@@ -800,7 +800,7 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		minimap_icon.scale = Vector3(20.0, 20.0, 20.0)
 		room.add_child(minimap_icon)
 		
-		## Since it's a start room, nothing should spawn!
+		## Since it's a start room, nothing should spawn!		
 		
 		if DEBUG_MODE:
 			## SPAWN THE BOSS		

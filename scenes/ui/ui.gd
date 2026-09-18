@@ -281,3 +281,7 @@ func on_level_up() -> void:
 	health_indicator.refresh(GameState.current_player.health.current_life, GameState.current_player.health.max_life)
 	## refreshe the strethindicator
 	strength_indicator.refresh(GameState.current_player.player_strength, -1, UI_STR_NAME + " : ")
+	
+	## GRANT SHIELD on level 3-6-9
+	if GameState.current_player.experience.current_level == 3 or GameState.current_player.experience.current_level == 6 or GameState.current_player.experience.current_level == 9:
+		show_message("You gained a shield!")
