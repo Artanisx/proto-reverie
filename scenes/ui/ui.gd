@@ -41,6 +41,7 @@ const UI_STRING_KEY_COLOR_BLUE: String = "Blue"
 const UI_STRING_KEY_COLOR_RED: String = "Red"
 const UI_STRING_KEY_COLOR_YELLOW: String = "Yellow"
 const UI_STRING_KEY_COLOR_PURPLE: String = "Purple"
+const UI_STR_NAME: String = "POWER"
 
 const KEY_TEXTURE_PREFAB := preload("res://scenes/ui/key_texture.tscn")
 
@@ -277,4 +278,4 @@ func on_level_up() -> void:
 	##refreshes the HelathINdicator
 	health_indicator.refresh(GameState.current_player.health.current_life, GameState.current_player.health.max_life)
 	## refreshe the strethindicator
-	strength_indicator.refresh(GameState.current_player.player_strength, -1, "STR - ")
+	strength_indicator.refresh(GameState.current_player.player_strength, -1, UI_STR_NAME + " : ")
