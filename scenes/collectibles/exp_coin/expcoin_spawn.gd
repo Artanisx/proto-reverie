@@ -22,6 +22,7 @@ func set_expcoin(expcoin_prefab: PackedScene, rot_speed: float = 12.0, rot_dir: 
 		expcoin.rotation_speed = rot_speed
 		expcoin.rotation_direction = rot_dir
 		expcoin.exp_amount = exp_amount
+		expcoin.ammo_amount = exp_amount ## AMMO IS EQUAL TO EXP AMOUNT
 		expcoin.pickCollectible = Pickable.PickCollectible.EXPCOIN
 		expcoin.position = position
 		

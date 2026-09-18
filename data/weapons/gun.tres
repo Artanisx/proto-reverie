@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_l0a3a")
 name = "Gun"
-condition = 2
+condition = 50
 max_condition = 50
 damage_min = 3
 damage_max = 5

@@ -317,6 +317,15 @@ func apply_weapon_damage(amount: int) -> void:
 		## Since we just changed the durability of the weapon, let's emit this event	
 		GameEvents.weapon_changed.emit(weapon_data)
 		
+## Restores durability of the equipped weapon
+func restore_weapon_condition(amount: int = 0) -> void:
+	if has_weapon():
+		## Restore the condition
+		weapon_data.restore_condition(amount) 
+		
+		## Since we just changed the durability of the weapon, let's emit this event	
+		GameEvents.weapon_changed.emit(weapon_data)
+		
 ## Reduce durability of the equipped shield
 func apply_shield_damage(amount: int) -> void:
 	if has_shield():

@@ -12,6 +12,7 @@ extends RigidBody3D
 
 @export var heal_amount: int = 0 ## Amount of heal if it's healt pack
 @export var exp_amount: int = 0 ## Amount of experience if it's exp coin
+@export var ammo_amount: int = 0 ## Amount of ammo if it's exp coin
 
 @onready var player_detection_area: Area3D = %PlayerDetectionArea
 
@@ -61,7 +62,10 @@ func on_player_entered(body: Player) -> void:
 				printerr("Pickable.gd: Trying to pick a Helth Pack but exp_amount export var set to 0.")
 				return
 			body.experience.gain_experience(exp_amount)
-			GameEvents.exp_up.emit(body) ## Emis the exp up signal	
+			GameEvents.exp_up.emit(body) ## Emis the exp up signal
+			## Picking up a coin also restores some ammunition
+			body.equipment.restore_weapon_condition(ammo_amount)
+				
 			AudioManager.play("key-pickup", body.vocal_audio_stream_player) ## Play SFX
 			print("You picked up a Exp Coin!")
 		_:
