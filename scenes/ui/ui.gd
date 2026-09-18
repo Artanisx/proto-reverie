@@ -270,6 +270,8 @@ func on_message_fadeout(panel: ColorRect) -> void:
 func on_exp_up(player: Player) -> void:
 	## refresh the exp indicator
 	exp_indicator.refresh(player.experience.current_exp, player.experience.max_exp)
+	## refreshe the strethindicator as on level up it isn't correclt yrefreshed for some reason
+	strength_indicator.refresh(GameState.current_player.player_strength, -1, UI_STR_NAME + " : ")
 	
 func on_level_up() -> void:
 	## On a level up several stast update. We need to refresh them all here.

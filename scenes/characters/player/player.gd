@@ -14,6 +14,8 @@ const GROUND_FRICTION : float = 15.0			## Used to slow down after a pushback
 const HP_GAIN_ON_LEVEL_UP: int = 10				## How much HP is added to max hp for each level up
 const STR_GAIN_ON_LEVEL_UP: int = 1				## How much STR is added to max hp for each level up
 const DISABLE_PICKING_UP_MELEE_WEAPONS = true	## TRUE won't allow to pickup swords or shields
+const MAX_DURATION_BETWEEN_RANGED_ATTACKS: int = 2000 # Cna't shoot any later than each 2 seconds
+const RATE_REDUCTION_PER_STR_LEVEL: int = 50 ## how much rate reduction in ms you get per STR point
 
 ## UI STRINGS
 const UI_STRING_PICKUP : String = "[E] Pick Up"
@@ -356,6 +358,8 @@ func on_level_up() -> void:
 	health.current_life = health.max_life	
 	## 2 - Increase damage by STR_GAIN_ON_LEVEL_UP
 	player_strength += STR_GAIN_ON_LEVEL_UP
+	## 3 - REDUCES THE DURATION BETWEEN ATTACKS SO THE PLAYER CAN SHOOT QUCKLIER?!
+	duration_between_range_attacks = clampi(duration_between_range_attacks - RATE_REDUCTION_PER_STR_LEVEL, 0, MAX_DURATION_BETWEEN_RANGED_ATTACKS)
 	print("Player streght is now: (" + str (player_strength) + ")- Player Max HP is now: (" + str (health.max_life) + ")")
 	# Play a sound fx
 	AudioManager.play("key-pickup", vocal_audio_stream_player)
