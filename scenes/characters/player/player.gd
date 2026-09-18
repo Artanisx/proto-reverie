@@ -181,6 +181,9 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_page_down"):
 		camera.make_current()
 		mouse_look_allowed = true
+		
+	if Input.is_action_just_pressed("quit"): ## ESC / Q button
+			get_tree().quit() # Close the game. WARNING: Nothing is saved!
 	
 	## HANDLE MOUSE LOOK (looking around)
 	if event is InputEventMouseMotion and mouse_look_allowed:
