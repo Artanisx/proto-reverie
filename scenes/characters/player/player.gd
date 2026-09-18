@@ -14,6 +14,10 @@ const GROUND_FRICTION : float = 15.0			## Used to slow down after a pushback
 const HP_GAIN_ON_LEVEL_UP: int = 10				## How much HP is added to max hp for each level up
 const STR_GAIN_ON_LEVEL_UP: int = 1				## How much STR is added to max hp for each level up
 const DISABLE_PICKING_UP_MELEE_WEAPONS = true	## TRUE won't allow to pickup swords or shields
+const MAX_DURATION_BETWEEN_RANGED_ATTACKS: int = 2000 # Cna't shoot any later than each 2 seconds
+const RATE_REDUCTION_PER_STR_LEVEL: int = 50 ## how much rate reduction in ms you get per STR point
+
+const WEAPON_SHIELD_DATA = preload("res://data/shields/buckler.tres")
 
 ## UI STRINGS
 const UI_STRING_PICKUP : String = "[E] Pick Up"
@@ -38,6 +42,7 @@ const UI_STRING_KICK_ENEMY : String = "[F] Kick"
 @export_group("Player Stats")
 @export var player_strength: int ## Player Strenght: Adds damage to each attack
 @export var player_armor: int ## Player Armor: Reduces damage to each attack - NYI
+@export var duration_between_range_attacks : int ## How often the player can shoot
 
 @onready var action_audio_stream_player: AudioStreamPlayer3D = %ActionAudioStreamPlayer3D
 @onready var footstep_audio_stream_player: AudioStreamPlayer3D = %FootstepAudioStreamPlayer
@@ -68,6 +73,9 @@ var current_possible_action: String = "" ## Stores the possible action (TEXT for
 var player_spawn_completed: bool = false
 
 var mouse_look_allowed : bool = true ## toggles mouselook
+
+## TIMERS
+var time_since_last_range_attack := 0#Time.get_ticks_msec()
 
 func _ready() -> void:
 	if capture_mouse_enabled:
@@ -181,6 +189,9 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_page_down"):
 		camera.make_current()
 		mouse_look_allowed = true
+		
+	if Input.is_action_just_pressed("quit"): ## ESC / Q button
+			get_tree().quit() # Close the game. WARNING: Nothing is saved!
 	
 	## HANDLE MOUSE LOOK (looking around)
 	if event is InputEventMouseMotion and mouse_look_allowed:
@@ -349,6 +360,13 @@ func on_level_up() -> void:
 	health.current_life = health.max_life	
 	## 2 - Increase damage by STR_GAIN_ON_LEVEL_UP
 	player_strength += STR_GAIN_ON_LEVEL_UP
+	## 3 - REDUCES THE DURATION BETWEEN ATTACKS SO THE PLAYER CAN SHOOT QUCKLIER?!
+	duration_between_range_attacks = clampi(duration_between_range_attacks - RATE_REDUCTION_PER_STR_LEVEL, 0, MAX_DURATION_BETWEEN_RANGED_ATTACKS)
+	
+	## 4 - GRANT SHIELD on level 3-6-9
+	if experience.current_level == 3 or experience.current_level == 6 or experience.current_level == 9:
+		equipment.equip_shield(WEAPON_SHIELD_DATA) ## Grant a shield	
+	
 	print("Player streght is now: (" + str (player_strength) + ")- Player Max HP is now: (" + str (health.max_life) + ")")
 	# Play a sound fx
 	AudioManager.play("key-pickup", vocal_audio_stream_player)
@@ -358,4 +376,11 @@ func on_enemy_died(exp_to_gain: int) -> void:
 	experience.gain_experience(exp_to_gain)
 	GameEvents.exp_up.emit(self) ## Emis the exp up signal
 	GameState.add_enemy_counter() ## Add to the kills counter
+
+## THis returns true if the player can shoot	
+func can_range_attack() -> bool:
+	if Time.get_ticks_msec() - time_since_last_range_attack < duration_between_range_attacks:
+		return false
+	else:
+		return true
 	

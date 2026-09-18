@@ -24,3 +24,10 @@ func get_damage_dealt() -> int:
 ## Decreases durability
 func decrease_condition(amount: int) -> void:
 	condition = clampi(condition - amount, 0, max_condition)
+
+## Restores durability
+func restore_condition(amount: int) -> void:
+	if amount == 0: ## full restore if no arugment is passed
+		condition = max_condition
+	else:
+		condition = clampi(condition + amount, 0, max_condition)

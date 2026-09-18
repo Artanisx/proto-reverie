@@ -190,7 +190,8 @@ func thrown_weapon(is_being_dropped: bool = false) -> void:
 		
 		## Destroy the weapon in hand
 		weapon_data = null
-		weapon_placeholder.get_child(0).queue_free()		
+		if weapon_placeholder.get_child(0) != null:
+			weapon_placeholder.get_child(0).queue_free()		
 		
 		## If this equipment is the player's equippemnt (linked to ui)
 		if is_linked_to_ui:		
@@ -230,7 +231,8 @@ func drop_furniture() -> void:
 
 ## Drop thje weapon rather than trhow it
 func drop_weapon() -> void:
-	thrown_weapon(true)
+	if weapon_data.name != "Gun": ## guns are never dropped
+		thrown_weapon(true)	
 	
 ## Drop the shield :(
 func drop_shield() -> void:
@@ -289,9 +291,13 @@ func has_gun() -> bool:
 		return false
 	
 ## Check if there's a weapon equipped
-func has_weapon() -> bool:	
+func has_weapon() -> bool:
 	## If there's weapon data and there's an instance in the weapon placeholder...
-	return weapon_data != null and weapon_placeholder.get_child_count() > 0
+	if weapon_data != null:
+		if weapon_placeholder.get_child_count() > 0 or weapon_data.name == "Gun":
+			return true
+	
+	return false
 	
 ## Check if there's a furniture equipped
 func has_furniture() -> bool:	
@@ -307,6 +313,15 @@ func apply_weapon_damage(amount: int) -> void:
 		## If the weapon is destroyed by this...
 		if weapon_data.condition <= 0:
 			drop_weapon()	##drop it
+		
+		## Since we just changed the durability of the weapon, let's emit this event	
+		GameEvents.weapon_changed.emit(weapon_data)
+		
+## Restores durability of the equipped weapon
+func restore_weapon_condition(amount: int = 0) -> void:
+	if has_weapon():
+		## Restore the condition
+		weapon_data.restore_condition(amount) 
 		
 		## Since we just changed the durability of the weapon, let's emit this event	
 		GameEvents.weapon_changed.emit(weapon_data)

@@ -38,22 +38,22 @@ const WEAPON_SWORD_DATA = preload("res://data/weapons/shortsword.tres")
 const WEAPON_AXE_DATA = preload("res://data/weapons/axe.tres")
 
 ## Constants for pickable stats
-const BIG_HEALTH_PACK: int = 50
+const BIG_HEALTH_PACK: int = 60
 const MED_HEALTH_PACK: int = 25
 const SMALL_HEALTH_PACK: int = 10
-const BIG_EXP_COIN: int = 15
+const BIG_EXP_COIN: int = 20
 const MED_EXP_COIN: int = 5
 const SMALL_EXP_COIN: int = 2
 
 ## Constants for Boss (KOBOLD)
-const KOBOLD_MAX_HP: int = 50
+const KOBOLD_MAX_HP: int = 100
 const KOBOLD_DURATION_STUN: float = 1.5
-const KOBOLD_DURATION_BETWEEN_ATTACKS: int = 1000
-const KOBOLD_SPEED: float = 3.0
+const KOBOLD_DURATION_BETWEEN_ATTACKS: int = 800
+const KOBOLD_SPEED: float = 5.0
 const KOBOLD_XP_FOR_KILL: int = 100
 const KOBOLD_MIN_DAMAGE: int = 10
 const KOBOLD_MAX_DAMAGE: int = 20
-const KOBOLD_DETECTION_RANGE: float = 10.0
+const KOBOLD_DETECTION_RANGE: float = 8.0
 
 ## Constants for random gen
 const REGULAR_ROOM_HEALTHPACK_CHANCE: int = 25
@@ -62,6 +62,10 @@ const REGULAR_ROOM_MAX_ENEMIES: int = 3
 const REGULAR_ROOM_MIN_COINS: int = 1
 const REGULAR_ROOM_MAX_COINS: int = 7
 const BRANCH_ROOM_HEALTHPACK_CHANCE: int = 30
+
+## CONSTANT SFOR ENEMIES
+const GOBLIN_DURATION_BETWEEN_ATTACKS: int = 500
+const GOBLIN_SPEED: float = 6.0
 
 
 const MINIMAP_ICONS_HEIGHT : float = 3.5 ## Y position for minimap icons
@@ -650,7 +654,7 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		## ENEMIES
 		for child in room.enemies.get_children():
 			if child is EnemySpawn:
-				child.set_enemy(GOBLIN_PREFAB, 2.5, 2000, 2.0, 10, 8)
+				child.set_enemy(GOBLIN_PREFAB, 2.5, GOBLIN_DURATION_BETWEEN_ATTACKS, GOBLIN_SPEED, 10, 8)
 				print("Branch Room: Placed an enemy.")
 		
 		## Now that enemies are set, connect their signals
@@ -686,7 +690,7 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 			var selected_spawner = enemyspawners.pick_random()
 					
 			## Spawn an enemy
-			selected_spawner.set_enemy(GOBLIN_PREFAB, 2.5, 2000, 2.0, 10, 8)
+			selected_spawner.set_enemy(GOBLIN_PREFAB, 2.5, GOBLIN_DURATION_BETWEEN_ATTACKS, GOBLIN_SPEED, 10, 8)
 			print("Enemy placed in a regular room.")
 			
 			##Remove th spawner from the array
@@ -796,7 +800,7 @@ func place_room_nodes(room_to_place: BaseRoom) -> void:
 		minimap_icon.scale = Vector3(20.0, 20.0, 20.0)
 		room.add_child(minimap_icon)
 		
-		## Since it's a start room, nothing should spawn!
+		## Since it's a start room, nothing should spawn!		
 		
 		if DEBUG_MODE:
 			## SPAWN THE BOSS		

@@ -41,6 +41,7 @@ const UI_STRING_KEY_COLOR_BLUE: String = "Blue"
 const UI_STRING_KEY_COLOR_RED: String = "Red"
 const UI_STRING_KEY_COLOR_YELLOW: String = "Yellow"
 const UI_STRING_KEY_COLOR_PURPLE: String = "Purple"
+const UI_STR_NAME: String = "POWER"
 
 const KEY_TEXTURE_PREFAB := preload("res://scenes/ui/key_texture.tscn")
 
@@ -269,6 +270,8 @@ func on_message_fadeout(panel: ColorRect) -> void:
 func on_exp_up(player: Player) -> void:
 	## refresh the exp indicator
 	exp_indicator.refresh(player.experience.current_exp, player.experience.max_exp)
+	## refreshe the strethindicator as on level up it isn't correclt yrefreshed for some reason
+	strength_indicator.refresh(GameState.current_player.player_strength, -1, UI_STR_NAME + " : ")
 	
 func on_level_up() -> void:
 	## On a level up several stast update. We need to refresh them all here.
@@ -277,4 +280,8 @@ func on_level_up() -> void:
 	##refreshes the HelathINdicator
 	health_indicator.refresh(GameState.current_player.health.current_life, GameState.current_player.health.max_life)
 	## refreshe the strethindicator
-	strength_indicator.refresh(GameState.current_player.player_strength, -1, "STR - ")
+	strength_indicator.refresh(GameState.current_player.player_strength, -1, UI_STR_NAME + " : ")
+	
+	## GRANT SHIELD on level 3-6-9
+	if GameState.current_player.experience.current_level == 3 or GameState.current_player.experience.current_level == 6 or GameState.current_player.experience.current_level == 9:
+		show_message("You gained a shield!")
