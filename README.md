@@ -16,7 +16,9 @@ This is a [Godot](https://godotengine.org/) prototype 3D Game for a procedurally
 
 ## Overview
 Proto Reverie is a procedurally generated dungeon crawler. The map is generated from scratch at each new playthrough; the dungeon contains rooms that can be of any kind (15 manually crafted rooms), populated with a random number of enemies and pickups.
+
 The dungeon can also feature locked doors that lead to special bonus room. Each dungeon may feature a number of these special rooms, and the locked doors have a frame of the color of the key that needs to be used to open said door. For each locked room, a random room is selected and killing all enemies from that room will drop the key. The game is completed once you reach the end room which contains a boss. Killing the boss will result in your victory.
+
 The game also features a levelling system, the more enemies you kill and the more experience coins you pickup, the more levels you'll gain. Each level increases not only the maximum health, but also the power of your weapon; specifically that will improve the rate of fire and damage of the gun. Ammo can also be found picking up the coins. At level 3, 6 and 9 you will also gain a Shield that can be used to block attacks! Each attack blocked will damage the shield and it will drop on the ground once broken.
 
 ## Goal of the game
@@ -26,27 +28,41 @@ This main goal of the game is to explore the dungeon, level up to become stronge
 You can find three pickables:
 
 **Experience Coin**
+
 ![Exp Coin](/images/exp_coin.png)
+
 Experience coin will increase your experience and restock some of your ammunitions.
 
 **Health Pack**
+
 ![Health Pack](/images/health_pack.png)
+
 Health Pack will heal you. You can pick one up only if you are wounded.
 
 **Keys**
+
 ![Purple Key](/images/key.png)
+
 Killing all enemies of a special room, can have the last of them drop a key. There are four colored keys that opens doors of the same color. Each locked room is filled with big experience coins and a big health pack!
 
-#UI
+# UI
 ![Proto Reverie Gameplay 8](/images/ui_screen.png)
 1 - Your health bar. It will change color to reflect your status with green being healthy, yellow being wounded and red being critically wounded.
+
 2 - Your experience bar. If you fill it up, you'll gain a level. Each level provides more health, incrases your power and awards a shield at level 3, 6 and 9.
+
 3 - Your level is shown here. Level cap is 10.
+
 4 - Your power is shown here. Each point grants more damage for your weapon and increases the rate of fire.
+
 5 - Your minimap. You can see your position in yellow and your cone of view. Enemies are shown as red dots, experience coin as small yellow dots. A big red circle signify a bonus room, whereas a big blue circle signifies the end room where the boss is.
+
 6 - Your ammunition bar. If you reach zero you cannot shoot! Find an experience coin as that will replenish your ammo.
+
 7 - Your shield condition bar. If you have a shield equipped, you'll see its condition here. Each block will damage it, and you'll drop the broken shield if the bar reaches 0.
+
 8 - Your keys are displayed here.
+
 
 
 ## Controls
